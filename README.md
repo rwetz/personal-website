@@ -1,16 +1,75 @@
-# React + Vite
+# Personal Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Single-page portfolio site built with React and Vite. Features a WebGL pixel-dithering hero background, ASCII name effect, typewriter subtitle, scroll-reveal animations, and an embedded PDF resume viewer.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack & Dependencies
 
-## React Compiler
+| Category | Library |
+|---|---|
+| Framework | React 19 + Vite 8 |
+| Styling | Tailwind CSS v4 |
+| Animations | Framer Motion 12 |
+| 3D / WebGL | Three.js |
+| Post-processing | postprocessing (for PixelBlast liquid effect) |
+| Cursor animation | gsap (used by TextType) |
+| PDF viewer | react-pdf (PDF.js) |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Third-Party Components
 
-## Expanding the ESLint configuration
+| Component | Source |
+|---|---|
+| `PixelBlast` | Reactbits — pixel dithering WebGL background |
+| `ASCIIText` | Reactbits — Three.js ASCII text renderer |
+| `GlassSurface` | Reactbits — SVG displacement map glass effect |
+| `SpotlightCard` | Reactbits — radial gradient spotlight card |
+| `TextType` | Reactbits — typewriter cycling text |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Fonts
+
+- **Geist** / **Geist Mono** — body and code (Google Fonts)
+- **Libre Baskerville** — section headings (Google Fonts)
+- **IBM Plex Mono** — used internally by ASCIIText renderer
+
+---
+
+## File Structure
+
+```
+├── public/
+│   ├── favicon.svg
+│   ├── icons.svg          # SVG sprite (Gmail, GitHub, LinkedIn icons)
+│   └── resume.pdf
+├── src/
+│   ├── assets/
+│   │   ├── profile.jpg
+│   │   └── signature.png
+│   ├── components/
+│   │   ├── ASCIIText.jsx      # Three.js ASCII name effect (Reactbits)
+│   │   ├── About.jsx
+│   │   ├── Contact.jsx
+│   │   ├── GlassSurface.jsx   # SVG displacement glass effect (Reactbits)
+│   │   ├── Hero.jsx
+│   │   ├── Navbar.jsx
+│   │   ├── PixelBlast.jsx     # WebGL pixel dithering background (Reactbits)
+│   │   ├── Projects.jsx
+│   │   ├── Resume.jsx
+│   │   ├── Skills.jsx
+│   │   ├── SpotlightCard.jsx  # Spotlight hover card (Reactbits)
+│   │   └── TextType.jsx       # Typewriter text component (Reactbits)
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+├── index.html
+├── package.json
+└── vite.config.js
+```
+
+## Dev
+
+```bash
+npm run dev      # start dev server
+npm run build    # production build
+npm run lint     # eslint
+```
