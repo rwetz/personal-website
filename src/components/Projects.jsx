@@ -1,0 +1,85 @@
+// Edit this array to add your real projects
+const projects = [
+  {
+    title: 'Project One',
+    description:
+      'A brief description of what this project does and the problem it solves.',
+    tags: ['React', 'Node.js', 'MongoDB'],
+    github: 'https://github.com',
+    live: 'https://example.com',
+  },
+  {
+    title: 'Project Two',
+    description:
+      'A brief description of what this project does and the problem it solves.',
+    tags: ['Python', 'FastAPI', 'PostgreSQL'],
+    github: 'https://github.com',
+    live: null,
+  },
+  {
+    title: 'Project Three',
+    description:
+      'A brief description of what this project does and the problem it solves.',
+    tags: ['TypeScript', 'Next.js', 'Tailwind'],
+    github: 'https://github.com',
+    live: 'https://example.com',
+  },
+]
+
+export default function Projects() {
+  return (
+    <section id="projects" className="py-24 px-6 bg-[var(--color-surface-2)]">
+      <div className="max-w-5xl mx-auto">
+        <h2 className="text-3xl font-bold text-[var(--color-text)] mb-2">
+          Projects
+        </h2>
+        <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {projects.map((project) => (
+            <div
+              key={project.title}
+              className="flex flex-col bg-[var(--color-surface-3)] rounded-xl p-6 border border-white/5 hover:border-[var(--color-accent)]/40 transition-colors duration-200"
+            >
+              <h3 className="text-lg font-semibold text-[var(--color-text)] mb-2">
+                {project.title}
+              </h3>
+              <p className="text-[var(--color-muted)] text-sm leading-relaxed flex-1 mb-4">
+                {project.description}
+              </p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs px-2 py-1 rounded bg-[var(--color-accent)]/15 text-[var(--color-accent-light)] font-mono"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div className="flex gap-4 text-sm">
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--color-muted)] hover:text-[var(--color-text)] transition-colors"
+                >
+                  GitHub →
+                </a>
+                {project.live && (
+                  <a
+                    href={project.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--color-accent-light)] hover:text-[var(--color-text)] transition-colors"
+                  >
+                    Live →
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
