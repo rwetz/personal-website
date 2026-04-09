@@ -6,10 +6,11 @@ export default function About() {
       </h2>
       <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
       <div className="flex flex-col md:flex-row items-center gap-12">
-        {/* Avatar placeholder */}
-        <div className="shrink-0 w-40 h-40 rounded-full bg-[var(--color-surface-3)] border-2 border-[var(--color-accent)]/40 flex items-center justify-center text-5xl select-none">
-          👤
-        </div>
+        <img
+          src="/src/assets/profile.jpg"
+          alt="Ryan"
+          className="shrink-0 w-40 h-40 rounded-full object-cover border-2 border-[var(--color-accent)]/40"
+        />
         <div className="text-[var(--color-muted)] text-lg leading-relaxed text-left space-y-4">
           <p>
             Hi! I&apos;m Ryan — a software developer with a passion for building
