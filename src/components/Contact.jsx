@@ -52,7 +52,7 @@ export default function Contact() {
         >
           <span className="text-xs font-mono text-[var(--color-accent-light)] tracking-widest">// 05</span>
           <h2 className="text-3xl font-bold text-[var(--color-text)] mt-1 mb-2">Contact</h2>
-          <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
+          <div className="accent-bar" />
           <p className="text-[var(--color-muted)] text-lg max-w-xl mb-12">
             I&apos;m always open to new opportunities, collaborations, or just a
             friendly chat. Reach out through any of the links below.
@@ -70,7 +70,7 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.5, ease: 'easeOut', delay: i * 0.1 }}
-              className="flex-1 flex flex-col gap-3 p-6 rounded-xl bg-[var(--color-surface-2)] border border-white/5 hover:border-[var(--color-accent)]/40 transition-colors duration-200 group"
+              className="flex-1 flex flex-col gap-3 p-6 rounded-xl bg-[var(--color-surface-2)] border border-white/5 hover:border-[var(--color-accent-dark)]/60 transition-colors duration-200 group"
             >
               <svg width="28" height="28" aria-hidden="true">
                 <use href={`/icons.svg#${icon}`} />

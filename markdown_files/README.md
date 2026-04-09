@@ -1,6 +1,6 @@
 # Personal Website
 
-Single-page portfolio site built with React and Vite. Features a WebGL pixel-dithering hero background, ASCII name effect, typewriter subtitle, scroll-reveal animations, section number labels, skill icons, and an embedded PDF resume viewer.
+Single-page portfolio site built with React and Vite. Features a CSS animated orb hero background, ASCII name effect, typewriter subtitle, scroll-reveal animations, section number labels, skill icons, and an embedded PDF resume viewer.
 
 ---
 
@@ -11,8 +11,8 @@ Single-page portfolio site built with React and Vite. Features a WebGL pixel-dit
 | Framework | React 19 + Vite 8 |
 | Styling | Tailwind CSS v4 |
 | Animations | Framer Motion 12 |
-| 3D / WebGL | Three.js |
-| Post-processing | postprocessing (for PixelBlast liquid effect) |
+| 3D / WebGL | Three.js, ogl |
+| Post-processing | postprocessing |
 | Cursor animation | gsap (used by TextType) |
 | PDF viewer | react-pdf (PDF.js) |
 
@@ -20,11 +20,30 @@ Single-page portfolio site built with React and Vite. Features a WebGL pixel-dit
 
 | Component | Source |
 |---|---|
-| `PixelBlast` | Reactbits — pixel dithering WebGL background |
+| `Grainient` | Reactbits — WebGL grain gradient background (ogl) — available but unused |
 | `ASCIIText` | Reactbits — Three.js ASCII text renderer |
 | `GlassSurface` | Reactbits — SVG displacement map glass effect |
 | `SpotlightCard` | Reactbits — radial gradient spotlight card |
 | `TextType` | Reactbits — typewriter cycling text |
+
+## Color Palette
+
+All colors are defined as CSS custom properties in `src/index.css` under `@theme` and referenced throughout as `var(--color-*)`.
+
+| Token | Hex | Usage |
+|---|---|---|
+| `--color-surface` | `#0f0f13` | Page background |
+| `--color-surface-2` | `#1a1a24` | Alternate section background |
+| `--color-surface-3` | `#242433` | Cards, skill pills, input backgrounds |
+| `--color-muted` | `#94a3b8` | Secondary text, nav links, placeholders |
+| `--color-text` | `#e2e8f0` | Primary text |
+| `--color-accent-dark` | `#5b21b6` | Hover/pressed states, deep accent |
+| `--color-accent` | `#7c3aed` | Primary accent — buttons, underlines, borders |
+| `--color-accent-light` | `#a78bfa` | Highlighted nav links, tags, cursor, badges |
+
+The palette is a single-hue dark purple ramp — three surface darks, two text grays, and three purple accent steps — designed to stay cohesive at any combination.
+
+---
 
 ## Fonts & Icons
 
@@ -52,8 +71,9 @@ Single-page portfolio site built with React and Vite. Features a WebGL pixel-dit
 │   │   ├── Contact.jsx        # Includes copy-to-clipboard on email
 │   │   ├── GlassSurface.jsx   # SVG displacement glass effect (Reactbits)
 │   │   ├── Hero.jsx
+│   │   ├── Granient.jsx       # WebGL grain gradient background (Reactbits)
 │   │   ├── Navbar.jsx         # Scroll-spy + hide/show on scroll
-│   │   ├── PixelBlast.jsx     # WebGL pixel dithering background (Reactbits)
+│   │   ├── PixelBlast.jsx     # WebGL pixel dithering background (Reactbits, unused)
 │   │   ├── Projects.jsx
 │   │   ├── Resume.jsx         # react-pdf viewer
 │   │   ├── Skills.jsx         # Devicon icons on skill pills

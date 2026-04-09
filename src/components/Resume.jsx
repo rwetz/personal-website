@@ -24,7 +24,7 @@ export default function Resume() {
         >
           <span className="text-xs font-mono text-[var(--color-accent-light)] tracking-widest">// 04</span>
           <h2 className="text-3xl font-bold text-[var(--color-text)] mt-1 mb-2">Resume</h2>
-          <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
+          <div className="accent-bar" />
         </motion.div>
 
         <motion.div
@@ -65,7 +65,7 @@ export default function Resume() {
             <a
               href="/resume.pdf"
               download
-              className="inline-block px-8 py-4 rounded-lg bg-[var(--color-accent)] text-white font-semibold text-lg hover:bg-[var(--color-accent-light)] hover:text-[var(--color-surface)] transition-colors duration-200"
+              className="inline-block px-8 py-4 rounded-lg bg-[var(--color-accent)] text-white font-semibold text-lg hover:bg-[var(--color-accent-dark)] transition-colors duration-200"
             >
               Download Resume (PDF)
             </a>

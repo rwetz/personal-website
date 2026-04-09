@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import PixelBlast from './PixelBlast'
 import ASCIIText from './ASCIIText'
 import GlassSurface from './GlassSurface'
 import TextType from './TextType'
@@ -16,27 +15,11 @@ export default function Hero() {
       id="hero"
       className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden"
     >
-      {/* PixelBlast background */}
-      <div className="absolute inset-0 z-0">
-        <PixelBlast
-          variant="square"
-          pixelSize={4}
-          color="#5f31f6"
-          patternScale={2}
-          patternDensity={1}
-          pixelSizeJitter={0}
-          enableRipples
-          rippleSpeed={0.4}
-          rippleThickness={0.12}
-          rippleIntensityScale={1.5}
-          liquid={false}
-          liquidStrength={0.12}
-          liquidRadius={1.2}
-          liquidWobbleSpeed={5}
-          speed={0.5}
-          edgeFade={0.25}
-          transparent
-        />
+      {/* CSS orb background */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="hero-orb hero-orb-1" />
+        <div className="hero-orb hero-orb-2" />
+        <div className="hero-orb hero-orb-3" />
       </div>
 
       {/* Mobile name — shown only below md */}
@@ -65,12 +48,12 @@ export default function Hero() {
       <div className="relative z-10 w-full max-w-4xl flex flex-col items-center">
         {/* Open to work badge */}
         <motion.div className="mb-4" {...fadeUp(0.3)}>
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-white/5 border border-white/10 text-[var(--color-muted)]">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-white/5 border border-[var(--color-accent-dark)]/40 text-[var(--color-muted)]">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
             </span>
-            Available for internships
+            Open to internships
           </span>
         </motion.div>
 

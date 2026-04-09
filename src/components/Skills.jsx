@@ -48,7 +48,7 @@ export default function Skills() {
         >
           <span className="text-xs font-mono text-[var(--color-accent-light)] tracking-widest">// 03</span>
           <h2 className="text-3xl font-bold text-[var(--color-text)] mt-1 mb-2">Skills</h2>
-          <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
+          <div className="accent-bar" />
         </motion.div>
 
         <div className="space-y-10">
@@ -67,7 +67,7 @@ export default function Skills() {
                 {skills.map(({ name, icon }) => (
                   <span
                     key={name}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--color-surface-3)] text-[var(--color-text)] text-sm border border-white/5 hover:border-[var(--color-accent)]/50 transition-colors duration-200"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--color-surface-3)] text-[var(--color-text)] text-sm border border-white/5 hover:border-[var(--color-accent-dark)]/60 transition-colors duration-200"
                   >
                     <i className={`${icon} text-base`} />
                     {name}

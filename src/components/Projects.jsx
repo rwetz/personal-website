@@ -40,7 +40,7 @@ export default function Projects() {
         >
           <span className="text-xs font-mono text-[var(--color-accent-light)] tracking-widest">// 02</span>
           <h2 className="text-3xl font-bold text-[var(--color-text)] mt-1 mb-2">Projects</h2>
-          <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
+          <div className="accent-bar" />
         </motion.div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -51,7 +51,7 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.5, ease: 'easeOut', delay: i * 0.1 }}
-              className="flex flex-col bg-[var(--color-surface-3)] rounded-xl p-6 border border-white/5 hover:border-[var(--color-accent)]/40 hover:-translate-y-1 transition-all duration-200"
+              className="flex flex-col bg-[var(--color-surface-3)] rounded-xl p-6 border border-white/5 hover:border-[var(--color-accent-dark)]/60 hover:-translate-y-1 transition-all duration-200"
             >
               <h3 className="text-lg font-semibold text-[var(--color-text)] mb-2">
                 {project.title}

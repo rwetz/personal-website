@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  --color-accent-dark: #5b21b6;
   --color-accent: #7c3aed;
   --color-accent-light: #a78bfa;
   --color-surface: #0f0f13;
@@ -12,6 +13,64 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Hero orb animations */
+@keyframes orb-1 {
+  0%, 100% { transform: translate(0px, 0px); }
+  33%       { transform: translate(45px, -30px); }
+  66%       { transform: translate(-20px, 20px); }
+}
+@keyframes orb-2 {
+  0%, 100% { transform: translate(0px, 0px); }
+  33%       { transform: translate(-40px, 35px); }
+  66%       { transform: translate(30px, -15px); }
+}
+@keyframes orb-3 {
+  0%, 100% { transform: translate(0px, 0px); }
+  50%       { transform: translate(25px, -35px); }
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-orb-1 {
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(124,58,237,0.28) 0%, transparent 70%);
+  top: -200px;
+  left: -150px;
+  filter: blur(80px);
+  animation: orb-1 14s ease-in-out infinite;
+}
+.hero-orb-2 {
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(167,139,250,0.18) 0%, transparent 70%);
+  bottom: -150px;
+  right: -100px;
+  filter: blur(90px);
+  animation: orb-2 18s ease-in-out infinite;
+}
+.hero-orb-3 {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(91,33,182,0.22) 0%, transparent 70%);
+  top: 25%;
+  left: 45%;
+  filter: blur(100px);
+  animation: orb-3 22s ease-in-out infinite;
+}
+
+/* Shared accent bar style used across all sections */
+.accent-bar {
+  width: 3rem;
+  height: 4px;
+  border-radius: 9999px;
+  margin-bottom: 2.5rem;
+  background: linear-gradient(to right, var(--color-accent-dark), var(--color-accent));
 }
 
 section[id] {

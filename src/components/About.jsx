@@ -14,7 +14,7 @@ export default function About() {
         <motion.div {...fadeUp(0)}>
           <span className="text-xs font-mono text-[var(--color-accent-light)] tracking-widest">// 01</span>
           <h2 className="text-3xl font-bold text-[var(--color-text)] mt-1 mb-2">About Me</h2>
-          <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
+          <div className="accent-bar" />
         </motion.div>
 
         <div className="flex flex-col md:flex-row items-center gap-12">
