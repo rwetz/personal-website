@@ -22,7 +22,8 @@ export default function Resume() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <h2 className="text-3xl font-bold text-[var(--color-text)] mb-2">Resume</h2>
+          <span className="text-xs font-mono text-[var(--color-accent-light)] tracking-widest">// 04</span>
+          <h2 className="text-3xl font-bold text-[var(--color-text)] mt-1 mb-2">Resume</h2>
           <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
         </motion.div>
 
