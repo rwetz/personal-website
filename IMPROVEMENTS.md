@@ -1,78 +1,47 @@
-# Website Improvement Log
+# Site Improvements
 
-All 15 improvements have been implemented. This file tracks what was done and the outcome.
+## High Priority
 
----
+### 1. Scroll-reveal animations on section content
+As the user scrolls, cards and text fade/slide up into view. Framer Motion is already installed — just wrap section content in `<motion.div>` with `whileInView`. Makes the page feel alive without being distracting.
 
-## Completed
+### 2. Active project cards with real content
+The Projects section has placeholder data. Fill in real projects with actual descriptions, tags, and links. Even 1–2 real projects with a GitHub link is more compelling than 3 placeholder cards.
 
-### 1. ✅ Scroll-spy active link highlighting in Navbar
-**File:** `src/components/Navbar.jsx`
-`IntersectionObserver` watches each section. The matching nav link turns accent-colored and gets an underline indicator as the user scrolls. Works for both the desktop glass pill and the mobile dropdown.
-
-### 2. ✅ Scroll-reveal animations on section entry
-**Files:** All section components
-`framer-motion` `whileInView` + `viewport={{ once: true }}` fade-up animations on each section. Staggered children on Projects cards and Skills badges.
-
-### 3. ✅ Mobile hamburger menu
-**File:** `src/components/Navbar.jsx`
-Hamburger icon (≡) appears on screens below `md`. Toggles a dropdown with all nav links. Auto-closes on link click or viewport resize to desktop. CloseIcon (✕) replaces the hamburger while open.
-
-### 4. ✅ Project card image previews
-**File:** `src/components/Projects.jsx`
-Optional `image` field on each project object. When present, renders as a `rounded-t-xl` banner above the card content.
-
-### 5. ✅ Real profile photo in About
-**File:** `src/components/About.jsx`
-Replaced the 👤 emoji placeholder with `src/assets/profile.jpg`, cropped into a circle with `object-cover rounded-full`.
-
-### 6. ✅ Animated skill badges
-**File:** `src/components/Skills.jsx`
-`framer-motion` stagger container — each badge fades and slides up with a 0.05s delay between them.
-
-### 7. ✅ Contact form
-**File:** `src/components/Contact.jsx`
-Formspree-ready `<form>` with name, email, and message fields. Managed state, loading/success/error feedback. Swap the `FORMSPREE_ENDPOINT` constant with your Formspree form ID to activate.
-
-### 8. ✅ Featured project badge
-**File:** `src/components/Projects.jsx`
-`featured: true` flag on any project object renders a "Featured" badge and gives the card an accent-colored glow border.
-
-### 9. ✅ Custom favicon
-**File:** `public/favicon.svg`
-Replaced the default Vite lightning bolt with a violet rounded-square "R" icon matching the site accent color.
-
-### 10. ✅ Meta tags / SEO
-**File:** `index.html`
-Added `<meta name="description">`, Open Graph (`og:title`, `og:description`, `og:image`, `og:type`), and Twitter Card tags. Add a real `public/og-image.png` for link previews.
-
-### 11. ✅ Section dividers
-**Files:** `src/App.jsx`
-Subtle SVG wave dividers between alternating sections (About→Projects, Projects→Skills, etc.) using matching background fills for smooth transitions.
-
-### 12. ✅ ASCII typewriter text effect in Hero
-**File:** `src/components/Hero.jsx`, `src/components/ASCIIText.jsx`
-Replaced the plain "Hello, I'm / Ryan" text with a Three.js-powered ASCII art effect (from reactbits.dev). The text waves, reacts to mouse movement with 3D rotation, and hue-shifts with cursor position.
-
-### 13. ✅ Back-to-top button
-**File:** `src/App.jsx`
-Fixed `bottom-6 right-6` button appears after scrolling 400px. Smooth-scrolls to `#hero`. Fades in/out with a CSS transition.
-
-### 14. ✅ Light/dark mode toggle
-**File:** `src/components/Navbar.jsx`
-Sun/Moon icon button in the top-right of the navbar. Toggles `html.light` class and persists preference to `localStorage`. GlassSurface and all CSS variables respond to the class change instantly.
-
-### 15. ✅ Code-split PixelBlast (lazy load)
-**File:** `src/components/Hero.jsx`
-`React.lazy` + `Suspense` defers loading of the Three.js PixelBlast background so the main bundle stays smaller and the page becomes interactive sooner.
+### 3. Subtle section number labels
+Add a small `// 01`, `// 02` etc. label in mono text above each section `<h2>`. Common on polished dev portfolios — orients the reader and adds personality without cluttering.
 
 ---
 
-## Extra additions (beyond the original list)
+## Medium Priority
 
-- **Geist font** — applied globally via Google Fonts; Geist Mono used for code/mono elements
-- **Signature logo in Navbar** — `src/assets/signature.png` replaces the text "Ryan" wordmark; inverts automatically in dark mode
-- **GlassSurface component** (reactbits.dev) — applied to hero CTA buttons and the navbar nav-link pill
-- **PixelBlast background** (reactbits.dev) — animated violet pixel-dither canvas behind the hero
-- **ASCIIText component** (reactbits.dev) — Three.js ASCII shader replaces the hero heading text
-- **Removed unused Vite defaults** — `App.css`, `react.svg`, `vite.svg`, `hero.png` deleted
+### 4. Framer Motion page-load entrance animation
+Stagger the Hero elements (name → subtitle → buttons) on first load with a short fade-in. Gives a polished first impression. Framer Motion is already a dependency so this is low-effort.
+
+### 5. Project card hover — lift effect
+Add `hover:-translate-y-1 transition-transform duration-200` to project cards. Small touch that makes them feel interactive and clickable.
+
+### 6. Skills — icons next to skill names
+Right now skills are plain text pills. Adding a small SVG logo next to each skill (React, Python, etc.) adds visual interest. Devicons are available as a CDN font or individual SVGs.
+
+### 7. Footer — social links
+The footer just says "Built with React + Vite + Tailwind CSS". Adding the Gmail/GitHub/LinkedIn icon links from the Contact section makes it a natural second entry point at the bottom of the page.
+
+### 8. "Open to work" badge in Hero or About
+A small pill badge ("Available for internships") near your name or bio draws recruiter attention immediately. Can be a simple `<span>` with a pulsing green dot — one line of Tailwind.
+
+### 9. Navbar hide-on-scroll-down / show-on-scroll-up
+Navbar slides up out of view when scrolling down (more reading space) and reappears when scrolling up. Only a few extra lines in Navbar using the existing scroll listener. Very common on polished portfolios.
+
+---
+
+## Polish
+
+### 10. Meta tags for sharing
+`index.html` likely has minimal meta tags. Adding `og:title`, `og:description`, and an `og:image` makes the site preview well when shared on LinkedIn or in a message.
+
+### 11. Consistent section max-width
+`About` and `Skills` apply `max-w-5xl mx-auto` directly on the `<section>`, while `Projects` and `Resume` apply it to an inner `<div>`. Standardize to an inner wrapper in every section to avoid subtle alignment differences.
+
+### 12. Contact section — copy-to-clipboard on email
+Add a small clipboard icon next to the email address that copies it on click. Saves the user from having to open their mail client just to grab the address.

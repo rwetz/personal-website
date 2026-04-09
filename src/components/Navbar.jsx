@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import GlassSurface from './GlassSurface'
 
 const links = [
@@ -9,26 +9,8 @@ const links = [
   { label: 'Contact', href: '#contact' },
 ]
 
-const sectionIds = links.map(l => l.href.slice(1))
+const sectionIds = ['hero', ...links.map(l => l.href.slice(1))]
 
-function SunIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-    </svg>
-  )
-}
-
-function MoonIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-  )
-}
 
 function MenuIcon() {
   return (
@@ -48,49 +30,53 @@ function CloseIcon() {
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [activeSection, setActiveSection] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
-  const [isLight, setIsLight] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') === 'light'
-    }
-    return false
-  })
+  const prevScrollY = useRef(0)
 
-  // Apply theme class on mount and change
+  // Scroll detection for navbar background + hide/show
   useEffect(() => {
-    if (isLight) {
-      document.documentElement.classList.add('light')
-      localStorage.setItem('theme', 'light')
-    } else {
-      document.documentElement.classList.remove('light')
-      localStorage.setItem('theme', 'dark')
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 20)
+      setHidden(y > prevScrollY.current && y > 80)
+      prevScrollY.current = y
     }
-  }, [isLight])
-
-  // Scroll detection for navbar background
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   // Scroll-spy: track which section is in view
   useEffect(() => {
-    const observers = []
-    sectionIds.forEach(id => {
-      const el = document.getElementById(id)
-      if (!el) return
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActiveSection(id)
-        },
-        { rootMargin: '-40% 0px -55% 0px' }
-      )
-      obs.observe(el)
-      observers.push(obs)
-    })
-    return () => observers.forEach(o => o.disconnect())
+    const OFFSET = 120
+    const update = () => {
+      const nearBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80
+
+      if (nearBottom) {
+        // Find the last section that's actually visible in the viewport
+        let last = ''
+        for (const id of sectionIds) {
+          const el = document.getElementById(id)
+          if (!el) continue
+          if (el.getBoundingClientRect().top < window.innerHeight) last = id
+        }
+        setActiveSection(last)
+        return
+      }
+
+      let current = ''
+      for (const id of sectionIds) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        if (el.getBoundingClientRect().top <= OFFSET) current = id
+      }
+      setActiveSection(current)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
   }, [])
 
   // Close mobile menu on resize to desktop
@@ -108,7 +94,7 @@ export default function Navbar() {
         scrolled
           ? 'bg-[var(--color-surface)]/90 backdrop-blur border-b border-white/10 shadow-lg'
           : 'bg-transparent'
-      }`}
+      } ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
     >
       <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between relative">
         {/* Logo — far left */}
@@ -120,7 +106,7 @@ export default function Navbar() {
           <img
             src="/src/assets/signature.png"
             alt="Ryan"
-            className={`h-8 w-auto ${isLight ? 'invert-0' : 'invert'}`}
+            className="h-8 w-auto invert"
           />
         </a>
 
@@ -164,15 +150,8 @@ export default function Navbar() {
           </GlassSurface>
         </div>
 
-        {/* Theme toggle + hamburger — far right */}
-        <div className="flex items-center gap-3 shrink-0">
-          <button
-            onClick={() => setIsLight(v => !v)}
-            aria-label="Toggle theme"
-            className="p-2 rounded-lg text-[var(--color-muted)] hover:text-[var(--color-text)] hover:bg-white/5 transition-colors"
-          >
-            {isLight ? <MoonIcon /> : <SunIcon />}
-          </button>
+        {/* Hamburger — far right */}
+        <div className="flex items-center shrink-0">
           <button
             className="md:hidden p-2 rounded-lg text-[var(--color-muted)] hover:text-[var(--color-text)] hover:bg-white/5 transition-colors"
             onClick={() => setMenuOpen(v => !v)}

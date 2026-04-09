@@ -14,6 +14,14 @@ html {
   scroll-behavior: smooth;
 }
 
+section[id] {
+  scroll-margin-top: 72px;
+}
+
+section h2 {
+  font-family: 'Libre Baskerville', serif;
+}
+
 body {
   background-color: var(--color-surface);
   color: var(--color-text);
@@ -25,11 +33,3 @@ code, kbd, pre, .font-mono {
   font-family: 'Geist Mono', ui-monospace, monospace;
 }
 
-/* Light mode overrides */
-html.light {
-  --color-surface: #f8fafc;
-  --color-surface-2: #f1f5f9;
-  --color-surface-3: #e2e8f0;
-  --color-text: #0f172a;
-  --color-muted: #64748b;
-}

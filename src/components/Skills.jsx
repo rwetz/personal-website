@@ -1,8 +1,10 @@
+import { motion } from 'framer-motion'
+
 // Edit these arrays to reflect your actual skills
 const skillGroups = [
   {
     category: 'Languages',
-    skills: ['JavaScript', 'TypeScript', 'Python', 'HTML', 'CSS'],
+    skills: ['C', 'Java', 'Python', 'Typescript', 'SQL', 'HTML + CSS'],
   },
   {
     category: 'Frameworks & Libraries',
@@ -17,13 +19,25 @@ const skillGroups = [
 export default function Skills() {
   return (
     <section id="skills" className="py-24 px-6 max-w-5xl mx-auto">
-      <h2 className="text-3xl font-bold text-[var(--color-text)] mb-2">
-        Skills
-      </h2>
-      <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
+        <h2 className="text-3xl font-bold text-[var(--color-text)] mb-2">Skills</h2>
+        <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
+      </motion.div>
+
       <div className="space-y-10">
-        {skillGroups.map(({ category, skills }) => (
-          <div key={category}>
+        {skillGroups.map(({ category, skills }, i) => (
+          <motion.div
+            key={category}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5, ease: 'easeOut', delay: i * 0.1 }}
+          >
             <h3 className="text-sm font-mono uppercase tracking-widest text-[var(--color-accent-light)] mb-4">
               {category}
             </h3>
@@ -37,7 +51,7 @@ export default function Skills() {
                 </span>
               ))}
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

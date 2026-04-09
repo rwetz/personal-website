@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion'
+
 // Edit this array to add your real projects
 const projects = [
   {
@@ -30,15 +32,25 @@ export default function Projects() {
   return (
     <section id="projects" className="py-24 px-6 bg-[var(--color-surface-2)]">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl font-bold text-[var(--color-text)] mb-2">
-          Projects
-        </h2>
-        <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <h2 className="text-3xl font-bold text-[var(--color-text)] mb-2">Projects</h2>
+          <div className="w-12 h-1 bg-[var(--color-accent)] rounded mb-10" />
+        </motion.div>
+
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <div
+          {projects.map((project, i) => (
+            <motion.div
               key={project.title}
-              className="flex flex-col bg-[var(--color-surface-3)] rounded-xl p-6 border border-white/5 hover:border-[var(--color-accent)]/40 transition-colors duration-200"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.5, ease: 'easeOut', delay: i * 0.1 }}
+              className="flex flex-col bg-[var(--color-surface-3)] rounded-xl p-6 border border-white/5 hover:border-[var(--color-accent)]/40 hover:-translate-y-1 transition-all duration-200"
             >
               <h3 className="text-lg font-semibold text-[var(--color-text)] mb-2">
                 {project.title}
@@ -76,7 +88,7 @@ export default function Projects() {
                   </a>
                 )}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
