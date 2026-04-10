@@ -266,7 +266,7 @@ class CanvAscii {
       color: this.textColor
     });
     this.textCanvas.resize();
-    this.textCanvas.render();
+    this.textCanvas.render(); // render once — text never changes
 
     this.texture = new THREE.CanvasTexture(this.textCanvas.texture);
     this.texture.minFilter = THREE.NearestFilter;
@@ -346,8 +346,7 @@ class CanvAscii {
   render() {
     const time = new Date().getTime() * 0.001;
 
-    this.textCanvas.render();
-    this.texture.needsUpdate = true;
+    // text canvas rendered once at init — no per-frame redraw needed
 
     this.mesh.material.uniforms.uTime.value = Math.sin(time);
 
@@ -491,8 +490,6 @@ export default function ASCIIText({
       }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap');
-
         .ascii-text-container canvas {
           position: absolute;
           left: 0;

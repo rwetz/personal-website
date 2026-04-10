@@ -1,6 +1,6 @@
 # Personal Website
 
-Single-page portfolio site built with React and Vite. Features a WebGL pixel-dithering hero background, ASCII name effect, typewriter subtitle, scroll-reveal animations, and an embedded PDF resume viewer.
+Single-page portfolio site + music page built with React and Vite. Features a CSS Houdini animated gradient hero, ASCII name art, typewriter subtitle, scroll-reveal animations, skill icons, embedded PDF resume viewer, WebGL dither background on the music page, hover-to-play audio portfolio cards, and SoundCloud/YouTube embeds.
 
 ---
 
@@ -11,26 +11,41 @@ Single-page portfolio site built with React and Vite. Features a WebGL pixel-dit
 | Framework | React 19 + Vite 8 |
 | Styling | Tailwind CSS v4 |
 | Animations | Framer Motion 12 |
-| 3D / WebGL | Three.js |
-| Post-processing | postprocessing (for PixelBlast liquid effect) |
-| Cursor animation | gsap (used by TextType) |
+| 3D / WebGL | Three.js, @react-three/fiber |
+| Post-processing | postprocessing, @react-three/postprocessing |
 | PDF viewer | react-pdf (PDF.js) |
 
 ## Third-Party Components
 
 | Component | Source |
 |---|---|
-| `PixelBlast` | Reactbits — pixel dithering WebGL background |
 | `ASCIIText` | Reactbits — Three.js ASCII text renderer |
 | `GlassSurface` | Reactbits — SVG displacement map glass effect |
 | `SpotlightCard` | Reactbits — radial gradient spotlight card |
 | `TextType` | Reactbits — typewriter cycling text |
+| `Dither` | Reactbits — WebGL dithered wave background |
 
-## Fonts
+## Color Palette
+
+| Token | Hex | Usage |
+|---|---|---|
+| `--color-surface` | `#0f0f13` | Page background |
+| `--color-surface-2` | `#1a1a24` | Alternate section background |
+| `--color-surface-3` | `#242433` | Cards, skill pills, input backgrounds |
+| `--color-muted` | `#94a3b8` | Secondary text, nav links, placeholders |
+| `--color-text` | `#e2e8f0` | Primary text |
+| `--color-accent-dark` | `#5b21b6` | Hover/pressed states, deep accent |
+| `--color-accent` | `#7c3aed` | Primary accent — buttons, underlines, borders |
+| `--color-accent-light` | `#a78bfa` | Highlighted nav links, tags, cursor, badges |
+
+---
+
+## Fonts & Icons
 
 - **Geist** / **Geist Mono** — body and code (Google Fonts)
 - **Libre Baskerville** — section headings (Google Fonts)
-- **IBM Plex Mono** — used internally by ASCIIText renderer
+- **IBM Plex Mono** — used by ASCIIText renderer (Google Fonts)
+- **Devicons** — skill pill icons via CDN
 
 ---
 
@@ -38,33 +53,55 @@ Single-page portfolio site built with React and Vite. Features a WebGL pixel-dit
 
 ```
 ├── public/
+│   ├── audio/
+│   │   ├── track1.mp3
+│   │   ├── track2.mp3
+│   │   └── track3.mp3
 │   ├── favicon.svg
-│   ├── icons.svg          # SVG sprite (Gmail, GitHub, LinkedIn icons)
+│   ├── icons.svg
+│   ├── manifest.json
 │   └── resume.pdf
 ├── src/
 │   ├── assets/
 │   │   ├── profile.jpg
 │   │   └── signature.png
 │   ├── components/
-│   │   ├── ASCIIText.jsx      # Three.js ASCII name effect (Reactbits)
+│   │   ├── ASCIIText.jsx      # Three.js ASCII name effect
 │   │   ├── About.jsx
-│   │   ├── Contact.jsx
-│   │   ├── GlassSurface.jsx   # SVG displacement glass effect (Reactbits)
-│   │   ├── Hero.jsx
-│   │   ├── Navbar.jsx
-│   │   ├── PixelBlast.jsx     # WebGL pixel dithering background (Reactbits)
-│   │   ├── Projects.jsx
-│   │   ├── Resume.jsx
-│   │   ├── Skills.jsx
-│   │   ├── SpotlightCard.jsx  # Spotlight hover card (Reactbits)
-│   │   └── TextType.jsx       # Typewriter text component (Reactbits)
-│   ├── App.jsx
+│   │   ├── CommandPalette.jsx # ⌘K command palette
+│   │   ├── Contact.jsx        # Copy-to-clipboard + contact form
+│   │   ├── Dither.jsx         # WebGL dithered wave background
+│   │   ├── GlassSurface.jsx   # SVG displacement glass effect
+│   │   ├── Hero.jsx           # Parallax gradient + scroll indicator
+│   │   ├── Music.jsx          # Music page (lazy-loaded)
+│   │   ├── Navbar.jsx         # Scroll-spy + animated underline
+│   │   ├── Projects.jsx       # 3D tilt + spotlight cards
+│   │   ├── Resume.jsx         # react-pdf viewer
+│   │   ├── Skills.jsx         # Staggered pills with brand colors
+│   │   ├── SpotlightCard.jsx  # Spotlight hover card
+│   │   └── TextType.jsx       # Typewriter cycling text
+│   ├── App.jsx                # Routing, custom cursor, Konami, ⌘K
 │   ├── index.css
 │   └── main.jsx
+├── markdown_files/
+│   ├── CLAUDE.md
+│   ├── improvements.md
+│   └── README.md
 ├── index.html
 ├── package.json
 └── vite.config.js
 ```
+
+## Features
+
+- **⌘K Command Palette** — jump to any section, copy email, download resume
+- **Custom cursor** — dot + lagging ring on desktop pointer devices
+- **Konami code** — toggles light mode easter egg
+- **Ctrl+Shift+L** — also toggles light mode
+- **Music page** (`/#music`) — SoundCloud embeds, YouTube videos, hover-to-play audio portfolio
+- **PWA** — installable via `manifest.json`
+- **Section URL updates** — hash updates as you scroll
+- **Lazy-loaded Music bundle** — Three.js/WebGL only loads when navigating to `/#music`
 
 ## Dev
 

@@ -111,11 +111,13 @@ const GlassSurface = ({
 
   useEffect(() => {
     if (!containerRef.current) return;
+    let timer;
     const resizeObserver = new ResizeObserver(() => {
-      setTimeout(updateDisplacementMap, 0);
+      clearTimeout(timer);
+      timer = setTimeout(updateDisplacementMap, 100);
     });
     resizeObserver.observe(containerRef.current);
-    return () => resizeObserver.disconnect();
+    return () => { resizeObserver.disconnect(); clearTimeout(timer); };
   }, []);
 
   useEffect(() => {

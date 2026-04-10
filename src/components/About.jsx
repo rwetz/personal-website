@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import profileImg from '../assets/profile.jpg'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -19,38 +20,36 @@ export default function About() {
 
         <div className="flex flex-col md:flex-row items-center gap-12">
           <motion.img
-            src="/src/assets/profile.jpg"
-            alt="Ryan"
-            className="shrink-0 w-64 h-64 rounded-full object-cover border-2 border-[var(--color-accent)]/40"
-            {...fadeUp(0.15)}
+            src={profileImg}
+            alt="Ryan Wetzstein"
+            className="shrink-0 w-48 sm:w-64 h-48 sm:h-64 rounded-full object-cover border-2 border-[var(--color-accent)]/40"
+            initial={{ clipPath: 'circle(0% at 50% 50%)', opacity: 0 }}
+            whileInView={{ clipPath: 'circle(55% at 50% 50%)', opacity: 1 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
+            style={{
+              boxShadow: '0 0 32px rgba(124,58,237,0.18)',
+            }}
           />
           <motion.div
             className="text-[var(--color-muted)] text-lg leading-relaxed text-left space-y-4"
             {...fadeUp(0.3)}
           >
             <p>
-              Hi! I&apos;m Ryan. I am a student at North Dakota State University
-              pursuing a bachelor's degree in Computer Science, as well as a minor
-              in Artificial Intelligence. I have a specific interest in artificial
-              intelligence and backend software development. My biggest interests
-              right now include machine learning, operating systems, and neural
-              networks. I am actively seeking an internship or co-op opportunity,
-              and I am open to working remotely. I am currently a junior and have
-              2 years of experience with object-oriented programming principles,
-              specifically in languages such as Java, C#, and Python. I have
-              in-class experience creating web applications using languages such
-              as HTML, CSS, TypeScript, JavaScript, and Python. I have completed
-              courses focused on data structures and algorithms, object-oriented
-              principles, agile software development, and frameworks.
+              Hi! I&apos;m Ryan — a junior at North Dakota State University pursuing a
+              Bachelor&apos;s in Computer Science with a minor in Artificial Intelligence.
             </p>
             <p>
-              When I&apos;m not working on university work, or personal projects,
-              you can find me exploring new weightlifting or excersizing, spending
-              time with friends or family, and enjoying the outdoors.
+              My core interests are machine learning, neural networks, and backend
+              development. I have two years of experience with object-oriented programming
+              in Java, C#, and Python, and hands-on web development in TypeScript, React,
+              and FastAPI. I&apos;ve completed coursework in data structures &amp; algorithms,
+              agile development, and operating systems.
             </p>
             <p>
-              I&apos;m currently open to new opportunities - feel free to reach
-              out!
+              Outside of code you&apos;ll find me lifting, making music, and enjoying the
+              outdoors. I&apos;m actively seeking an internship or co-op — remote-friendly.
+              Feel free to reach out!
             </p>
           </motion.div>
         </div>

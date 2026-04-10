@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import ASCIIText from './ASCIIText'
 import GlassSurface from './GlassSurface'
 import TextType from './TextType'
@@ -9,27 +10,64 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.6, ease: 'easeOut', delay },
 })
 
+function ScrollIndicator() {
+  const [visible, setVisible] = useState(true)
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY < 60)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return (
+    <motion.div
+      className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10"
+      animate={{ opacity: visible ? 1 : 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <span className="text-[10px] font-mono text-[var(--color-muted)] tracking-widest uppercase">scroll</span>
+      <motion.div
+        animate={{ y: [0, 6, 0] }}
+        transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--color-accent-light)]" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 export default function Hero() {
+  const { scrollY } = useScroll()
+  const gradientY = useTransform(scrollY, [0, 600], [0, 80])
+
   return (
     <section
       id="hero"
       className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden"
     >
-      {/* CSS orb background */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <div className="hero-orb hero-orb-1" />
-        <div className="hero-orb hero-orb-2" />
-        <div className="hero-orb hero-orb-3" />
-      </div>
+      {/* Parallax gradient background */}
+      <motion.div className="hero-gradient z-0" style={{ y: gradientY }} />
+
+      {/* Vignette overlay */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.45) 100%)',
+        }}
+      />
 
       {/* Mobile name — shown only below md */}
       <motion.div className="relative z-10 md:hidden mb-4" {...fadeUp(0.1)}>
-        <h1 className="text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-r from-white via-[var(--color-accent-light)] to-white bg-clip-text text-transparent">
+        <h1
+          className="shimmer-text font-bold tracking-tight"
+          style={{ fontSize: 'clamp(2.5rem, 8vw, 3.75rem)' }}
+        >
           Ryan Wetzstein
         </h1>
       </motion.div>
 
-      {/* ASCII name effect — desktop only, full section width */}
+      {/* ASCII name effect — desktop only */}
       <motion.div
         className="relative z-10 hidden md:block w-full"
         style={{ height: '260px' }}
@@ -50,7 +88,11 @@ export default function Hero() {
         <motion.div className="mb-4" {...fadeUp(0.3)}>
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-white/5 border border-[var(--color-accent-dark)]/40 text-[var(--color-muted)]">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+              <motion.span
+                className="absolute inline-flex h-full w-full rounded-full bg-green-400"
+                animate={{ scale: [1, 1.8, 1], opacity: [0.75, 0, 0.75] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
             </span>
             Open to internships
@@ -77,7 +119,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.div className="flex flex-wrap gap-4 justify-center" {...fadeUp(0.6)}>
-          <a href="#projects">
+          <a href="#projects" className="min-h-[48px] flex items-center">
             <GlassSurface
               width="auto"
               height={48}
@@ -93,7 +135,7 @@ export default function Hero() {
               <span className="text-white font-medium text-sm whitespace-nowrap">View Projects</span>
             </GlassSurface>
           </a>
-          <a href="/resume.pdf" download>
+          <a href="/resume.pdf" download className="min-h-[48px] flex items-center">
             <GlassSurface
               width="auto"
               height={48}
@@ -111,6 +153,8 @@ export default function Hero() {
           </a>
         </motion.div>
       </div>
+
+      <ScrollIndicator />
     </section>
   )
 }
