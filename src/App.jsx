@@ -253,7 +253,7 @@ export default function App() {
                 </div>
               </div>
               <p className="text-center text-xs text-[var(--color-muted)]/50 mt-3">
-                press <kbd className="font-mono bg-white/5 border border-white/10 px-1 rounded">⌘K</kbd> for commands
+                press <kbd className="font-mono bg-white/5 border border-white/10 px-1 rounded">Ctrl+K</kbd> for commands
               </p>
             </footer>
           </motion.div>
