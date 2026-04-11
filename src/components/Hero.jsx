@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import ASCIIText from './ASCIIText'
 import GlassSurface from './GlassSurface'
 import TextType from './TextType'
+import Silk from './Silk'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -48,6 +49,9 @@ export default function Hero() {
     >
       {/* Parallax gradient background */}
       <motion.div className="hero-gradient z-0" style={{ y: gradientY }} />
+
+      {/* Silk texture layer */}
+      <Silk color="#3b1f6e" speed={5} scale={1.2} noiseIntensity={1.5} opacity={0.30} />
 
       {/* Vignette overlay */}
       <div

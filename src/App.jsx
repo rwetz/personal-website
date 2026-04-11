@@ -9,6 +9,7 @@ import Skills from './components/Skills'
 import Resume from './components/Resume'
 import Contact from './components/Contact'
 import CommandPalette from './components/CommandPalette'
+import PartyMode from './components/PartyMode'
 
 const Music = lazy(() => import('./components/Music'))
 
@@ -25,102 +26,12 @@ function useHash() {
   return hash
 }
 
-/* ── Custom cursor ───────────────────────────────────────────────────────── */
-function CustomCursor() {
-  const dotRef = useRef(null)
-  const ringRef = useRef(null)
-  const ringPos = useRef({ x: 0, y: 0 })
-  const mousePos = useRef({ x: 0, y: 0 })
-  const rafRef = useRef(null)
-  const [visible, setVisible] = useState(false)
-  const [hovered, setHovered] = useState(false)
-
-  useEffect(() => {
-    // Only on pointer (non-touch) devices
-    if (!window.matchMedia('(pointer: fine)').matches) return
-
-    const onMove = (e) => {
-      mousePos.current = { x: e.clientX, y: e.clientY }
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`
-      }
-      if (!visible) setVisible(true)
-    }
-
-    const onOver = (e) => {
-      const t = e.target.closest('a, button, [role="button"], input, textarea, select, label')
-      setHovered(!!t)
-    }
-
-    const onLeave = () => setVisible(false)
-    const onEnter = () => setVisible(true)
-
-    document.addEventListener('mousemove', onMove)
-    document.addEventListener('mouseover', onOver)
-    document.addEventListener('mouseleave', onLeave)
-    document.addEventListener('mouseenter', onEnter)
-
-    const loop = () => {
-      ringPos.current.x += (mousePos.current.x - ringPos.current.x) * 0.12
-      ringPos.current.y += (mousePos.current.y - ringPos.current.y) * 0.12
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px)`
-      }
-      rafRef.current = requestAnimationFrame(loop)
-    }
-    rafRef.current = requestAnimationFrame(loop)
-
-    return () => {
-      document.removeEventListener('mousemove', onMove)
-      document.removeEventListener('mouseover', onOver)
-      document.removeEventListener('mouseleave', onLeave)
-      document.removeEventListener('mouseenter', onEnter)
-      cancelAnimationFrame(rafRef.current)
-    }
-  }, [visible])
-
-  if (typeof window !== 'undefined' && !window.matchMedia('(pointer: fine)').matches) return null
-
-  return (
-    <>
-      {/* Dot — snaps immediately */}
-      <div
-        ref={dotRef}
-        className="pointer-events-none fixed top-0 left-0 z-[10000]"
-        style={{
-          width: hovered ? 8 : 5,
-          height: hovered ? 8 : 5,
-          marginLeft: hovered ? -4 : -2.5,
-          marginTop: hovered ? -4 : -2.5,
-          borderRadius: '50%',
-          background: 'var(--color-accent-light)',
-          opacity: visible ? 1 : 0,
-          transition: 'width 0.15s, height 0.15s, opacity 0.3s, margin 0.15s',
-        }}
-      />
-      {/* Ring — lags behind */}
-      <div
-        ref={ringRef}
-        className="pointer-events-none fixed top-0 left-0 z-[9999]"
-        style={{
-          width: hovered ? 36 : 24,
-          height: hovered ? 36 : 24,
-          marginLeft: hovered ? -18 : -12,
-          marginTop: hovered ? -18 : -12,
-          borderRadius: '50%',
-          border: `1.5px solid var(--color-accent-light)`,
-          opacity: visible ? 0.5 : 0,
-          transition: 'width 0.2s, height 0.2s, opacity 0.3s, margin 0.2s',
-        }}
-      />
-    </>
-  )
-}
 
 export default function App() {
   const hash = useHash()
   const isMusic = hash === '#music'
   const [paletteOpen, setPaletteOpen] = useState(false)
+  const [partyMode, setPartyMode] = useState(false)
   const konamiProgress = useRef(0)
 
   // Section URL updates as user scrolls
@@ -155,14 +66,14 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  // Konami code easter egg
+  // Konami code easter egg — party mode
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === KONAMI[konamiProgress.current]) {
         konamiProgress.current += 1
         if (konamiProgress.current === KONAMI.length) {
           konamiProgress.current = 0
-          document.documentElement.classList.toggle('light')
+          setPartyMode(v => !v)
         }
       } else {
         konamiProgress.current = 0
@@ -185,9 +96,13 @@ export default function App() {
 
   return (
     <>
-      <CustomCursor />
+      {/* Party overlay lives OUTSIDE the content wrapper so position:fixed
+          elements aren't trapped inside the hue-rotate stacking context */}
+      <PartyMode active={partyMode} onExit={() => setPartyMode(false)} />
       <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
 
+      {/* Content wrapper — hue-rotate applied here, not on body */}
+      <div className={partyMode ? 'party-active' : ''}>
       <AnimatePresence mode="wait">
         {isMusic ? (
           <motion.div
@@ -259,6 +174,7 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </>
   )
 }
