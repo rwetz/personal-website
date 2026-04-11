@@ -36,19 +36,22 @@ export default function About() {
             {...fadeUp(0.3)}
           >
             <p>
-              Hi! I&apos;m Ryan — a junior at North Dakota State University pursuing a
+              <span className="shimmer-text font-semibold text-xl">Hi! I&apos;m Ryan</span>
+              {' '}— a junior at <span className="keyword-text">North Dakota State University</span> pursuing a
               Bachelor&apos;s in Computer Science with a minor in Artificial Intelligence.
             </p>
             <p>
-              My core interests are machine learning, neural networks, and backend
-              development. I have two years of experience with object-oriented programming
-              in Java, C#, and Python, and hands-on web development in TypeScript, React,
-              and FastAPI. I&apos;ve completed coursework in data structures &amp; algorithms,
-              agile development, and operating systems.
+              My core interests are <span className="keyword-text">machine learning</span>,{' '}
+              <span className="keyword-text">neural networks</span>, and{' '}
+              <span className="keyword-text">backend development</span>. I have two years
+              of experience with object-oriented programming in Java, C#, and Python, and
+              hands-on web development in TypeScript, React, and FastAPI. I&apos;ve completed
+              coursework in data structures &amp; algorithms, agile development, and operating systems.
             </p>
             <p>
               Outside of code you&apos;ll find me lifting, making music, and enjoying the
-              outdoors. I&apos;m actively seeking an internship or co-op — remote-friendly.
+              outdoors. I&apos;m actively seeking an{' '}
+              <span className="keyword-text">internship or co-op</span> — remote-friendly.
               Feel free to reach out!
             </p>
           </motion.div>

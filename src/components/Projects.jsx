@@ -253,10 +253,10 @@ function DetailPanel({ project }) {
 
 // ── Skeleton ───────────────────────────────────────────────────────────────
 
-function Skeleton() {
+function Skeleton({ cardWidth }) {
   return (
     <div className="flex flex-col items-center gap-16 animate-pulse">
-      <div className="rounded-2xl bg-[var(--color-surface-3)] border border-white/5" style={{ width: 340, height: 220 }} />
+      <div className="rounded-2xl bg-[var(--color-surface-3)] border border-white/5" style={{ width: cardWidth, height: 220 }} />
       <div className="w-full max-w-2xl space-y-4 rounded-2xl bg-[var(--color-surface-3)] border border-white/5 p-8">
         <div className="h-4 w-1/3 rounded bg-white/10" />
         <div className="h-7 w-2/3 rounded bg-white/10" />
@@ -281,6 +281,7 @@ export default function Projects() {
   const [projects, setProjects] = useState([])
   const [status, setStatus] = useState('loading')
   const [activeIdx, setActiveIdx] = useState(0)
+  const [cardWidth, setCardWidth] = useState(() => Math.min(340, window.innerWidth - 48))
 
   useEffect(() => {
     fetchGithubProjects()
@@ -288,22 +289,28 @@ export default function Projects() {
       .catch(() => setStatus('error'))
   }, [])
 
+  useEffect(() => {
+    const onResize = () => setCardWidth(Math.min(340, window.innerWidth - 48))
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
   return (
-    <section id="projects" className="py-24 px-6 bg-[var(--color-surface-2)]">
+    <section id="projects" className="py-28 md:py-24 px-6 bg-[var(--color-surface-2)]">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="mb-14"
+          className="mb-20 md:mb-14"
         >
           <span className="text-xs font-mono text-[var(--color-accent-light)] tracking-widest">// 02</span>
           <h2 className="text-3xl font-bold text-[var(--color-text)] mt-1 mb-2">Projects</h2>
           <div className="accent-bar" />
         </motion.div>
 
-        {status === 'loading' && <Skeleton />}
+        {status === 'loading' && <Skeleton cardWidth={cardWidth} />}
 
         {status === 'error' && (
           <p className="text-[var(--color-muted)] text-sm font-mono">
@@ -323,7 +330,7 @@ export default function Projects() {
               className="flex flex-col items-center gap-4"
             >
               <CardSwap
-                width={340}
+                width={cardWidth}
                 height={220}
                 cardDistance={50}
                 verticalDistance={55}

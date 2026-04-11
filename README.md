@@ -1,6 +1,6 @@
 # Personal Website
 
-Single-page portfolio site + music page built with React and Vite. Features a CSS Houdini animated gradient hero, ASCII name art, typewriter subtitle, scroll-reveal animations, skill icons, embedded PDF resume viewer, WebGL dither background on the music page, hover-to-play audio portfolio cards, and SoundCloud/YouTube embeds.
+Single-page portfolio site + music page built with React and Vite. Features a CSS Houdini animated gradient hero, ASCII name art, typewriter subtitle, scroll-reveal animations, gradient keyword highlights in the About section, animated section dividers, skill icons, embedded PDF resume viewer, WebGL dither background on the music page, hover-to-play audio portfolio cards, and SoundCloud/YouTube embeds.
 
 ---
 
@@ -102,6 +102,10 @@ Single-page portfolio site + music page built with React and Vite. Features a CS
 - **PWA** — installable via `manifest.json`
 - **Section URL updates** — hash updates as you scroll
 - **Lazy-loaded Music bundle** — Three.js/WebGL only loads when navigating to `/#music`
+- **Gradient keyword highlights** — key terms in About shimmer/glow with accent colors
+- **Animated section dividers** — glowing sweeping line between sections
+- **Responsive card deck** — Projects CardSwap width adapts to screen size
+- **Social footer** — Instagram and X icons alongside GitHub and music links
 
 ## Dev
 

@@ -151,16 +151,13 @@ export default function App() {
                   </a>
                 </span>
                 <div className="flex items-center gap-5">
-                  <a href="mailto:rwetz00@gmail.com" aria-label="Email" className="p-2 text-[var(--color-muted)] hover:text-[var(--color-text)] transition-colors">
-                    <svg width="20" height="20"><use href="/icons.svg#gmail-icon" /></svg>
+                  <a href="https://instagram.com/ryanwetz" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="p-2 text-white/60 hover:text-white transition-colors">
+                    <svg width="20" height="20"><use href="/icons.svg#instagram-icon" /></svg>
                   </a>
-                  <a href="https://github.com/rwetz" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="p-2 text-[var(--color-muted)] hover:text-[var(--color-text)] transition-colors">
-                    <svg width="20" height="20"><use href="/icons.svg#github-icon" /></svg>
+                  <a href="https://x.com/ryanwetz" target="_blank" rel="noopener noreferrer" aria-label="X" className="p-2 text-white/60 hover:text-white transition-colors">
+                    <svg width="20" height="20"><use href="/icons.svg#x-icon" /></svg>
                   </a>
-                  <a href="https://linkedin.com/in/ryan-wetzstein" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="p-2 text-[var(--color-muted)] hover:text-[var(--color-text)] transition-colors">
-                    <svg width="20" height="20"><use href="/icons.svg#linkedin-icon" /></svg>
-                  </a>
-                  <a href="#music" aria-label="Music" className="p-2 text-[var(--color-muted)] hover:text-[var(--color-accent-light)] transition-colors">
+                  <a href="#music" aria-label="Music" className="p-2 text-white/60 hover:text-[var(--color-accent-light)] transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
                     </svg>
