@@ -151,10 +151,10 @@ export default function App() {
                   </a>
                 </span>
                 <div className="flex items-center gap-5">
-                  <a href="https://instagram.com/ryanwetz" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="p-2 text-white/60 hover:text-white transition-colors">
+                  <a href="https://instagram.com/ryanwetzstein" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="p-2 text-white/60 hover:text-white transition-colors">
                     <svg width="20" height="20"><use href="/icons.svg#instagram-icon" /></svg>
                   </a>
-                  <a href="https://x.com/ryanwetz" target="_blank" rel="noopener noreferrer" aria-label="X" className="p-2 text-white/60 hover:text-white transition-colors">
+                  <a href="https://x.com/ryanawetzstein" target="_blank" rel="noopener noreferrer" aria-label="X" className="p-2 text-white/60 hover:text-white transition-colors">
                     <svg width="20" height="20"><use href="/icons.svg#x-icon" /></svg>
                   </a>
                   <a href="#music" aria-label="Music" className="p-2 text-white/60 hover:text-[var(--color-accent-light)] transition-colors">
