@@ -1,5 +1,6 @@
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import WaveSurfer from "wavesurfer.js";
 import Dither from "./Dither";
 import signatureImg from "../assets/signature.png";
 
@@ -42,21 +43,39 @@ const youtubeVideos = [
 const portfolioTracks = [
   {
     title: "1",
-    description: "Here's a look into what I've been up to recently.",
+    description: "2026",
     tags: ["Original", "Produced"],
     audioSrc: "/audio/track1.mp3",
   },
   {
     title: "2",
-    description: "These are original compositions.",
+    description: "2025",
     tags: ["Original", "Produced"],
     audioSrc: "/audio/track2.mp3",
   },
   {
     title: "3",
-    description: "More music coming soon.",
+    description: "2026",
     tags: ["Original", "Produced"],
     audioSrc: "/audio/track3.mp3",
+  },
+  {
+    title: "4",
+    description: "2026",
+    tags: ["Original", "Produced"],
+    audioSrc: "/audio/track4.mp3",
+  },
+  {
+    title: "5",
+    description: "2026",
+    tags: ["Original", "Produced"],
+    audioSrc: "/audio/track5.mp3",
+  },
+  {
+    title: "6",
+    description: "2026",
+    tags: ["Original", "Produced"],
+    audioSrc: "/audio/track6.mp3",
   },
 ];
 
@@ -103,179 +122,109 @@ function LiteYouTube({ embedId, title }) {
 }
 
 // ---------------------------------------------------------------------------
-// Portfolio card — real-time Web Audio waveform (#66) + gradient bars (#bonus)
+// Portfolio card — Wavesurfer.js real waveform from audio file
 // ---------------------------------------------------------------------------
 function PortfolioCard({ title, description, tags, audioSrc, index }) {
-  const audioRef    = useRef(null);
-  const canvasRef   = useRef(null);
-  const audioCtxRef = useRef(null);
-  const analyserRef = useRef(null);
-  const rafRef      = useRef(null);
-  const [playing, setPlaying] = useState(false);
+  const waveContainerRef = useRef(null);
+  const wsRef            = useRef(null);
+  const [playing, setPlaying]   = useState(false);
+  const [ready, setReady]       = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration]       = useState(0);
 
-  // Memoized static bar heights, unique per card (#63)
-  const staticBars = useMemo(
-    () =>
-      Array.from({ length: 48 }, (_, k) =>
-        Math.abs(
-          Math.sin((k + index * 3) * 0.75) * 16 +
-          Math.cos((k + index * 2) * 0.35) * 8
-        )
-      ),
-    [index]
-  );
+  useEffect(() => {
+    if (!waveContainerRef.current) return;
 
-  // Set up AudioContext + AnalyserNode once per audio element (#66)
-  const setupAudio = () => {
-    if (audioCtxRef.current) return;
-    const ctx   = new AudioContext();
-    const analyser = ctx.createAnalyser();
-    analyser.fftSize = 128;
-    analyser.smoothingTimeConstant = 0.82;
-    const source = ctx.createMediaElementSource(audioRef.current);
-    source.connect(analyser);
-    analyser.connect(ctx.destination);
-    audioCtxRef.current = ctx;
-    analyserRef.current = analyser;
+    const ws = WaveSurfer.create({
+      container: waveContainerRef.current,
+      waveColor: "#7c3aed",
+      progressColor: "#a78bfa",
+      cursorColor: "transparent",
+      barWidth: 2,
+      barGap: 1,
+      barRadius: 2,
+      height: 64,
+      normalize: true,
+      backend: "WebAudio",
+      url: audioSrc,
+      fetchParams: { cache: "force-cache" },
+    });
+
+    ws.on("ready", () => {
+      setReady(true);
+      setDuration(ws.getDuration());
+    });
+    ws.on("audioprocess", () => setCurrentTime(ws.getCurrentTime()));
+    ws.on("play",  () => setPlaying(true));
+    ws.on("pause", () => setPlaying(false));
+    ws.on("finish", () => {
+      setPlaying(false);
+      setCurrentTime(0);
+    });
+
+    wsRef.current = ws;
+    return () => ws.destroy();
+  }, [audioSrc]);
+
+  const togglePlay = () => {
+    wsRef.current?.playPause();
   };
 
-  const startViz = () => {
-    const canvas = canvasRef.current;
-    if (!canvas || !analyserRef.current) return;
-
-    const draw = () => {
-      const w   = canvas.offsetWidth;
-      const h   = canvas.offsetHeight;
-      canvas.width  = w;
-      canvas.height = h;
-      const ctx2d = canvas.getContext("2d");
-      const data  = new Uint8Array(analyserRef.current.frequencyBinCount);
-      analyserRef.current.getByteFrequencyData(data);
-
-      ctx2d.clearRect(0, 0, w, h);
-
-      const count = data.length;
-      const barW  = (w / count) * 0.6;
-      const step  = w / count;
-
-      for (let i = 0; i < count; i++) {
-        const barH = Math.max(2, (data[i] / 255) * h);
-        const x    = i * step;
-        const y    = h - barH;
-
-        const grad = ctx2d.createLinearGradient(0, h, 0, y);
-        grad.addColorStop(0, "rgba(91,33,182,0.85)");
-        grad.addColorStop(0.5, "rgba(124,58,237,0.95)");
-        grad.addColorStop(1, "rgba(167,139,250,1)");
-        ctx2d.fillStyle = grad;
-
-        if (ctx2d.roundRect) {
-          ctx2d.beginPath();
-          ctx2d.roundRect(x, y, barW, barH, 2);
-          ctx2d.fill();
-        } else {
-          ctx2d.fillRect(x, y, barW, barH);
-        }
-      }
-
-      rafRef.current = requestAnimationFrame(draw);
-    };
-    draw();
+  const fmt = (s) => {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, "0")}`;
   };
-
-  const stopViz = () => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    rafRef.current = null;
-  };
-
-  const handleEnter = () => {
-    if (!audioRef.current) return;
-    setupAudio();
-    if (audioCtxRef.current?.state === "suspended") audioCtxRef.current.resume();
-    audioRef.current.currentTime = 0;
-    audioRef.current
-      .play()
-      .then(() => {
-        setPlaying(true);
-        startViz();
-      })
-      .catch(() => {});
-  };
-
-  const handleLeave = () => {
-    if (!audioRef.current) return;
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
-    stopViz();
-    setPlaying(false);
-  };
-
-  useEffect(() => () => {
-    stopViz();
-    audioCtxRef.current?.close();
-  }, []);
-
-  const gradId = `wg-${index}`;
 
   return (
     <motion.div
       {...fadeUp(index * 0.1)}
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-      onTouchStart={handleEnter}
-      onTouchEnd={handleLeave}
-      className="flex flex-col bg-[var(--color-surface-3)] rounded-xl p-6 border border-white/5 hover:border-[var(--color-accent-dark)]/60 hover:-translate-y-1 transition-all duration-200 cursor-pointer"
+      className="flex flex-col bg-[var(--color-surface-3)] rounded-xl p-6 border border-white/5 hover:border-[var(--color-accent-dark)]/60 transition-all duration-200"
     >
-      <audio ref={audioRef} src={audioSrc} preload="none" />
+      {/* Waveform */}
+      <div
+        ref={waveContainerRef}
+        className="w-full rounded-lg bg-[var(--color-surface-2)] mb-3 overflow-hidden cursor-pointer"
+        onClick={togglePlay}
+      />
 
-      {/* Waveform container */}
-      <div className="w-full h-16 rounded-lg bg-[var(--color-surface-2)] mb-4 overflow-hidden relative">
-        {/* Static gradient SVG — visible when idle */}
-        <svg
-          viewBox="0 0 240 40"
-          className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${playing ? "opacity-0" : "opacity-100"}`}
-          preserveAspectRatio="none"
+      {/* Controls row */}
+      <div className="flex items-center gap-3 mb-4">
+        <button
+          onClick={togglePlay}
+          disabled={!ready}
+          aria-label={playing ? "Pause" : "Play"}
+          className="w-9 h-9 rounded-full bg-[var(--color-accent)] hover:bg-[var(--color-accent-dark)] disabled:opacity-40 flex items-center justify-center transition-colors shrink-0"
         >
-          <defs>
-            <linearGradient id={gradId} x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0%"   stopColor="#5b21b6" stopOpacity="0.7" />
-              <stop offset="50%"  stopColor="#7c3aed" stopOpacity="0.85" />
-              <stop offset="100%" stopColor="#a78bfa" stopOpacity="1" />
-            </linearGradient>
-          </defs>
-          {staticBars.map((h, k) => (
-            <rect
-              key={k}
-              x={k * 5 + 1}
-              y={20 - h}
-              width="3"
-              height={h * 2}
-              fill={`url(#${gradId})`}
-              rx="1"
-            />
-          ))}
-        </svg>
-
-        {/* Real-time canvas — visible when playing */}
-        <canvas
-          ref={canvasRef}
-          className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${playing ? "opacity-100" : "opacity-0"}`}
-        />
-      </div>
-
-      <h3 className="text-base font-semibold text-[var(--color-text)] mb-1">{title}</h3>
-      <p className="text-[var(--color-muted)] text-sm leading-relaxed flex-1 mb-4">{description}</p>
-      <div className="flex flex-wrap gap-2 items-center">
-        {tags.map((tag) => (
-          <span key={tag} className="text-xs px-2 py-1 rounded bg-[var(--color-accent)]/15 text-[var(--color-accent-light)] font-mono">
-            {tag}
-          </span>
-        ))}
+          {playing ? (
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="white">
+              <rect x="1" y="1" width="4" height="10" rx="1" />
+              <rect x="7" y="1" width="4" height="10" rx="1" />
+            </svg>
+          ) : (
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="white">
+              <polygon points="2,1 11,6 2,11" />
+            </svg>
+          )}
+        </button>
+        <span className="text-xs font-mono text-[var(--color-muted)] tabular-nums">
+          {fmt(currentTime)} / {ready ? fmt(duration) : "--:--"}
+        </span>
         {playing && (
           <span className="ml-auto text-xs text-[var(--color-accent-light)] font-mono animate-pulse">
             ♪ playing
           </span>
         )}
+      </div>
+
+      <h3 className="text-base font-semibold text-[var(--color-text)] mb-1">{title}</h3>
+      <p className="text-[var(--color-muted)] text-sm leading-relaxed flex-1 mb-4">{description}</p>
+      <div className="flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <span key={tag} className="text-xs px-2 py-1 rounded bg-[var(--color-accent)]/15 text-[var(--color-accent-light)] font-mono">
+            {tag}
+          </span>
+        ))}
       </div>
     </motion.div>
   );
@@ -428,7 +377,7 @@ export default function Music() {
           <SectionHeader number={3} title="Portfolio" />
           <motion.div {...fadeUp(0.1)}>
             <p className="text-[var(--color-muted)] text-lg max-w-xl mb-12 -mt-4">
-              Original compositions and productions. Hover to preview.
+              Original compositions and productions.
             </p>
           </motion.div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

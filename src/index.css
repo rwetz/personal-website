@@ -57,35 +57,7 @@ body::after {
   border-radius: 4px;
 }
 
-/* ── Section dividers ──────────────────────────────────────────────────── */
-@keyframes divider-sweep {
-  0%   { background-position: -100% 0; }
-  100% { background-position: 200% 0; }
-}
 
-section + section {
-  position: relative;
-}
-
-section + section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--color-accent-dark) 25%,
-    var(--color-accent-light) 50%,
-    var(--color-accent-dark) 75%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  box-shadow: 0 0 8px var(--color-accent), 0 0 20px color-mix(in srgb, var(--color-accent) 40%, transparent);
-  animation: divider-sweep 6s ease-in-out infinite;
-}
 
 /* ── Hero animated gradient — CSS Houdini @property ───────────────────── */
 @property --o1x { syntax: '<percentage>'; initial-value: 15%; inherits: false; }
@@ -152,19 +124,6 @@ section + section::before {
   font-weight: 500;
 }
 
-/* ── Accent bar draw-on ────────────────────────────────────────────────── */
-@keyframes accent-draw {
-  from { width: 0; opacity: 0; }
-  to   { width: 3rem; opacity: 1; }
-}
-
-.accent-bar {
-  height: 4px;
-  border-radius: 9999px;
-  margin-bottom: 2.5rem;
-  background: linear-gradient(to right, var(--color-accent-dark), var(--color-accent));
-  animation: accent-draw 0.5s ease-out forwards;
-}
 
 /* ── Waveform animation (music portfolio cards) ────────────────────────── */
 @keyframes waveBar {
@@ -205,6 +164,20 @@ section + section::before {
 
 section[id] {
   scroll-margin-top: 72px;
+}
+
+/* ── Accent bar draw-on ────────────────────────────────────────────────── */
+@keyframes accent-draw {
+  from { width: 0; opacity: 0; }
+  to   { width: 3rem; opacity: 1; }
+}
+
+.accent-bar {
+  height: 4px;
+  border-radius: 9999px;
+  margin-bottom: 2.5rem;
+  background: linear-gradient(to right, var(--color-accent-dark), var(--color-accent));
+  animation: accent-draw 0.5s ease-out forwards;
 }
 
 section h2 {

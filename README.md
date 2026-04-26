@@ -1,6 +1,6 @@
 # Personal Website
 
-Single-page portfolio site + music page built with React and Vite. Features a CSS Houdini animated gradient hero, ASCII name art, typewriter subtitle, scroll-reveal animations, gradient keyword highlights in the About section, animated section dividers, skill icons, embedded PDF resume viewer, WebGL dither background on the music page, hover-to-play audio portfolio cards, and SoundCloud/YouTube embeds.
+Single-page portfolio site + music page built with React and Vite. Features a CSS Houdini animated gradient hero, ASCII name art, typewriter subtitle, scroll-reveal animations, gradient keyword highlights in the About section, skill icons, embedded PDF resume viewer, WebGL dither background on the music page, Wavesurfer.js audio portfolio cards, and SoundCloud/YouTube embeds.
 
 ---
 
@@ -14,6 +14,7 @@ Single-page portfolio site + music page built with React and Vite. Features a CS
 | 3D / WebGL | Three.js, @react-three/fiber |
 | Post-processing | postprocessing, @react-three/postprocessing |
 | PDF viewer | react-pdf (PDF.js) |
+| Audio | wavesurfer.js |
 
 ## Third-Party Components
 
@@ -56,7 +57,10 @@ Single-page portfolio site + music page built with React and Vite. Features a CS
 │   ├── audio/
 │   │   ├── track1.mp3
 │   │   ├── track2.mp3
-│   │   └── track3.mp3
+│   │   ├── track3.mp3
+│   │   ├── track4.mp3
+│   │   ├── track5.mp3
+│   │   └── track6.mp3
 │   ├── favicon.svg
 │   ├── icons.svg
 │   ├── manifest.json
@@ -98,12 +102,11 @@ Single-page portfolio site + music page built with React and Vite. Features a CS
 - **Custom cursor** — dot + lagging ring on desktop pointer devices
 - **Konami code** — toggles light mode easter egg
 - **Ctrl+Shift+L** — also toggles light mode
-- **Music page** (`/#music`) — SoundCloud embeds, YouTube videos, hover-to-play audio portfolio
+- **Music page** (`/#music`) — SoundCloud embeds, YouTube videos, Wavesurfer.js audio portfolio with real waveforms, seek, and live timestamps
 - **PWA** — installable via `manifest.json`
 - **Section URL updates** — hash updates as you scroll
 - **Lazy-loaded Music bundle** — Three.js/WebGL only loads when navigating to `/#music`
 - **Gradient keyword highlights** — key terms in About shimmer/glow with accent colors
-- **Animated section dividers** — glowing sweeping line between sections
 - **Responsive card deck** — Projects CardSwap width adapts to screen size
 - **Social footer** — Instagram and X icons alongside GitHub and music links
 
