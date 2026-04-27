@@ -133,7 +133,7 @@ Theme is selected via the color swatch button in the navbar and persisted to `lo
 - **Gradient keyword highlights** — key terms in About shimmer/glow with accent colors
 - **Responsive card deck** — Projects CardSwap width adapts to screen size
 - **Social footer** — Instagram and X icons alongside GitHub and music links
-- **Browser DAW** (`/#daw`, also in ⌘K palette) — 5-track piano roll sequencer powered entirely by Web Audio API; each track has an icon + dropdown to swap between Piano, Synth, Strings, Bass, and Drums; 32-step grid, spacebar play/pause, BPM control, loop toggle, per-track clear; all colors follow the site theme system
+- **Browser DAW** (`/#daw`, also in ⌘K palette) — 5-track piano roll sequencer powered entirely by Web Audio API; each track has an icon + dropdown to swap between Piano, Synth, Strings, Bass, and Drums; 32-step grid with note velocity (right-click to cycle 4 levels) and note length (1/2/4/8 steps via transport selector); per-track reverb and delay sends routed through a global convolution reverb (synthetically generated IR, no audio files) and BPM-synced feedback delay; full undo/redo (Ctrl+Z/Shift+Z, up to 60 states) and per-track copy/paste; spacebar play/pause, BPM control, loop toggle; all colors follow the site theme system
 
 ## Dev
 

@@ -1,13 +1,15 @@
 import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-const STEPS   = 32
-const CELL_W  = 38
-const PITCH_H = 28
-const DRUM_H  = 56
-const LABEL_W = 108
-const STEP_H  = 38
-const INST_H  = 44
+const STEPS       = 32
+const CELL_W      = 38
+const PITCH_H     = 28
+const DRUM_H      = 56
+const LABEL_W     = 140
+const STEP_H      = 38
+const INST_H      = 56
+const DEFAULT_VEL = 0.8
+const MAX_HIST    = 60
 
 const NOTE_NAMES   = ['B','Bb','A','Ab','G','Gb','F','E','Eb','D','Db','C']
 const PITCHED_ROWS = [4,3].flatMap(oct => NOTE_NAMES.map(n => `${n}${oct}`))
@@ -31,6 +33,17 @@ const DEFAULT_TRACKS = [
   { id: 'track-3', instId: 'Bass'    },
   { id: 'track-4', instId: 'Drums'   },
 ]
+
+const VEL_LEVELS = [0.25, 0.5, 0.75, 1.0]
+
+// ─── History helpers (module-level, no closure issues) ────────────────────────
+function pushHistory(histRef, snap) {
+  const h = histRef.current
+  h.stack = h.stack.slice(0, h.idx + 1)
+  h.stack.push(snap)
+  if (h.stack.length > MAX_HIST) h.stack.shift()
+  else h.idx++
+}
 
 // ─── Instrument icons ─────────────────────────────────────────────────────────
 function InstIcon({ id, size = 16 }) {
@@ -84,10 +97,38 @@ function InstIcon({ id, size = 16 }) {
   return null
 }
 
-// ─── Audio ────────────────────────────────────────────────────────────────────
-let _ctx = null
+// ─── Audio infrastructure ─────────────────────────────────────────────────────
+let _ctx = null, _reverb = null, _delayNode = null, _delayFeedback = null, _master = null
+
+function makeReverbIR(ctx, dur = 2.4, decay = 2.8) {
+  const sr  = ctx.sampleRate
+  const len = Math.ceil(sr * dur)
+  const buf = ctx.createBuffer(2, len, sr)
+  for (let ch = 0; ch < 2; ch++) {
+    const d = buf.getChannelData(ch)
+    for (let i = 0; i < len; i++)
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay)
+  }
+  return buf
+}
+
 function getCtx() {
-  if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext)()
+  if (!_ctx) {
+    _ctx = new (window.AudioContext || window.webkitAudioContext)()
+    _master = _ctx.createGain()
+    _master.gain.value = 1
+    _master.connect(_ctx.destination)
+    _reverb = _ctx.createConvolver()
+    _reverb.buffer = makeReverbIR(_ctx)
+    _reverb.connect(_master)
+    _delayNode = _ctx.createDelay(2.0)
+    _delayNode.delayTime.value = 0.375
+    _delayFeedback = _ctx.createGain()
+    _delayFeedback.gain.value = 0.35
+    _delayNode.connect(_delayFeedback)
+    _delayFeedback.connect(_delayNode)
+    _delayNode.connect(_master)
+  }
   if (_ctx.state === 'suspended') _ctx.resume()
   return _ctx
 }
@@ -109,11 +150,20 @@ function makeNoise(ctx, dur) {
   return src
 }
 
-function playNote(instId, row, t, dur, vol) {
+function playNote(instId, row, t, dur, vol, fxReverb = 0, fxDelay = 0) {
   const ctx = getCtx()
   const out = ctx.createGain()
-  out.gain.value = vol
-  out.connect(ctx.destination)
+  out.gain.value = Math.max(0, Math.min(1.5, vol))
+  out.connect(_master)
+
+  if (fxReverb > 0.01) {
+    const s = ctx.createGain(); s.gain.value = fxReverb * 0.85
+    out.connect(s); s.connect(_reverb)
+  }
+  if (fxDelay > 0.01) {
+    const s = ctx.createGain(); s.gain.value = fxDelay * 0.5
+    out.connect(s); s.connect(_delayNode)
+  }
 
   if (instId === 'Drums') { playDrum(ctx, out, row, t); return }
 
@@ -124,8 +174,8 @@ function playNote(instId, row, t, dur, vol) {
     o.type = 'triangle'; o.frequency.value = freq
     o.connect(g); g.connect(out)
     g.gain.setValueAtTime(0.45, t)
-    g.gain.exponentialRampToValueAtTime(0.001, t + Math.min(dur * 2 + 0.4, 3))
-    o.start(t); o.stop(t + 3.5)
+    g.gain.exponentialRampToValueAtTime(0.001, t + Math.min(dur * 1.5 + 0.4, 3.5))
+    o.start(t); o.stop(t + 4)
   } else if (instId === 'Synth') {
     const o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain()
     o.type = 'sawtooth'; o.frequency.value = freq
@@ -134,8 +184,8 @@ function playNote(instId, row, t, dur, vol) {
     f.frequency.exponentialRampToValueAtTime(freq * 0.6, t + 0.12)
     o.connect(f); f.connect(g); g.connect(out)
     g.gain.setValueAtTime(0.35, t)
-    g.gain.exponentialRampToValueAtTime(0.001, t + Math.min(dur + 0.15, 0.8))
-    o.start(t); o.stop(t + 1)
+    g.gain.exponentialRampToValueAtTime(0.001, t + Math.max(dur, 0.15) + 0.15)
+    o.start(t); o.stop(t + Math.max(dur, 0.15) + 0.25)
   } else if (instId === 'Strings') {
     ;[-6, 0, 6].forEach(c => {
       const o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain()
@@ -155,8 +205,8 @@ function playNote(instId, row, t, dur, vol) {
     f.type = 'lowpass'; f.frequency.value = 600
     o.connect(f); f.connect(g); g.connect(out)
     g.gain.setValueAtTime(0.75, t)
-    g.gain.exponentialRampToValueAtTime(0.001, t + Math.min(dur + 0.3, 2))
-    o.start(t); o.stop(t + 2.2)
+    g.gain.exponentialRampToValueAtTime(0.001, t + Math.min(dur + 0.3, 2.5))
+    o.start(t); o.stop(t + 2.7)
   }
 }
 
@@ -209,37 +259,62 @@ function playDrum(ctx, out, pad, t) {
   }
 }
 
-// ─── Cell Grid (memoized — no playhead/step dependency) ───────────────────────
-const CellGrid = memo(function CellGrid({ instId, rows, notes, cellH, onMouseDown, onMouseEnter }) {
+// ─── Cell Grid ────────────────────────────────────────────────────────────────
+// notes is now Map<`${row}::${step}`, {vel, len}>
+const CellGrid = memo(function CellGrid({ instId, rows, notes, cellH, onMouseDown, onMouseEnter, onRightClick }) {
   const isDrums = instId === 'Drums'
+
+  // Build coverage: each covered (row, step) -> {isStart, vel, startStep}
+  const coverage = useMemo(() => {
+    const map = new Map()
+    notes.forEach(({ vel, len }, key) => {
+      const sep  = key.lastIndexOf('::')
+      const row  = key.slice(0, sep)
+      const step = parseInt(key.slice(sep + 2))
+      for (let i = 0; i < len && step + i < STEPS; i++)
+        map.set(`${row}::${step + i}`, { isStart: i === 0, vel, startStep: step })
+    })
+    return map
+  }, [notes])
+
   return (
     <div>
       {rows.map(row => {
         const isBlack = !isDrums && row.includes('b')
         return (
-          <div
-            key={row}
-            style={{ height: cellH, display: 'grid', gridTemplateColumns: `repeat(${STEPS}, 1fr)` }}
-          >
+          <div key={row} style={{ height: cellH, display: 'grid', gridTemplateColumns: `repeat(${STEPS}, 1fr)` }}>
             {Array.from({ length: STEPS }, (_, ci) => {
-              const active    = notes.has(`${row}::${ci}`)
+              const cov       = coverage.get(`${row}::${ci}`)
+              const isStart   = cov?.isStart
+              const isCont    = cov && !isStart
+              const vel       = cov?.vel ?? 1
               const evenBar   = Math.floor(ci / 4) % 2 === 0
               const barBorder = ci % 4 === 0
               return (
                 <div
                   key={ci}
-                  onMouseDown={() => onMouseDown(row, ci, active)}
+                  onMouseDown={(e) => onMouseDown(row, ci, cov, e)}
                   onMouseEnter={() => onMouseEnter(row, ci)}
+                  onContextMenu={(e) => { e.preventDefault(); onRightClick(row, ci, cov) }}
                   className={[
-                    'border-r border-b transition-colors duration-[60ms]',
+                    'relative border-r border-b transition-colors duration-[60ms]',
                     barBorder ? 'border-l border-l-white/[0.1]' : '',
-                    active
+                    isStart
                       ? 'bg-[var(--color-accent)] border-[var(--color-accent-light)]/40'
+                      : isCont
+                      ? 'bg-[var(--color-accent)]/40 border-[var(--color-accent)]/20'
                       : isBlack
                       ? `${evenBar ? 'bg-[var(--color-surface)]' : 'bg-[var(--color-surface-2)]'} border-white/[0.04] hover:bg-[var(--color-accent)]/25`
                       : `${evenBar ? 'bg-[var(--color-surface-2)]' : 'bg-[var(--color-surface-3)]'} border-white/[0.07] hover:bg-[var(--color-accent)]/25`,
                   ].join(' ')}
-                />
+                >
+                  {isStart && (
+                    <div
+                      className="absolute bottom-0 left-0 right-0 pointer-events-none"
+                      style={{ height: 3, background: `rgba(255,255,255,${0.2 + vel * 0.65})` }}
+                    />
+                  )}
+                </div>
               )
             })}
           </div>
@@ -251,33 +326,60 @@ const CellGrid = memo(function CellGrid({ instId, rows, notes, cellH, onMouseDow
 
 // ─── Main DAW ─────────────────────────────────────────────────────────────────
 export default function DAW() {
-  const [tracks, setTracks]           = useState(DEFAULT_TRACKS)
-  const [notes, setNotes]             = useState(() =>
-    Object.fromEntries(DEFAULT_TRACKS.map(t => [t.id, new Set()]))
+  const initNotes = () => Object.fromEntries(DEFAULT_TRACKS.map(t => [t.id, new Map()]))
+
+  const [tracks,       setTracks]       = useState(DEFAULT_TRACKS)
+  const [notes,        setNotes]        = useState(initNotes)
+  const [bpm,          setBpm]          = useState(120)
+  const [playing,      setPlaying]      = useState(false)
+  const [loop,         setLoop]         = useState(true)
+  const [volume,       setVolume]       = useState(0.7)
+  const [noteLen,      setNoteLen]      = useState(1)
+  const [trackFx,      setTrackFx]      = useState(() =>
+    Object.fromEntries(DEFAULT_TRACKS.map(t => [t.id, { reverb: 0, delay: 0 }]))
   )
-  const [bpm,           setBpm]           = useState(120)
-  const [playing,       setPlaying]       = useState(false)
-  const [loop,          setLoop]          = useState(true)
-  const [volume,        setVolume]        = useState(0.7)
-  const [openDropdown,  setOpenDropdown]  = useState(null) // trackId or null
+  const [openDropdown, setOpenDropdown] = useState(null)
+  const [clipboard,    setClipboard]    = useState(null)
 
   const stepRef      = useRef(0)
   const playingRef   = useRef(false)
   const loopRef      = useRef(true)
   const bpmRef       = useRef(120)
   const volRef       = useRef(0.7)
+  const noteLenRef   = useRef(1)
   const notesRef     = useRef(notes)
   const tracksRef    = useRef(tracks)
+  const trackFxRef   = useRef(trackFx)
+  const clipboardRef = useRef(null)
   const intervalRef  = useRef(null)
   const playheadRefs = useRef(DEFAULT_TRACKS.map(() => null))
   const dragging     = useRef(false)
   const drawMode     = useRef(true)
+  const histRef      = useRef({ stack: [initNotes()], idx: 0 })
 
-  notesRef.current  = notes
-  tracksRef.current = tracks
-  loopRef.current   = loop
-  bpmRef.current    = bpm
-  volRef.current    = volume
+  notesRef.current    = notes
+  tracksRef.current   = tracks
+  loopRef.current     = loop
+  bpmRef.current      = bpm
+  volRef.current      = volume
+  noteLenRef.current  = noteLen
+  trackFxRef.current  = trackFx
+  clipboardRef.current = clipboard
+
+  // ── Undo / Redo ───────────────────────────────────────────────────────────
+  const undo = useCallback(() => {
+    const h = histRef.current
+    if (h.idx <= 0) return
+    h.idx--
+    setNotes(h.stack[h.idx])
+  }, [])
+
+  const redo = useCallback(() => {
+    const h = histRef.current
+    if (h.idx >= h.stack.length - 1) return
+    h.idx++
+    setNotes(h.stack[h.idx])
+  }, [])
 
   // ── Playback ──────────────────────────────────────────────────────────────
   const stopPlayback = useCallback(() => {
@@ -289,15 +391,17 @@ export default function DAW() {
 
   const tick = useCallback(() => {
     if (!playingRef.current) return
-    const s   = stepRef.current
-    const ctx = getCtx()
-    const dur = 60 / bpmRef.current / 4
+    const s       = stepRef.current
+    const ctx     = getCtx()
+    const stepDur = 60 / bpmRef.current / 4
 
     tracksRef.current.forEach(({ id: trackId, instId }) => {
       const inst = INST_MAP[instId]
+      const fx   = trackFxRef.current[trackId] ?? { reverb: 0, delay: 0 }
       inst.rows.forEach(row => {
-        if (notesRef.current[trackId].has(`${row}::${s}`))
-          playNote(instId, row, ctx.currentTime, dur, volRef.current)
+        const note = notesRef.current[trackId].get(`${row}::${s}`)
+        if (note)
+          playNote(instId, row, ctx.currentTime, stepDur * note.len, volRef.current * note.vel, fx.reverb, fx.delay)
       })
     })
 
@@ -316,6 +420,7 @@ export default function DAW() {
 
   const startPlayback = useCallback(() => {
     getCtx()
+    if (_delayNode) _delayNode.delayTime.value = (60 / bpmRef.current) * 0.75
     playingRef.current = true
     tick()
     intervalRef.current = setInterval(tick, (60 / bpmRef.current / 4) * 1000)
@@ -333,94 +438,156 @@ export default function DAW() {
   const handleBpm = useCallback((raw) => {
     const v = Math.max(40, Math.min(240, parseInt(raw) || bpmRef.current))
     setBpm(v); bpmRef.current = v
+    if (_delayNode) _delayNode.delayTime.value = (60 / v) * 0.75
     if (playingRef.current) {
       clearInterval(intervalRef.current)
       intervalRef.current = setInterval(tick, (60 / v / 4) * 1000)
     }
   }, [tick])
 
-  // ── Keyboard: spacebar play/pause ─────────────────────────────────────────
+  // ── Effects ───────────────────────────────────────────────────────────────
   useEffect(() => {
     const onKey = (e) => {
-      if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
-        e.preventDefault()
-        handlePlayPause()
-      }
+      if (e.target.tagName === 'INPUT') return
+      if (e.code === 'Space') { e.preventDefault(); handlePlayPause() }
+      if (e.ctrlKey && e.code === 'KeyZ') { e.preventDefault(); e.shiftKey ? redo() : undo() }
+      if (e.ctrlKey && e.code === 'KeyY') { e.preventDefault(); redo() }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [handlePlayPause])
+  }, [handlePlayPause, undo, redo])
 
   useEffect(() => () => stopPlayback(), [stopPlayback])
 
   useEffect(() => {
-    const up = () => { dragging.current = false }
+    const up = () => {
+      if (dragging.current) {
+        const cur = notesRef.current
+        const h   = histRef.current
+        if (h.stack[h.idx] !== cur) pushHistory(histRef, cur)
+      }
+      dragging.current = false
+    }
     window.addEventListener('mouseup', up)
     return () => window.removeEventListener('mouseup', up)
   }, [])
 
-  // Close dropdown on outside click
   useEffect(() => {
     if (!openDropdown) return
-    const close = (e) => {
-      if (!e.target.closest('[data-dropdown]')) setOpenDropdown(null)
-    }
+    const close = (e) => { if (!e.target.closest('[data-dropdown]')) setOpenDropdown(null) }
     window.addEventListener('mousedown', close)
     return () => window.removeEventListener('mousedown', close)
   }, [openDropdown])
 
-  // ── Per-track handlers (stable, keyed by trackId created once) ────────────
+  // ── Per-track handlers ────────────────────────────────────────────────────
   const handlers = useMemo(() =>
     Object.fromEntries(DEFAULT_TRACKS.map(({ id: trackId }) => [trackId, {
-      onMouseDown: (row, ci, active) => {
+      onMouseDown: (row, ci, cov, e) => {
+        if (e.button !== 0) return
         dragging.current = true
-        drawMode.current = !active
-        setNotes(prev => {
-          const key  = `${row}::${ci}`
-          const next = new Set(prev[trackId])
-          drawMode.current ? next.add(key) : next.delete(key)
-          return { ...prev, [trackId]: next }
-        })
-        const ctx  = getCtx()
-        const inst = tracksRef.current.find(t => t.id === trackId)
-        if (inst) playNote(inst.instId, row, ctx.currentTime, 60 / bpmRef.current / 4, volRef.current)
+        if (cov) {
+          drawMode.current = false
+          const startKey = cov.isStart ? `${row}::${ci}` : `${row}::${cov.startStep}`
+          setNotes(prev => {
+            const next = new Map(prev[trackId])
+            next.delete(startKey)
+            return { ...prev, [trackId]: next }
+          })
+        } else {
+          drawMode.current = true
+          const key = `${row}::${ci}`
+          setNotes(prev => {
+            const next = new Map(prev[trackId])
+            next.set(key, { vel: DEFAULT_VEL, len: noteLenRef.current })
+            return { ...prev, [trackId]: next }
+          })
+          const ctx  = getCtx()
+          const inst = tracksRef.current.find(t => t.id === trackId)
+          const fx   = trackFxRef.current[trackId] ?? { reverb: 0, delay: 0 }
+          if (inst) playNote(inst.instId, row, ctx.currentTime, 60 / bpmRef.current / 4, volRef.current, fx.reverb, fx.delay)
+        }
       },
       onMouseEnter: (row, ci) => {
         if (!dragging.current) return
         setNotes(prev => {
-          const key  = `${row}::${ci}`
-          const next = new Set(prev[trackId])
-          drawMode.current ? next.add(key) : next.delete(key)
+          const noteMap = prev[trackId]
+          const next    = new Map(noteMap)
+          const key     = `${row}::${ci}`
+          if (drawMode.current) {
+            if (!next.has(key)) next.set(key, { vel: DEFAULT_VEL, len: noteLenRef.current })
+          } else {
+            if (next.has(key)) {
+              next.delete(key)
+            } else {
+              for (let back = 1; back < 8; back++) {
+                const k = `${row}::${ci - back}`
+                const n = next.get(k)
+                if (n && n.len > back) { next.delete(k); break }
+              }
+            }
+          }
+          return { ...prev, [trackId]: next }
+        })
+      },
+      onRightClick: (row, ci, cov) => {
+        if (!cov) return
+        const startKey = cov.isStart ? `${row}::${ci}` : `${row}::${cov.startStep}`
+        setNotes(prev => {
+          const next = new Map(prev[trackId])
+          const note = next.get(startKey)
+          if (!note) return prev
+          const idx     = VEL_LEVELS.findIndex(v => Math.abs(v - note.vel) < 0.15)
+          const nextVel = VEL_LEVELS[(idx + 1) % VEL_LEVELS.length]
+          next.set(startKey, { ...note, vel: nextVel })
           return { ...prev, [trackId]: next }
         })
       },
     }]))
   , []) // eslint-disable-line
 
+  // ── Track operations ──────────────────────────────────────────────────────
   const setTrackInstrument = useCallback((trackId, instId) => {
     setTracks(prev => prev.map(t => t.id === trackId ? { ...t, instId } : t))
-    setNotes(prev => ({ ...prev, [trackId]: new Set() }))
+    const next = { ...notesRef.current, [trackId]: new Map() }
+    pushHistory(histRef, next)
+    setNotes(next)
     setOpenDropdown(null)
   }, [])
 
   const clearTrack = useCallback((trackId) => {
-    setNotes(p => ({ ...p, [trackId]: new Set() }))
+    const next = { ...notesRef.current, [trackId]: new Map() }
+    pushHistory(histRef, next)
+    setNotes(next)
   }, [])
 
   const clearAll = useCallback(() => {
-    setNotes(Object.fromEntries(DEFAULT_TRACKS.map(t => [t.id, new Set()])))
+    const next = Object.fromEntries(DEFAULT_TRACKS.map(t => [t.id, new Map()]))
+    pushHistory(histRef, next)
+    setNotes(next)
+  }, [])
+
+  const copyTrack = useCallback((trackId) => {
+    setClipboard(new Map(notesRef.current[trackId]))
+  }, [])
+
+  const pasteTrack = useCallback((trackId) => {
+    if (!clipboardRef.current) return
+    const next = { ...notesRef.current, [trackId]: new Map(clipboardRef.current) }
+    pushHistory(histRef, next)
+    setNotes(next)
+  }, [])
+
+  const updateFx = useCallback((trackId, key, val) => {
+    setTrackFx(prev => ({ ...prev, [trackId]: { ...prev[trackId], [key]: val } }))
   }, [])
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="h-screen bg-[var(--color-surface)] text-[var(--color-text)] flex flex-col overflow-hidden">
 
-      {/* ── Transport bar ─────────────────────────────────────────────────── */}
-      <header className="flex-shrink-0 border-b border-white/10 bg-[var(--color-surface-2)] px-5 py-3 flex items-center gap-4 flex-wrap">
-        <a
-          href="#hero"
-          className="flex items-center gap-2 text-sm font-mono text-[var(--color-muted)] hover:text-[var(--color-text)] transition-colors"
-        >
+      {/* ── Transport ─────────────────────────────────────────────────────── */}
+      <header className="flex-shrink-0 border-b border-white/10 bg-[var(--color-surface-2)] px-5 py-3 flex items-center gap-3 flex-wrap">
+        <a href="#hero" className="flex items-center gap-2 text-sm font-mono text-[var(--color-muted)] hover:text-[var(--color-text)] transition-colors">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="m15 18-6-6 6-6"/>
           </svg>
@@ -430,6 +597,43 @@ export default function DAW() {
         <div className="w-px h-6 bg-white/10" />
         <span className="font-mono text-base font-bold tracking-[0.25em] text-[var(--color-accent-light)]">DAW</span>
         <div className="flex-1" />
+
+        {/* Note length */}
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs font-mono text-[var(--color-muted)]/50">LEN</span>
+          {[1, 2, 4, 8].map(l => (
+            <button
+              key={l}
+              onClick={() => { setNoteLen(l); noteLenRef.current = l }}
+              title={['1/16','1/8','1/4','1/2'][[1,2,4,8].indexOf(l)]}
+              className={`w-7 h-7 text-xs font-mono rounded transition-colors ${
+                noteLen === l
+                  ? 'bg-[var(--color-accent)] text-white'
+                  : 'bg-white/5 text-[var(--color-muted)] hover:bg-white/10 hover:text-[var(--color-text)]'
+              }`}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+
+        <div className="w-px h-6 bg-white/10" />
+
+        {/* Undo / Redo */}
+        <button onClick={undo} title="Undo (Ctrl+Z)"
+          className="p-2 rounded-lg bg-white/5 hover:bg-white/12 text-[var(--color-muted)] hover:text-[var(--color-text)] transition-colors">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+            <path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/>
+          </svg>
+        </button>
+        <button onClick={redo} title="Redo (Ctrl+Shift+Z)"
+          className="p-2 rounded-lg bg-white/5 hover:bg-white/12 text-[var(--color-muted)] hover:text-[var(--color-text)] transition-colors">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+            <path d="M21 7v6h-6"/><path d="M3 17a9 9 0 019-9 9 9 0 016 2.3L21 13"/>
+          </svg>
+        </button>
+
+        <div className="w-px h-6 bg-white/10" />
 
         {/* BPM */}
         <label className="flex items-center gap-2">
@@ -487,12 +691,12 @@ export default function DAW() {
           className="text-sm font-mono text-red-400/60 hover:text-red-400 px-3 py-1.5 rounded-lg hover:bg-red-400/10 transition-colors">
           Clear all
         </button>
-        <span className="hidden lg:block text-xs font-mono text-[var(--color-muted)]/35 ml-2">
-          space = play/pause · drag to draw
+        <span className="hidden xl:block text-xs font-mono text-[var(--color-muted)]/30 ml-1">
+          space · drag · right-click vel · ⌘Z undo
         </span>
       </header>
 
-      {/* ── Scrollable piano-roll area ────────────────────────────────────── */}
+      {/* ── Piano-roll area ───────────────────────────────────────────────── */}
       <div className="flex-1 overflow-auto select-none" style={{ cursor: 'crosshair' }}>
         <div style={{ minWidth: LABEL_W + STEPS * CELL_W, position: 'relative' }}>
 
@@ -517,7 +721,7 @@ export default function DAW() {
             </div>
           </div>
 
-          {/* ── Each track ────────────────────────────────────────────────── */}
+          {/* Each track */}
           {tracks.map(({ id: trackId, instId }, idx) => {
             const inst      = INST_MAP[instId]
             const { rows, type, cellH, label } = inst
@@ -525,21 +729,19 @@ export default function DAW() {
             const h         = handlers[trackId]
             const noteCount = notes[trackId].size
             const isOpen    = openDropdown === trackId
+            const fx        = trackFx[trackId]
 
             return (
               <div key={trackId}>
 
-                {/* Instrument banner with dropdown */}
+                {/* Instrument banner */}
                 <div className="flex border-b border-t border-white/[0.08]"
                   style={{ height: INST_H, background: 'var(--color-surface-2)' }}>
 
-                  {/* Sticky left: dropdown trigger */}
+                  {/* Sticky left: instrument dropdown */}
                   <div className="sticky left-0 z-20 flex-shrink-0 border-r border-white/10"
                     style={{ width: LABEL_W, background: 'var(--color-surface-2)' }}>
-                    <div
-                      data-dropdown
-                      className="relative h-full"
-                    >
+                    <div data-dropdown className="relative h-full">
                       <button
                         onClick={() => setOpenDropdown(isOpen ? null : trackId)}
                         className="w-full h-full flex items-center gap-2.5 px-3 hover:bg-white/5 transition-colors group"
@@ -550,30 +752,19 @@ export default function DAW() {
                         <span className="font-mono text-sm font-bold text-[var(--color-accent-light)] flex-1 text-left truncate">
                           {label}
                         </span>
-                        <svg
-                          width="12" height="12" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" strokeWidth="2.5"
-                          className={`text-[var(--color-muted)]/50 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-                        >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                          className={`text-[var(--color-muted)]/50 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}>
                           <path d="m6 9 6 6 6-6"/>
                         </svg>
                       </button>
 
-                      {/* Dropdown panel */}
                       {isOpen && (
-                        <div
-                          data-dropdown
+                        <div data-dropdown
                           className="absolute top-full left-0 z-50 mt-1 rounded-xl border border-white/10 shadow-2xl overflow-hidden"
-                          style={{
-                            width: 200,
-                            background: 'var(--color-surface-2)',
-                            boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-                          }}
+                          style={{ width: 200, background: 'var(--color-surface-2)', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}
                         >
                           {INSTRUMENTS.map(opt => (
-                            <button
-                              key={opt.id}
-                              onClick={() => setTrackInstrument(trackId, opt.id)}
+                            <button key={opt.id} onClick={() => setTrackInstrument(trackId, opt.id)}
                               className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-mono transition-colors ${
                                 opt.id === instId
                                   ? 'bg-[var(--color-accent)]/20 text-[var(--color-accent-light)]'
@@ -596,23 +787,63 @@ export default function DAW() {
                     </div>
                   </div>
 
-                  {/* Note count + clear */}
-                  <div className="flex flex-1 items-center gap-4 px-4">
+                  {/* FX + note count + copy/paste/clear */}
+                  <div className="flex flex-1 items-center gap-3 px-3">
+                    {/* Reverb send */}
+                    <label className="flex items-center gap-1.5 shrink-0">
+                      <span className="text-[10px] font-mono text-[var(--color-muted)]/50 uppercase tracking-wider">Rev</span>
+                      <input type="range" min="0" max="1" step="0.05" value={fx.reverb}
+                        onChange={e => updateFx(trackId, 'reverb', parseFloat(e.target.value))}
+                        className="w-14 accent-[var(--color-accent)] cursor-pointer"
+                      />
+                    </label>
+                    {/* Delay send */}
+                    <label className="flex items-center gap-1.5 shrink-0">
+                      <span className="text-[10px] font-mono text-[var(--color-muted)]/50 uppercase tracking-wider">Dly</span>
+                      <input type="range" min="0" max="1" step="0.05" value={fx.delay}
+                        onChange={e => updateFx(trackId, 'delay', parseFloat(e.target.value))}
+                        className="w-14 accent-[var(--color-accent)] cursor-pointer"
+                      />
+                    </label>
+
+                    <div className="w-px h-4 bg-white/10 shrink-0" />
+
                     {noteCount > 0 && (
-                      <span className="text-xs font-mono text-[var(--color-accent-light)]/60 bg-[var(--color-accent)]/10 px-2 py-0.5 rounded-full">
-                        {noteCount} notes
+                      <span className="text-xs font-mono text-[var(--color-accent-light)]/60 bg-[var(--color-accent)]/10 px-2 py-0.5 rounded-full shrink-0">
+                        {noteCount}
                       </span>
                     )}
-                    <button onClick={() => clearTrack(trackId)}
-                      className="text-xs font-mono text-[var(--color-muted)]/50 hover:text-[var(--color-muted)] px-2 py-1 rounded hover:bg-white/5 transition-colors ml-auto">
-                      Clear
-                    </button>
+
+                    <div className="ml-auto flex items-center gap-1">
+                      {/* Copy */}
+                      <button onClick={() => copyTrack(trackId)} title="Copy track"
+                        className="p-1.5 rounded hover:bg-white/8 text-[var(--color-muted)]/50 hover:text-[var(--color-muted)] transition-colors">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <rect x="9" y="9" width="13" height="13" rx="2"/>
+                          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                        </svg>
+                      </button>
+                      {/* Paste */}
+                      {clipboard && (
+                        <button onClick={() => pasteTrack(trackId)} title="Paste track"
+                          className="p-1.5 rounded hover:bg-white/8 text-[var(--color-accent-light)]/60 hover:text-[var(--color-accent-light)] transition-colors">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/>
+                            <rect x="8" y="2" width="8" height="4" rx="1"/>
+                          </svg>
+                        </button>
+                      )}
+                      {/* Clear */}
+                      <button onClick={() => clearTrack(trackId)}
+                        className="text-xs font-mono text-[var(--color-muted)]/50 hover:text-[var(--color-muted)] px-2 py-1 rounded hover:bg-white/5 transition-colors">
+                        Clear
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 {/* Row labels + grid */}
                 <div className="flex">
-                  {/* Sticky left: row labels */}
                   <div className="sticky left-0 z-10 flex-shrink-0 border-r border-white/10"
                     style={{ width: LABEL_W, background: 'var(--color-surface-2)' }}>
                     {rows.map(row => {
@@ -631,7 +862,6 @@ export default function DAW() {
                     })}
                   </div>
 
-                  {/* Grid + playhead */}
                   <div className="relative flex-1">
                     <div
                       ref={el => { playheadRefs.current[idx] = el }}
@@ -645,6 +875,7 @@ export default function DAW() {
                       cellH={cellH}
                       onMouseDown={h.onMouseDown}
                       onMouseEnter={h.onMouseEnter}
+                      onRightClick={h.onRightClick}
                     />
                   </div>
                 </div>
