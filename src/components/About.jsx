@@ -28,7 +28,7 @@ export default function About() {
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
             style={{
-              boxShadow: '0 0 32px rgba(124,58,237,0.18)',
+              boxShadow: '0 0 32px var(--color-glow)',
             }}
           />
           <motion.div

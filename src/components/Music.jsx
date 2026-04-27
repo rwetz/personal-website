@@ -135,10 +135,11 @@ function PortfolioCard({ title, description, tags, audioSrc, index }) {
   useEffect(() => {
     if (!waveContainerRef.current) return;
 
+    const style = getComputedStyle(document.documentElement)
     const ws = WaveSurfer.create({
       container: waveContainerRef.current,
-      waveColor: "#7c3aed",
-      progressColor: "#a78bfa",
+      waveColor: style.getPropertyValue('--color-accent').trim() || '#7c3aed',
+      progressColor: style.getPropertyValue('--color-accent-light').trim() || '#a78bfa',
       cursorColor: "transparent",
       barWidth: 2,
       barGap: 1,
@@ -246,14 +247,38 @@ function SectionHeader({ number, title, delay = 0 }) {
 
 // ---------------------------------------------------------------------------
 
+function hexToRgbFloat(hex) {
+  const h = hex.replace('#', '').trim()
+  if (h.length !== 6) return [0.486, 0.227, 0.929]
+  return [
+    parseInt(h.slice(0, 2), 16) / 255,
+    parseInt(h.slice(2, 4), 16) / 255,
+    parseInt(h.slice(4, 6), 16) / 255,
+  ]
+}
+
+function getAccentFloat() {
+  return hexToRgbFloat(
+    getComputedStyle(document.documentElement).getPropertyValue('--color-accent')
+  )
+}
+
 export default function Music() {
+  const [ditherColor, setDitherColor] = useState(() => getAccentFloat())
+
+  useEffect(() => {
+    const obs = new MutationObserver(() => setDitherColor(getAccentFloat()))
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
+
   return (
     <div>
       {/* ── Hero (#60: balanced height) ──────────────────────────────────── */}
       <section className="relative min-h-[60vh] md:min-h-[50vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Dither
-            waveColor={[0.486, 0.227, 0.929]}
+            waveColor={ditherColor}
             waveSpeed={0.04}
             waveFrequency={2.5}
             waveAmplitude={0.35}

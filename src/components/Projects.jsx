@@ -182,7 +182,7 @@ function DetailPanel({ project }) {
         className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300"
         style={{
           opacity: spotlight.opacity,
-          background: `radial-gradient(circle at ${spotlight.x}px ${spotlight.y}px, rgba(167,139,250,0.5), transparent 60%)`,
+          background: `radial-gradient(circle at ${spotlight.x}px ${spotlight.y}px, var(--color-spotlight), transparent 60%)`,
         }}
       />
 

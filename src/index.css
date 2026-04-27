@@ -11,6 +11,118 @@
   --color-muted: #94a3b8;
 }
 
+/* ── Per-theme extras (not Tailwind utilities, just CSS vars) ───────────── */
+:root {
+  --color-silk: #1e0f40;
+  --color-glow: rgba(124, 58, 237, 0.18);
+  --color-spotlight: rgba(167, 139, 250, 0.5);
+}
+
+/* ── Chill Spice ────────────────────────────────────────────────────────── */
+html.theme-spice {
+  --color-accent-dark: #9B1313;
+  --color-accent: #CD1C18;
+  --color-accent-light: #FFA896;
+  --color-surface: #0d0808;
+  --color-surface-2: #180f0f;
+  --color-surface-3: #221414;
+  --color-text: #f0e6e6;
+  --color-muted: #a89090;
+  --color-silk: #2a0808;
+  --color-glow: rgba(205, 28, 24, 0.18);
+  --color-spotlight: rgba(255, 168, 150, 0.5);
+}
+
+/* ── Tuscan Sunset ──────────────────────────────────────────────────────── */
+html.theme-tuscan {
+  --color-accent-dark: #8A2B0E;
+  --color-accent: #E35336;
+  --color-accent-light: #FFD3AC;
+  --color-surface: #0e0c0b;
+  --color-surface-2: #181410;
+  --color-surface-3: #221c16;
+  --color-text: #f0ece6;
+  --color-muted: #9988A1;
+  --color-silk: #2a1208;
+  --color-glow: rgba(227, 83, 54, 0.18);
+  --color-spotlight: rgba(255, 211, 172, 0.5);
+}
+
+/* ── Aurora (electric cyan) ─────────────────────────────────────────────── */
+html.theme-aurora {
+  --color-accent-dark: #0e7490;
+  --color-accent: #06b6d4;
+  --color-accent-light: #67e8f9;
+  --color-surface: #030f12;
+  --color-surface-2: #071820;
+  --color-surface-3: #0d242e;
+  --color-text: #e0f5f8;
+  --color-muted: #7ab8c8;
+  --color-silk: #041820;
+  --color-glow: rgba(6, 182, 212, 0.18);
+  --color-spotlight: rgba(103, 232, 249, 0.5);
+}
+
+/* ── Gilded (warm amber/gold) ───────────────────────────────────────────── */
+html.theme-gilded {
+  --color-accent-dark: #92400e;
+  --color-accent: #d97706;
+  --color-accent-light: #fbbf24;
+  --color-surface: #0f0d08;
+  --color-surface-2: #1a1710;
+  --color-surface-3: #252015;
+  --color-text: #f5ede0;
+  --color-muted: #a89568;
+  --color-silk: #1e1508;
+  --color-glow: rgba(217, 119, 6, 0.18);
+  --color-spotlight: rgba(251, 191, 36, 0.45);
+}
+
+/* ── Sakura (deep rose/pink) ────────────────────────────────────────────── */
+html.theme-sakura {
+  --color-accent-dark: #9d1a52;
+  --color-accent: #e8799f;
+  --color-accent-light: #f9b8d0;
+  --color-surface: #120a0f;
+  --color-surface-2: #1e1018;
+  --color-surface-3: #2a1420;
+  --color-text: #f5e6ee;
+  --color-muted: #c090a8;
+  --color-silk: #1e0812;
+  --color-glow: rgba(232, 121, 159, 0.18);
+  --color-spotlight: rgba(249, 184, 208, 0.5);
+}
+
+/* ── Forest (deep emerald green) ────────────────────────────────────────── */
+html.theme-forest {
+  --color-accent-dark: #14532d;
+  --color-accent: #16a34a;
+  --color-accent-light: #86efac;
+  --color-surface: #060e08;
+  --color-surface-2: #0c1810;
+  --color-surface-3: #122218;
+  --color-text: #e6f5ea;
+  --color-muted: #7aaa88;
+  --color-silk: #081808;
+  --color-glow: rgba(22, 163, 74, 0.18);
+  --color-spotlight: rgba(134, 239, 172, 0.45);
+}
+
+/* ── Cobalt (deep navy blue) ────────────────────────────────────────────── */
+html.theme-cobalt {
+  --color-accent-dark: #1e3a8a;
+  --color-accent: #4f80f7;
+  --color-accent-light: #93c5fd;
+  --color-surface: #06080f;
+  --color-surface-2: #0c1020;
+  --color-surface-3: #12182e;
+  --color-text: #e0e8ff;
+  --color-muted: #7890cc;
+  --color-silk: #080f28;
+  --color-glow: rgba(79, 128, 247, 0.18);
+  --color-spotlight: rgba(147, 197, 253, 0.5);
+}
+
 /* ── Light mode (Ctrl+Shift+L easter egg) ──────────────────────────────── */
 html.light {
   --color-surface: #f5f3ff;
@@ -21,6 +133,9 @@ html.light {
   --color-accent: #7c3aed;
   --color-accent-light: #6d28d9;
   --color-accent-dark: #4c1d95;
+  --color-silk: #c4b5fd;
+  --color-glow: rgba(124, 58, 237, 0.12);
+  --color-spotlight: rgba(109, 40, 217, 0.3);
 }
 
 html {
@@ -94,9 +209,9 @@ body::after {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 55% 50% at var(--o1x) var(--o1y), rgba(124,58,237,0.32), transparent),
-    radial-gradient(ellipse 45% 40% at var(--o2x) var(--o2y), rgba(167,139,250,0.18), transparent),
-    radial-gradient(ellipse 40% 45% at var(--o3x) var(--o3y), rgba(91,33,182,0.22), transparent);
+    radial-gradient(ellipse 55% 50% at var(--o1x) var(--o1y), color-mix(in srgb, var(--color-accent) 32%, transparent), transparent),
+    radial-gradient(ellipse 45% 40% at var(--o2x) var(--o2y), color-mix(in srgb, var(--color-accent-light) 18%, transparent), transparent),
+    radial-gradient(ellipse 40% 45% at var(--o3x) var(--o3y), color-mix(in srgb, var(--color-accent-dark) 22%, transparent), transparent);
   animation: hero-gradient 18s ease-in-out infinite;
   pointer-events: none;
 }

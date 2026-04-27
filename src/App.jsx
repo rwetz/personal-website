@@ -27,12 +27,25 @@ function useHash() {
 }
 
 
+const THEMES = ['default', 'spice', 'tuscan', 'aurora', 'gilded', 'sakura', 'forest', 'cobalt']
+
 export default function App() {
   const hash = useHash()
   const isMusic = hash === '#music'
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [partyMode, setPartyMode] = useState(false)
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('color-theme')
+    return THEMES.includes(saved) ? saved : 'default'
+  })
   const konamiProgress = useRef(0)
+
+  useEffect(() => {
+    const root = document.documentElement
+    root.classList.remove('theme-spice', 'theme-tuscan', 'theme-aurora', 'theme-gilded', 'theme-sakura', 'theme-forest', 'theme-cobalt')
+    if (theme !== 'default') root.classList.add(`theme-${theme}`)
+    localStorage.setItem('color-theme', theme)
+  }, [theme])
 
   // Section URL updates as user scrolls
   useEffect(() => {
@@ -128,7 +141,7 @@ export default function App() {
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.35, ease: 'easeInOut' }}
           >
-            <Navbar onOpenPalette={() => setPaletteOpen(true)} />
+            <Navbar onOpenPalette={() => setPaletteOpen(true)} theme={theme} onThemeChange={setTheme} />
             <main id="main-content">
               <Hero />
               <About />

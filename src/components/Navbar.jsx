@@ -3,6 +3,17 @@ import { AnimatePresence, motion } from 'framer-motion'
 import GlassSurface from './GlassSurface'
 import signatureImg from '../assets/signature.png'
 
+const THEME_OPTIONS = [
+  { id: 'default', label: 'Amethyst',      swatch: '#7c3aed' },
+  { id: 'spice',   label: 'Chill Spice',   swatch: '#CD1C18' },
+  { id: 'tuscan',  label: 'Tuscan Sunset', swatch: '#E35336' },
+  { id: 'aurora',  label: 'Aurora',        swatch: '#06b6d4' },
+  { id: 'gilded',  label: 'Gilded',        swatch: '#d97706' },
+  { id: 'sakura',  label: 'Sakura',        swatch: '#e8799f' },
+  { id: 'forest',  label: 'Forest',        swatch: '#16a34a' },
+  { id: 'cobalt',  label: 'Cobalt',        swatch: '#4f80f7' },
+]
+
 const links = [
   { label: 'About',    href: '#about' },
   { label: 'Projects', href: '#projects' },
@@ -29,13 +40,15 @@ function CloseIcon() {
   )
 }
 
-export default function Navbar({ onOpenPalette }) {
+export default function Navbar({ onOpenPalette, theme = 'default', onThemeChange }) {
   const [scrolled, setScrolled]       = useState(false)
   const [hidden, setHidden]           = useState(false)
   const [activeSection, setActive]    = useState('')
   const [menuOpen, setMenuOpen]       = useState(false)
+  const [themeOpen, setThemeOpen]     = useState(false)
   const prevScrollY                   = useRef(0)
   const menuRef                       = useRef(null)
+  const themeRef                      = useRef(null)
 
   // Single merged scroll listener — hide/show + scroll-spy
   useEffect(() => {
@@ -99,6 +112,14 @@ export default function Navbar({ onOpenPalette }) {
     first?.focus()
     return () => document.removeEventListener('keydown', trap)
   }, [menuOpen])
+
+  // Close theme popover on outside click
+  useEffect(() => {
+    if (!themeOpen) return
+    const onDown = (e) => { if (themeRef.current && !themeRef.current.contains(e.target)) setThemeOpen(false) }
+    document.addEventListener('mousedown', onDown)
+    return () => document.removeEventListener('mousedown', onDown)
+  }, [themeOpen])
 
   const handleNavClick = () => setMenuOpen(false)
 
@@ -169,8 +190,54 @@ export default function Navbar({ onOpenPalette }) {
           </a>
         </div>
 
-        {/* Right side: palette + hamburger */}
+        {/* Right side: theme picker + palette + hamburger */}
         <div className="flex items-center gap-1 shrink-0">
+          {/* Theme picker — desktop */}
+          <div ref={themeRef} className="relative hidden md:block">
+            <button
+              onClick={() => setThemeOpen(v => !v)}
+              aria-label="Change color theme"
+              aria-expanded={themeOpen}
+              className="p-2 rounded-lg text-[var(--color-muted)] hover:text-[var(--color-text)] hover:bg-white/5 transition-colors"
+            >
+              <span
+                className="block w-3.5 h-3.5 rounded-full border-2 border-white/30"
+                style={{ background: THEME_OPTIONS.find(t => t.id === theme)?.swatch }}
+              />
+            </button>
+            <AnimatePresence>
+              {themeOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -6, scale: 0.95 }}
+                  transition={{ duration: 0.15, ease: 'easeOut' }}
+                  className="absolute right-0 top-full mt-2 bg-[var(--color-surface-2)] border border-white/10 rounded-xl shadow-xl p-2 flex flex-col gap-1 min-w-[168px] max-h-[calc(100vh-80px)] overflow-y-auto"
+                >
+                  {THEME_OPTIONS.map(opt => (
+                    <button
+                      key={opt.id}
+                      onClick={() => { onThemeChange?.(opt.id); setThemeOpen(false) }}
+                      className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
+                        theme === opt.id
+                          ? 'bg-white/10 text-[var(--color-text)]'
+                          : 'text-[var(--color-muted)] hover:bg-white/5 hover:text-[var(--color-text)]'
+                      }`}
+                    >
+                      <span className="w-3 h-3 rounded-full shrink-0" style={{ background: opt.swatch }} />
+                      {opt.label}
+                      {theme === opt.id && (
+                        <svg className="ml-auto" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                      )}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           {onOpenPalette && (
             <button
               onClick={onOpenPalette}
@@ -239,6 +306,26 @@ export default function Navbar({ onOpenPalette }) {
                 </a>
               </li>
             </ul>
+            <div className="mt-3 pt-3 border-t border-white/10">
+              <p className="text-xs font-mono text-[var(--color-muted)] mb-2 px-0.5">Theme</p>
+              <div className="flex gap-2">
+                {THEME_OPTIONS.map(opt => (
+                  <button
+                    key={opt.id}
+                    onClick={() => { onThemeChange?.(opt.id); setMenuOpen(false) }}
+                    aria-label={opt.label}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-colors border ${
+                      theme === opt.id
+                        ? 'border-white/20 text-[var(--color-text)] bg-white/10'
+                        : 'border-transparent text-[var(--color-muted)] hover:bg-white/5'
+                    }`}
+                  >
+                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: opt.swatch }} />
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

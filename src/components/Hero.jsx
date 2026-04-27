@@ -38,9 +38,24 @@ function ScrollIndicator() {
   )
 }
 
+function useSilkColor() {
+  const [color, setColor] = useState(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--color-silk').trim() || '#1e0f40'
+  )
+  useEffect(() => {
+    const obs = new MutationObserver(() => {
+      setColor(getComputedStyle(document.documentElement).getPropertyValue('--color-silk').trim() || '#1e0f40')
+    })
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
+  return color
+}
+
 export default function Hero() {
   const { scrollY } = useScroll()
   const gradientY = useTransform(scrollY, [0, 600], [0, 80])
+  const silkColor = useSilkColor()
 
   return (
     <section
@@ -51,7 +66,7 @@ export default function Hero() {
       <motion.div className="hero-gradient z-0" style={{ y: gradientY }} />
 
       {/* Silk texture layer */}
-      <Silk color="#3b1f6e" speed={5} scale={1.2} noiseIntensity={1.5} opacity={0.30} />
+      <Silk color={silkColor} speed={5} scale={1.2} noiseIntensity={1.5} opacity={0.30} />
 
       {/* Vignette overlay */}
       <div

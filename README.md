@@ -26,18 +26,40 @@ Single-page portfolio site + music page built with React and Vite. Features a CS
 | `TextType` | Reactbits — typewriter cycling text |
 | `Dither` | Reactbits — WebGL dithered wave background |
 
-## Color Palette
+## Color System
 
-| Token | Hex | Usage |
-|---|---|---|
-| `--color-surface` | `#0f0f13` | Page background |
-| `--color-surface-2` | `#1a1a24` | Alternate section background |
-| `--color-surface-3` | `#242433` | Cards, skill pills, input backgrounds |
-| `--color-muted` | `#94a3b8` | Secondary text, nav links, placeholders |
-| `--color-text` | `#e2e8f0` | Primary text |
-| `--color-accent-dark` | `#5b21b6` | Hover/pressed states, deep accent |
-| `--color-accent` | `#7c3aed` | Primary accent — buttons, underlines, borders |
-| `--color-accent-light` | `#a78bfa` | Highlighted nav links, tags, cursor, badges |
+All colors are CSS custom properties defined in `index.css`. Every component references these variables — no hardcoded hex values in component files. Switching theme swaps the full palette site-wide including the WebGL Silk texture, Dither wave, WaveSurfer waveform, hero gradient, and spotlight effects.
+
+### CSS tokens (all themes share these names)
+
+| Token | Usage |
+|---|---|
+| `--color-surface` | Page background |
+| `--color-surface-2` | Alternate section / card backgrounds |
+| `--color-surface-3` | Inner cards, skill pills, inputs |
+| `--color-text` | Primary text |
+| `--color-muted` | Secondary text, nav links, placeholders |
+| `--color-accent-dark` | Hover/pressed states, deep accent |
+| `--color-accent` | Primary accent — buttons, underlines, borders |
+| `--color-accent-light` | Nav active state, tags, cursor, badges |
+| `--color-silk` | WebGL Silk texture base color |
+| `--color-glow` | Profile photo box-shadow |
+| `--color-spotlight` | Project card hover spotlight |
+
+### Themes
+
+| ID | Name | Accent | Vibe |
+|---|---|---|---|
+| `default` | Amethyst | `#7c3aed` | Deep purple — default |
+| `spice` | Chill Spice | `#CD1C18` | Deep red |
+| `tuscan` | Tuscan Sunset | `#E35336` | Warm orange |
+| `aurora` | Aurora | `#06b6d4` | Electric cyan |
+| `gilded` | Gilded | `#d97706` | Warm amber/gold |
+| `sakura` | Sakura | `#e8799f` | Rose pink |
+| `forest` | Forest | `#16a34a` | Emerald green |
+| `cobalt` | Cobalt | `#4f80f7` | Deep navy blue |
+
+Theme is selected via the color swatch button in the navbar and persisted to `localStorage` under the key `color-theme`. The `html` element gets a corresponding class (`theme-spice`, `theme-aurora`, etc.) which overrides the CSS variables. Light mode (`html.light`, toggled with Ctrl+Shift+L) is a separate easter egg that works on top of any theme.
 
 ---
 
@@ -98,10 +120,11 @@ Single-page portfolio site + music page built with React and Vite. Features a CS
 
 ## Features
 
+- **8 color themes** — navbar swatch picker cycles between Amethyst, Chill Spice, Tuscan Sunset, Aurora, Gilded, Sakura, Forest, and Cobalt; persisted to `localStorage`
 - **⌘K Command Palette** — jump to any section, copy email, download resume
 - **Custom cursor** — dot + lagging ring on desktop pointer devices
-- **Konami code** — toggles light mode easter egg
-- **Ctrl+Shift+L** — also toggles light mode
+- **Konami code** — toggles party mode easter egg
+- **Ctrl+Shift+L** — toggles light mode easter egg
 - **Music page** (`/#music`) — SoundCloud embeds, YouTube videos, Wavesurfer.js audio portfolio with real waveforms, seek, and live timestamps
 - **PWA** — installable via `manifest.json`
 - **Section URL updates** — hash updates as you scroll
