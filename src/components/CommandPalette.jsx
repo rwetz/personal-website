@@ -10,6 +10,7 @@ const commands = [
   { id: 'resume',   label: 'Go to Resume',   icon: '📄', action: () => { window.location.hash = '#resume' } },
   { id: 'contact',  label: 'Go to Contact',  icon: '✉️', action: () => { window.location.hash = '#contact' } },
   { id: 'music',    label: 'Go to Music',    icon: '🎵', action: () => { window.location.hash = '#music' } },
+  { id: 'daw',      label: 'Open DAW',       icon: '🎹', action: () => { window.location.hash = '#daw' } },
   { id: 'copy-email', label: 'Copy email address', icon: '📋', action: () => navigator.clipboard.writeText(EMAIL) },
   { id: 'download',   label: 'Download resume',     icon: '⬇️', action: () => { const a = document.createElement('a'); a.href = '/resume.pdf'; a.download = ''; a.click() } },
   { id: 'github',  label: 'Open GitHub',   icon: '🐙', action: () => window.open('https://github.com/rwetz', '_blank') },

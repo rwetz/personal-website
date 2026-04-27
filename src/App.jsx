@@ -12,6 +12,7 @@ import CommandPalette from './components/CommandPalette'
 import PartyMode from './components/PartyMode'
 
 const Music = lazy(() => import('./components/Music'))
+const DAW = lazy(() => import('./components/DAW'))
 
 const SECTIONS = ['hero', 'about', 'projects', 'skills', 'resume', 'contact']
 const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
@@ -32,6 +33,7 @@ const THEMES = ['default', 'spice', 'tuscan', 'aurora', 'gilded', 'sakura', 'for
 export default function App() {
   const hash = useHash()
   const isMusic = hash === '#music'
+  const isDAW   = hash === '#daw'
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [partyMode, setPartyMode] = useState(false)
   const [theme, setTheme] = useState(() => {
@@ -49,7 +51,7 @@ export default function App() {
 
   // Section URL updates as user scrolls
   useEffect(() => {
-    if (isMusic) return
+    if (isMusic || isDAW) return
     const update = () => {
       const OFFSET = 160
       let current = 'hero'
@@ -117,7 +119,23 @@ export default function App() {
       {/* Content wrapper — hue-rotate applied here, not on body */}
       <div className={partyMode ? 'party-active' : ''}>
       <AnimatePresence mode="wait">
-        {isMusic ? (
+        {isDAW ? (
+          <motion.div
+            key="daw"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+          >
+            <Suspense fallback={
+              <div className="min-h-screen flex items-center justify-center text-[var(--color-muted)] text-sm">
+                Loading…
+              </div>
+            }>
+              <DAW />
+            </Suspense>
+          </motion.div>
+        ) : isMusic ? (
           <motion.div
             key="music"
             initial={{ opacity: 0, y: 16 }}

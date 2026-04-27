@@ -1,6 +1,6 @@
 # Personal Website
 
-Single-page portfolio site + music page built with React and Vite. Features a CSS Houdini animated gradient hero, ASCII name art, typewriter subtitle, scroll-reveal animations, gradient keyword highlights in the About section, skill icons, embedded PDF resume viewer, WebGL dither background on the music page, Wavesurfer.js audio portfolio cards, and SoundCloud/YouTube embeds.
+Single-page portfolio site + music page + browser DAW built with React and Vite. Features a CSS Houdini animated gradient hero, ASCII name art, typewriter subtitle, scroll-reveal animations, gradient keyword highlights in the About section, skill icons, embedded PDF resume viewer, WebGL dither background on the music page, Wavesurfer.js audio portfolio cards, SoundCloud/YouTube embeds, and a fully in-browser DAW with Web Audio API synthesis.
 
 ---
 
@@ -99,6 +99,7 @@ Theme is selected via the color swatch button in the navbar and persisted to `lo
 │   │   ├── Dither.jsx         # WebGL dithered wave background
 │   │   ├── GlassSurface.jsx   # SVG displacement glass effect
 │   │   ├── Hero.jsx           # Parallax gradient + scroll indicator
+│   │   ├── DAW.jsx            # Browser DAW — Web Audio piano roll (lazy-loaded)
 │   │   ├── Music.jsx          # Music page (lazy-loaded)
 │   │   ├── Navbar.jsx         # Scroll-spy + animated underline
 │   │   ├── Projects.jsx       # 3D tilt + spotlight cards
@@ -132,6 +133,7 @@ Theme is selected via the color swatch button in the navbar and persisted to `lo
 - **Gradient keyword highlights** — key terms in About shimmer/glow with accent colors
 - **Responsive card deck** — Projects CardSwap width adapts to screen size
 - **Social footer** — Instagram and X icons alongside GitHub and music links
+- **Browser DAW** (`/#daw`, also in ⌘K palette) — 5-track piano roll sequencer powered entirely by Web Audio API; each track has an icon + dropdown to swap between Piano, Synth, Strings, Bass, and Drums; 32-step grid, spacebar play/pause, BPM control, loop toggle, per-track clear; all colors follow the site theme system
 
 ## Dev
 
