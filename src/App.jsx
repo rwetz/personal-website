@@ -4,17 +4,21 @@ import './index.css'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
+import Now from './components/Now'
 import Projects from './components/Projects'
 import Skills from './components/Skills'
+import Stats from './components/Stats'
 import Resume from './components/Resume'
+import Inspiration from './components/Inspiration'
 import Contact from './components/Contact'
 import CommandPalette from './components/CommandPalette'
 import PartyMode from './components/PartyMode'
+import { Toaster } from '@/components/ui/sonner'
 
 const Music = lazy(() => import('./components/Music'))
 const DAW = lazy(() => import('./components/DAW'))
 
-const SECTIONS = ['hero', 'about', 'projects', 'skills', 'resume', 'contact']
+const SECTIONS = ['hero', 'about', 'now', 'projects', 'skills', 'stats', 'resume', 'inspiration', 'contact']
 const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
 
 function useHash() {
@@ -115,6 +119,7 @@ export default function App() {
           elements aren't trapped inside the hue-rotate stacking context */}
       <PartyMode active={partyMode} onExit={() => setPartyMode(false)} />
       <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+      <Toaster />
 
       {/* Content wrapper — hue-rotate applied here, not on body */}
       <div className={partyMode ? 'party-active' : ''}>
@@ -163,9 +168,12 @@ export default function App() {
             <main id="main-content">
               <Hero />
               <About />
+              <Now />
               <Projects />
               <Skills />
+              <Stats />
               <Resume />
+              <Inspiration />
               <Contact />
             </main>
             <footer className="py-8 border-t border-white/5">

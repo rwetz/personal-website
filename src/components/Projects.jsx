@@ -1,6 +1,10 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ExternalLink, Maximize2, Star } from 'lucide-react'
 import CardSwap, { Card } from './CardSwap'
+import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { Badge } from '@/components/ui/badge'
 
 const GITHUB_USER = 'rwetz'
 const CACHE_KEY = 'gh_projects_cache_v2'
@@ -78,30 +82,111 @@ async function fetchGithubProjects() {
 
 // ── Category detection ─────────────────────────────────────────────────────
 
+// Keywords are matched as whole words (\b...\b), so "ml" won't match "html",
+// "ai" won't match "chain", "algorithm" won't match anything but the word itself.
+// Multi-word phrases ("machine learning") still work.
+//
+// Order matters for the keyword fallback — most-specific first. Topic matches
+// (from the GitHub repo's `topics` array) always beat keyword guessing.
+// "Misc" always matches last as a guaranteed fallback.
 const CATEGORIES = [
   {
     label: 'AI / ML',
     color: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/20',
     cardAccent: 'from-emerald-600/20 to-emerald-900/10',
-    keywords: ['cnn','neural','machine learning','deep learning','ai','ml','gan','lstm','transformer','llm','gpt','classification','genetic','algorithm','reinforcement','regression','tensorflow','pytorch','keras','sklearn','scikit','model','training','inference','nlp','computer vision','prediction'],
+    topics: ['ai', 'ml', 'machine-learning', 'deep-learning', 'neural-network', 'pytorch', 'tensorflow', 'nlp', 'computer-vision', 'reinforcement-learning', 'llm'],
+    keywords: ['cnn','neural network','machine learning','deep learning','transformer','llm','gpt','reinforcement learning','tensorflow','pytorch','keras','sklearn','scikit-learn','nlp','computer vision'],
   },
   {
-    label: 'Web',
+    label: 'Data',
+    color: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/20',
+    cardAccent: 'from-cyan-600/20 to-cyan-900/10',
+    topics: ['data', 'data-science', 'data-analysis', 'data-engineering', 'analytics', 'etl', 'pandas', 'numpy', 'jupyter', 'dataset', 'database', 'sql'],
+    keywords: ['data science','data analysis','data engineering','analytics','etl','pandas','jupyter','dataset','sql','postgres','mongodb','data pipeline'],
+  },
+  {
+    label: 'Algorithms / Viz',
+    color: 'bg-violet-500/15 text-violet-300 border-violet-500/20',
+    cardAccent: 'from-violet-600/20 to-violet-900/10',
+    topics: ['algorithms', 'algorithm', 'visualization', 'visualizer', 'data-structures', 'sorting', 'pathfinding', 'simulation'],
+    keywords: ['sorting algorithm','pathfinding','visualizer','visualization','data structure','data structures','algorithm visualizer','simulation'],
+  },
+  {
+    label: 'Game / Graphics',
+    color: 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/20',
+    cardAccent: 'from-fuchsia-600/20 to-fuchsia-900/10',
+    topics: ['game', 'gamedev', 'unity', 'unreal', 'godot', 'webgl', 'three-js', 'threejs', 'shader', 'graphics', 'opengl', 'raytracing', 'creative-coding'],
+    keywords: ['game','gamedev','unity','unreal','godot','webgl','three.js','shader','raytracing','raytracer','creative coding','graphics engine'],
+  },
+  {
+    label: 'Systems',
+    color: 'bg-orange-500/15 text-orange-300 border-orange-500/20',
+    cardAccent: 'from-orange-600/20 to-orange-900/10',
+    topics: ['systems', 'systems-programming', 'operating-system', 'kernel', 'embedded', 'compiler', 'interpreter', 'low-level', 'rust', 'c-plus-plus'],
+    keywords: ['operating system','kernel','embedded','compiler','interpreter','low-level','systems programming','assembler','memory allocator'],
+  },
+  {
+    label: 'Mobile',
+    color: 'bg-pink-500/15 text-pink-300 border-pink-500/20',
+    cardAccent: 'from-pink-600/20 to-pink-900/10',
+    topics: ['mobile', 'ios', 'android', 'react-native', 'flutter', 'swift', 'kotlin', 'expo'],
+    keywords: ['ios app','android app','react native','flutter','mobile app','swiftui'],
+  },
+  {
+    label: 'Full-Stack',
+    color: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/20',
+    cardAccent: 'from-indigo-600/20 to-indigo-900/10',
+    topics: ['fullstack', 'full-stack', 'saas', 'webapp', 'web-app'],
+    keywords: ['full-stack','fullstack','saas','authentication','crud','rest api','graphql'],
+  },
+  {
+    label: 'Backend / API',
+    color: 'bg-slate-500/15 text-slate-300 border-slate-500/20',
+    cardAccent: 'from-slate-600/20 to-slate-900/10',
+    topics: ['backend', 'api', 'server', 'rest', 'graphql', 'fastapi', 'express', 'django', 'flask', 'microservices'],
+    keywords: ['backend','rest api','graphql api','fastapi','express server','django','flask','microservice','microservices','web server'],
+  },
+  {
+    label: 'Frontend',
     color: 'bg-sky-500/15 text-sky-300 border-sky-500/20',
     cardAccent: 'from-sky-600/20 to-sky-900/10',
-    keywords: ['react','next.js','vue','svelte','angular','frontend','website','portfolio','dashboard','landing page','web app','tailwind','vite','webpack','fullstack','full-stack'],
+    topics: ['frontend', 'react', 'nextjs', 'next-js', 'vue', 'svelte', 'tailwind', 'vite', 'website', 'portfolio', 'landing-page', 'ui', 'ux'],
+    keywords: ['react','next.js','vue','svelte','frontend','website','portfolio','dashboard','landing page','tailwind','vite'],
   },
   {
     label: 'CLI / Tool',
     color: 'bg-amber-500/15 text-amber-300 border-amber-500/20',
     cardAccent: 'from-amber-600/20 to-amber-900/10',
-    keywords: ['cli','command line','terminal','script','automation','tool','utility','parser','generator','scraper'],
+    topics: ['cli', 'command-line', 'terminal', 'tool', 'utility', 'automation', 'script', 'devtool'],
+    keywords: ['cli','command line','terminal','automation tool','utility','scraper','dev tool'],
+  },
+  {
+    label: 'Misc',
+    color: 'bg-zinc-500/15 text-zinc-300 border-zinc-500/20',
+    cardAccent: 'from-zinc-600/20 to-zinc-900/10',
+    topics: [],
+    keywords: [],
+    fallback: true,
   },
 ]
 
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 function inferCategory(project) {
-  const haystack = [project.title, project.description, ...project.tags].join(' ').toLowerCase()
-  return CATEGORIES.find(cat => cat.keywords.some(kw => haystack.includes(kw))) ?? null
+  const repoTopics = (project.tags ?? []).map(t => String(t).toLowerCase())
+  // 1. Topic-based match — explicit and authoritative.
+  for (const cat of CATEGORIES) {
+    if (cat.topics.some(t => repoTopics.includes(t))) return cat
+  }
+  // 2. Keyword fallback — title + description, whole-word match.
+  const haystack = [project.title, project.description].join(' ').toLowerCase()
+  for (const cat of CATEGORIES) {
+    if (cat.keywords.some(kw => new RegExp(`\\b${escapeRegex(kw)}\\b`).test(haystack))) return cat
+  }
+  // 3. Always-on fallback — guaranteed Misc bucket.
+  return CATEGORIES.find(c => c.fallback) ?? null
 }
 
 // ── Deck preview card ──────────────────────────────────────────────────────
@@ -139,9 +224,52 @@ function DeckCard({ project, index }) {
   )
 }
 
+// ── Project deep-dive dialog ───────────────────────────────────────────────
+
+function ProjectDialog({ project, open, onOpenChange }) {
+  if (!project) return null
+  const category = inferCategory(project)
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <div className="flex items-center gap-2 flex-wrap mb-2">
+            {category && <Badge variant="default" style={{}}>{category.label}</Badge>}
+            {project.featured && <Badge variant="warning">featured</Badge>}
+            {project.stars > 0 && (
+              <Badge variant="secondary" className="gap-1">
+                <Star className="w-3 h-3 fill-current" /> {project.stars}
+              </Badge>
+            )}
+          </div>
+          <DialogTitle className="text-2xl">{project.title}</DialogTitle>
+          <DialogDescription className="leading-relaxed pt-2">{project.description}</DialogDescription>
+        </DialogHeader>
+        <div className="flex flex-wrap gap-2 mt-2">
+          {project.tags.map(tag => <Badge key={tag} variant="default">{tag}</Badge>)}
+        </div>
+        <div className="flex gap-3 text-sm mt-4">
+          <a href={project.github} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-white/10 text-[var(--color-muted)] hover:text-[var(--color-text)] hover:border-white/20 transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            GitHub
+          </a>
+          {project.live && (
+            <a href={project.live} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[var(--color-accent)]/30 text-[var(--color-accent-light)] hover:bg-[var(--color-accent)]/10 transition-colors">
+              <ExternalLink className="w-3.5 h-3.5" />
+              Live
+            </a>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 // ── Detail panel ───────────────────────────────────────────────────────────
 
-function DetailPanel({ project }) {
+function DetailPanel({ project, onOpenDialog }) {
   const cardRef = useRef(null)
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const [spotlight, setSpotlight] = useState({ x: 0, y: 0, opacity: 0 })
@@ -221,7 +349,14 @@ function DetailPanel({ project }) {
         ))}
       </div>
 
-      <div className="flex gap-3 text-sm mt-auto">
+      <div className="flex gap-3 text-sm mt-auto flex-wrap">
+        <button
+          onClick={onOpenDialog}
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[var(--color-accent)]/30 text-[var(--color-accent-light)] hover:bg-[var(--color-accent)]/10 transition-colors"
+        >
+          <Maximize2 className="w-3.5 h-3.5" />
+          Details
+        </button>
         <a
           href={project.github}
           target="_blank"
@@ -238,11 +373,9 @@ function DetailPanel({ project }) {
             href={project.live}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[var(--color-accent)]/30 text-[var(--color-accent-light)] hover:bg-[var(--color-accent)]/10 transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-white/10 text-[var(--color-muted)] hover:text-[var(--color-text)] hover:border-white/20 transition-colors"
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
+            <ExternalLink className="w-3.5 h-3.5" />
             Live
           </a>
         )}
@@ -281,6 +414,7 @@ export default function Projects() {
   const [projects, setProjects] = useState([])
   const [status, setStatus] = useState('loading')
   const [activeIdx, setActiveIdx] = useState(0)
+  const [dialogOpen, setDialogOpen] = useState(false)
   const [cardWidth, setCardWidth] = useState(() => Math.min(340, window.innerWidth - 48))
 
   useEffect(() => {
@@ -305,7 +439,7 @@ export default function Projects() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="mb-20 md:mb-14"
         >
-          <span className="text-xs font-mono text-[var(--color-accent-light)] tracking-widest">// 02</span>
+          <span className="text-xs font-mono text-[var(--color-accent-light)] tracking-widest">// 03</span>
           <h2 className="text-3xl font-bold text-[var(--color-text)] mt-1 mb-2">Projects</h2>
           <div className="accent-bar" />
         </motion.div>
@@ -342,7 +476,30 @@ export default function Projects() {
               >
                 {projects.map((project, i) => (
                   <Card key={project.github}>
-                    <DeckCard project={project} index={i} />
+                    <HoverCard openDelay={200} closeDelay={100}>
+                      <HoverCardTrigger asChild>
+                        <div className="h-full w-full">
+                          <DeckCard project={project} index={i} />
+                        </div>
+                      </HoverCardTrigger>
+                      <HoverCardContent side="top" className="w-80">
+                        <div className="space-y-2">
+                          <h4 className="text-sm font-semibold text-[var(--color-text)]">{project.title}</h4>
+                          <p className="text-xs text-[var(--color-muted)] leading-relaxed line-clamp-4">{project.description}</p>
+                          <div className="flex flex-wrap gap-1.5 pt-1">
+                            {project.tags.slice(0, 4).map(tag => (
+                              <Badge key={tag} variant="secondary">{tag}</Badge>
+                            ))}
+                          </div>
+                          {project.stars > 0 && (
+                            <div className="flex items-center gap-1.5 text-xs text-[var(--color-muted)] pt-1">
+                              <Star className="w-3 h-3 fill-current" />
+                              {project.stars} {project.stars === 1 ? 'star' : 'stars'}
+                            </div>
+                          )}
+                        </div>
+                      </HoverCardContent>
+                    </HoverCard>
                   </Card>
                 ))}
               </CardSwap>
@@ -361,9 +518,10 @@ export default function Projects() {
             >
               <AnimatePresence mode="sync">
                 {projects[activeIdx] && (
-                  <DetailPanel project={projects[activeIdx]} />
+                  <DetailPanel project={projects[activeIdx]} onOpenDialog={() => setDialogOpen(true)} />
                 )}
               </AnimatePresence>
+              <ProjectDialog project={projects[activeIdx]} open={dialogOpen} onOpenChange={setDialogOpen} />
             </motion.div>
 
           </div>

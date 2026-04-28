@@ -1,7 +1,16 @@
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Check, Search } from 'lucide-react'
 import GlassSurface from './GlassSurface'
 import signatureImg from '../assets/signature.png'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
 
 const THEME_OPTIONS = [
   { id: 'default', label: 'Amethyst',      swatch: '#7c3aed' },
@@ -16,9 +25,12 @@ const THEME_OPTIONS = [
 
 const links = [
   { label: 'About',    href: '#about' },
+  { label: 'Now',      href: '#now' },
   { label: 'Projects', href: '#projects' },
   { label: 'Skills',   href: '#skills' },
+  { label: 'Stats',    href: '#stats' },
   { label: 'Resume',   href: '#resume' },
+  { label: 'Inspiration', href: '#inspiration' },
   { label: 'Contact',  href: '#contact' },
 ]
 
@@ -45,10 +57,8 @@ export default function Navbar({ onOpenPalette, theme = 'default', onThemeChange
   const [hidden, setHidden]           = useState(false)
   const [activeSection, setActive]    = useState('')
   const [menuOpen, setMenuOpen]       = useState(false)
-  const [themeOpen, setThemeOpen]     = useState(false)
   const prevScrollY                   = useRef(0)
   const menuRef                       = useRef(null)
-  const themeRef                      = useRef(null)
 
   // Single merged scroll listener — hide/show + scroll-spy
   useEffect(() => {
@@ -112,14 +122,6 @@ export default function Navbar({ onOpenPalette, theme = 'default', onThemeChange
     first?.focus()
     return () => document.removeEventListener('keydown', trap)
   }, [menuOpen])
-
-  // Close theme popover on outside click
-  useEffect(() => {
-    if (!themeOpen) return
-    const onDown = (e) => { if (themeRef.current && !themeRef.current.contains(e.target)) setThemeOpen(false) }
-    document.addEventListener('mousedown', onDown)
-    return () => document.removeEventListener('mousedown', onDown)
-  }, [themeOpen])
 
   const handleNavClick = () => setMenuOpen(false)
 
@@ -192,50 +194,34 @@ export default function Navbar({ onOpenPalette, theme = 'default', onThemeChange
 
         {/* Right side: theme picker + palette + hamburger */}
         <div className="flex items-center gap-1 shrink-0">
-          {/* Theme picker — desktop */}
-          <div ref={themeRef} className="relative hidden md:block">
-            <button
-              onClick={() => setThemeOpen(v => !v)}
-              aria-label="Change color theme"
-              aria-expanded={themeOpen}
-              className="p-2 rounded-lg text-[var(--color-muted)] hover:text-[var(--color-text)] hover:bg-white/5 transition-colors"
-            >
-              <span
-                className="block w-3.5 h-3.5 rounded-full border-2 border-white/30"
-                style={{ background: THEME_OPTIONS.find(t => t.id === theme)?.swatch }}
-              />
-            </button>
-            <AnimatePresence>
-              {themeOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -6, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -6, scale: 0.95 }}
-                  transition={{ duration: 0.15, ease: 'easeOut' }}
-                  className="absolute right-0 top-full mt-2 bg-[var(--color-surface-2)] border border-white/10 rounded-xl shadow-xl p-2 flex flex-col gap-1 min-w-[168px] max-h-[calc(100vh-80px)] overflow-y-auto"
-                >
-                  {THEME_OPTIONS.map(opt => (
-                    <button
-                      key={opt.id}
-                      onClick={() => { onThemeChange?.(opt.id); setThemeOpen(false) }}
-                      className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
-                        theme === opt.id
-                          ? 'bg-white/10 text-[var(--color-text)]'
-                          : 'text-[var(--color-muted)] hover:bg-white/5 hover:text-[var(--color-text)]'
-                      }`}
-                    >
-                      <span className="w-3 h-3 rounded-full shrink-0" style={{ background: opt.swatch }} />
-                      {opt.label}
-                      {theme === opt.id && (
-                        <svg className="ml-auto" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                      )}
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+          {/* Theme picker — desktop (shadcn DropdownMenu) */}
+          <div className="hidden md:block">
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                aria-label="Change color theme"
+                className="p-2 rounded-lg text-[var(--color-muted)] hover:text-[var(--color-text)] hover:bg-white/5 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]/40"
+              >
+                <span
+                  className="block w-3.5 h-3.5 rounded-full border-2 border-white/30"
+                  style={{ background: THEME_OPTIONS.find(t => t.id === theme)?.swatch }}
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[180px]">
+                <DropdownMenuLabel>THEME</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {THEME_OPTIONS.map(opt => (
+                  <DropdownMenuItem
+                    key={opt.id}
+                    onSelect={() => onThemeChange?.(opt.id)}
+                    className={theme === opt.id ? 'bg-white/10 text-[var(--color-text)]' : ''}
+                  >
+                    <span className="w-3 h-3 rounded-full shrink-0" style={{ background: opt.swatch }} />
+                    <span>{opt.label}</span>
+                    {theme === opt.id && <Check className="ml-auto w-3.5 h-3.5" />}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {onOpenPalette && (
@@ -244,9 +230,7 @@ export default function Navbar({ onOpenPalette, theme = 'default', onThemeChange
               aria-label="Open command palette"
               className="hidden md:flex items-center gap-1.5 px-2 py-1 rounded-lg text-[var(--color-muted)] hover:text-[var(--color-text)] hover:bg-white/5 transition-colors text-xs font-mono"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
+              <Search className="w-3.5 h-3.5" />
               <kbd className="bg-white/5 border border-white/10 px-1 rounded">Ctrl+K</kbd>
             </button>
           )}
