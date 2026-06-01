@@ -692,7 +692,7 @@ export default function DAW() {
           Clear all
         </button>
         <span className="hidden xl:block text-xs font-mono text-[var(--color-muted)]/30 ml-1">
-          space · drag · right-click vel · ⌘Z undo
+          space · drag · right-click vel · Ctrl + Z undo
         </span>
       </header>
 
