@@ -9,6 +9,7 @@
   --color-accent-dark: #5b21b6;
   --color-accent: #7c3aed;
   --color-accent-light: #a78bfa;
+  --color-accent-text: #ffffff;
   --color-surface: #0f0f13;
   --color-surface-2: #1a1a24;
   --color-surface-3: #242433;
@@ -105,6 +106,7 @@ html.theme-gilded {
   --color-accent-dark: #92400e;
   --color-accent: #d97706;
   --color-accent-light: #fbbf24;
+  --color-accent-text: #1a0e00;
   --color-surface: #0f0d08;
   --color-surface-2: #1a1710;
   --color-surface-3: #252015;
@@ -120,6 +122,7 @@ html.theme-sakura {
   --color-accent-dark: #9d1a52;
   --color-accent: #e8799f;
   --color-accent-light: #f9b8d0;
+  --color-accent-text: #2d0a18;
   --color-surface: #120a0f;
   --color-surface-2: #1e1018;
   --color-surface-3: #2a1420;

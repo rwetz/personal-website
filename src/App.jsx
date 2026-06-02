@@ -16,7 +16,8 @@ import PartyMode from './components/PartyMode'
 import { Toaster } from '@/components/ui/sonner'
 
 const Music = lazy(() => import('./components/Music'))
-const DAW = lazy(() => import('./components/DAW'))
+const DAW   = lazy(() => import('./components/DAW'))
+const Nexis = lazy(() => import('./components/Nexis'))
 
 const SECTIONS = ['hero', 'about', 'now', 'projects', 'skills', 'stats', 'resume', 'inspiration', 'contact']
 const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
@@ -31,6 +32,24 @@ function useHash() {
   return hash
 }
 
+/** After leaving a subpage, scroll to whatever section the hash points at. */
+function useSubpageExit(isSubpage, hash) {
+  const wasSubpage = useRef(isSubpage)
+  useEffect(() => {
+    if (wasSubpage.current && !isSubpage) {
+      // AnimatePresence mode="wait" exits at 350ms — wait for main content to mount
+      const id = hash.replace('#', '') || 'hero'
+      const t = setTimeout(() => {
+        const el = document.getElementById(id)
+        if (el) el.scrollIntoView({ behavior: 'instant' })
+        else window.scrollTo({ top: 0, behavior: 'instant' })
+      }, 380)
+      return () => clearTimeout(t)
+    }
+    wasSubpage.current = isSubpage
+  }, [isSubpage]) // eslint-disable-line react-hooks/exhaustive-deps
+}
+
 
 const THEMES = ['default', 'spice', 'tuscan', 'aurora', 'gilded', 'sakura', 'forest', 'cobalt']
 
@@ -38,6 +57,8 @@ export default function App() {
   const hash = useHash()
   const isMusic = hash === '#music'
   const isDAW   = hash === '#daw'
+  const isNexis = hash === '#nexis'
+  useSubpageExit(isMusic || isDAW || isNexis, hash)
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [partyMode, setPartyMode] = useState(false)
   const [theme, setTheme] = useState(() => {
@@ -55,7 +76,7 @@ export default function App() {
 
   // Section URL updates as user scrolls
   useEffect(() => {
-    if (isMusic || isDAW) return
+    if (isMusic || isDAW || isNexis) return
     const update = () => {
       const OFFSET = 160
       let current = 'hero'
@@ -124,7 +145,23 @@ export default function App() {
       {/* Content wrapper — hue-rotate applied here, not on body */}
       <div className={partyMode ? 'party-active' : ''}>
       <AnimatePresence mode="wait">
-        {isDAW ? (
+        {isNexis ? (
+          <motion.div
+            key="nexis"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+          >
+            <Suspense fallback={
+              <div className="min-h-screen flex items-center justify-center text-[var(--color-muted)] text-sm">
+                Loading…
+              </div>
+            }>
+              <Nexis />
+            </Suspense>
+          </motion.div>
+        ) : isDAW ? (
           <motion.div
             key="daw"
             initial={{ opacity: 0, y: 16 }}

@@ -190,6 +190,16 @@ export default function Navbar({ onOpenPalette, theme = 'default', onThemeChange
               <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
             </svg>
           </a>
+
+          <a
+            href="#nexis"
+            aria-label="Nexis"
+            className="p-2 rounded-lg text-[var(--color-muted)] hover:text-[var(--color-accent-light)] hover:bg-white/5 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="18" rx="2"/><path d="M7 9l3 3-3 3"/><path d="M13 15h4"/>
+            </svg>
+          </a>
         </div>
 
         {/* Right side: theme picker + palette + hamburger */}

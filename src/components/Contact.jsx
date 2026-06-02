@@ -176,7 +176,7 @@ export default function Contact() {
             </div>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-lg bg-[var(--color-accent)] text-white font-semibold text-sm hover:bg-[var(--color-accent-dark)] transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[var(--color-accent-light)]"
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-lg bg-[var(--color-surface-3)] text-[var(--color-accent-light)] font-semibold text-sm hover:text-[var(--color-text)] transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[var(--color-accent-light)]"
             >
               <Send className="w-4 h-4" />
               Send via email

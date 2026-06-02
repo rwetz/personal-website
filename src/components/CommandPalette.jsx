@@ -26,8 +26,9 @@ const navigate = [
 ]
 
 const tools = [
-  { id: 'music', label: 'Music page',  icon: Music, hash: '#music' },
-  { id: 'daw',   label: 'Open DAW',    icon: Piano, hash: '#daw' },
+  { id: 'music', label: 'Music page',  icon: Music,       hash: '#music' },
+  { id: 'daw',   label: 'Open DAW',    icon: Piano,       hash: '#daw' },
+  { id: 'nexis', label: 'Nexis',       icon: ExternalLink, hash: '#nexis' },
 ]
 
 export default function CommandPalette({ open, onClose }) {
