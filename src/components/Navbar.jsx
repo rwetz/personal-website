@@ -80,7 +80,7 @@ export default function Navbar() {
         left: 0,
         right: 0,
         zIndex: 50,
-        height: 64,
+        height: 90,
         backgroundColor: scrolled ? 'rgba(255,255,255,0.96)' : '#ffffff',
         borderBottom: scrolled ? '1px solid #dddddd' : '1px solid transparent',
         backdropFilter: scrolled ? 'blur(8px)' : 'none',
@@ -90,9 +90,7 @@ export default function Navbar() {
     >
       <div
         style={{
-          maxWidth: '1280px',
-          margin: '0 auto',
-          padding: '0 24px',
+          padding: '0 32px',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
@@ -106,7 +104,7 @@ export default function Navbar() {
           style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}
         >
           {/* Signature is dark-on-transparent — render as-is on white */}
-          <img src={signatureImg} alt="Ryan Wetzstein" style={{ height: 28, width: 'auto' }} />
+          <img src={signatureImg} alt="Ryan Wetzstein" style={{ height: 48, width: 'auto' }} />
         </a>
 
         {/* Desktop nav — PillNav */}
@@ -130,7 +128,7 @@ export default function Navbar() {
             href="/resume.pdf"
             download
             style={{
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: 400,
               color: '#41454d',
               textDecoration: 'none',
@@ -143,11 +141,11 @@ export default function Navbar() {
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              padding: '8px 18px',
+              padding: '12px 28px',
               background: '#181d26',
               color: '#ffffff',
-              borderRadius: 12,
-              fontSize: 14,
+              borderRadius: 16,
+              fontSize: 16,
               fontWeight: 500,
               textDecoration: 'none',
             }}
@@ -197,7 +195,7 @@ export default function Navbar() {
             transition={{ duration: 0.18, ease: 'easeOut' }}
             style={{
               position: 'absolute',
-              top: 64,
+              top: 90,
               left: 0,
               right: 0,
               backgroundColor: '#ffffff',
