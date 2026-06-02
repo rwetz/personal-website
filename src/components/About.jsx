@@ -2,58 +2,106 @@ import { motion } from 'framer-motion'
 import profileImg from '../assets/profile.jpg'
 
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-80px' },
-  transition: { duration: 0.6, ease: 'easeOut', delay },
+  viewport: { once: true, margin: '-60px' },
+  transition: { duration: 0.55, ease: 'easeOut', delay },
 })
 
 export default function About() {
   return (
-    <section id="about" className="py-24 px-6">
-      <div className="max-w-5xl mx-auto">
-        <motion.div {...fadeUp(0)}>
-          <span className="text-xs font-mono text-[var(--color-accent-light)] tracking-widest">// 01</span>
-          <h2 className="text-3xl font-bold text-[var(--color-text)] mt-1 mb-2">About Me</h2>
-          <div className="accent-bar" />
+    <section
+      id="about"
+      style={{ backgroundColor: '#ffffff', padding: '96px 24px' }}
+    >
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+
+        {/* Eyebrow + heading */}
+        <motion.div {...fadeUp(0)} style={{ marginBottom: 64 }}>
+          <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#41454d', marginBottom: 12 }}>
+            About
+          </p>
+          <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: 0, maxWidth: 560 }}>
+            A junior CS student who builds for the real world.
+          </h2>
         </motion.div>
 
-        <div className="flex flex-col md:flex-row items-center gap-12">
-          <motion.img
-            src={profileImg}
-            alt="Ryan Wetzstein"
-            className="shrink-0 w-48 sm:w-64 h-48 sm:h-64 rounded-full object-cover border-2 border-[var(--color-accent)]/40"
-            initial={{ clipPath: 'circle(0% at 50% 50%)', opacity: 0 }}
-            whileInView={{ clipPath: 'circle(55% at 50% 50%)', opacity: 1 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
-            style={{
-              boxShadow: '0 0 32px var(--color-glow)',
-            }}
-          />
+        {/* Two-column: photo + bio */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: 64,
+            alignItems: 'start',
+          }}
+        >
+          {/* Profile photo */}
           <motion.div
-            className="text-[var(--color-muted)] text-lg leading-relaxed text-left space-y-4"
-            {...fadeUp(0.3)}
+            initial={{ opacity: 0, scale: 0.97 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.55, ease: 'easeOut', delay: 0.05 }}
           >
-            <p>
-              <span className="shimmer-text font-semibold text-xl">Hi! I&apos;m Ryan</span>
-              {' '}— a junior at <span className="keyword-text">North Dakota State University</span> pursuing a
-              Bachelor&apos;s in Computer Science with a minor in Artificial Intelligence.
+            <img
+              src={profileImg}
+              alt="Ryan Wetzstein"
+              style={{
+                width: '100%',
+                maxWidth: 320,
+                aspectRatio: '1 / 1',
+                objectFit: 'cover',
+                borderRadius: 10,
+                border: '1px solid #dddddd',
+                display: 'block',
+              }}
+            />
+          </motion.div>
+
+          {/* Bio */}
+          <motion.div {...fadeUp(0.15)} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <p style={{ fontSize: 14, color: '#333840', lineHeight: 1.7, margin: 0 }}>
+              Hi, I'm Ryan — a junior at <strong style={{ fontWeight: 500, color: '#181d26' }}>North Dakota State University</strong> pursuing
+              a Bachelor's in Computer Science with a minor in Artificial Intelligence.
             </p>
-            <p>
-              My core interests are <span className="keyword-text">machine learning</span>,{' '}
-              <span className="keyword-text">neural networks</span>, and{' '}
-              <span className="keyword-text">backend development</span>. I have two years
-              of experience with object-oriented programming in Java, C#, and Python, and
-              hands-on web development in TypeScript, React, and FastAPI. I&apos;ve completed
-              coursework in data structures &amp; algorithms, agile development, and operating systems.
+            <p style={{ fontSize: 14, color: '#333840', lineHeight: 1.7, margin: 0 }}>
+              My core interests are <strong style={{ fontWeight: 500, color: '#181d26' }}>machine learning</strong>,{' '}
+              <strong style={{ fontWeight: 500, color: '#181d26' }}>neural networks</strong>, and{' '}
+              <strong style={{ fontWeight: 500, color: '#181d26' }}>backend development</strong>. I have two years of
+              experience with OOP in Java, C#, and Python — and hands-on web development using TypeScript, React,
+              and FastAPI.
             </p>
-            <p>
-              Outside of code you&apos;ll find me lifting, making music, and enjoying the
-              outdoors. I&apos;m actively seeking an{' '}
-              <span className="keyword-text">internship or co-op</span> — remote-friendly.
-              Feel free to reach out!
+            <p style={{ fontSize: 14, color: '#333840', lineHeight: 1.7, margin: 0 }}>
+              Outside of code you'll find me lifting, making music, and exploring the outdoors.
+              I'm actively seeking an internship or co-op — remote-friendly.
             </p>
+
+            {/* Contact links */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 8 }}>
+              <a
+                href="mailto:rwetz00@gmail.com"
+                style={{ fontSize: 13, color: '#41454d', textDecoration: 'none', borderBottom: '1px solid #dddddd', paddingBottom: 1 }}
+              >
+                rwetz00@gmail.com
+              </a>
+              <span style={{ color: '#dddddd' }}>·</span>
+              <a
+                href="https://github.com/rwetz"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: 13, color: '#41454d', textDecoration: 'none', borderBottom: '1px solid #dddddd', paddingBottom: 1 }}
+              >
+                github.com/rwetz
+              </a>
+              <span style={{ color: '#dddddd' }}>·</span>
+              <a
+                href="https://linkedin.com/in/ryan-wetzstein"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: 13, color: '#41454d', textDecoration: 'none', borderBottom: '1px solid #dddddd', paddingBottom: 1 }}
+              >
+                LinkedIn
+              </a>
+            </div>
           </motion.div>
         </div>
       </div>

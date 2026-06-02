@@ -1,289 +1,240 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
 
+/* ── Airtable-inspired minimal design tokens ─────────────────────────────── */
 @theme {
-  --color-accent-dark: #5b21b6;
-  --color-accent: #7c3aed;
-  --color-accent-light: #a78bfa;
+  /* Override accent/surface with ink-based palette */
+  --color-accent-dark: #0d1218;
+  --color-accent: #181d26;
+  --color-accent-light: #41454d;
   --color-accent-text: #ffffff;
-  --color-surface: #0f0f13;
-  --color-surface-2: #1a1a24;
-  --color-surface-3: #242433;
-  --color-text: #e2e8f0;
-  --color-muted: #94a3b8;
+  --color-surface: #ffffff;
+  --color-surface-2: #f8fafc;
+  --color-surface-3: #e0e2e6;
+  --color-text: #181d26;
+  --color-muted: #41454d;
 }
 
-/* ── Per-theme extras (not Tailwind utilities, just CSS vars) ───────────── */
+/* ── CSS custom properties ────────────────────────────────────────────────── */
 :root {
-  --color-silk: #1e0f40;
-  --color-glow: rgba(124, 58, 237, 0.18);
-  --color-spotlight: rgba(167, 139, 250, 0.5);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Surfaces */
+  --m-canvas: #ffffff;
+  --m-surface-soft: #f8fafc;
+  --m-surface-strong: #e0e2e6;
+  --m-surface-dark: #181d26;
+
+  /* Ink / text hierarchy */
+  --m-ink: #181d26;
+  --m-ink-active: #0d1218;
+  --m-body: #333840;
+  --m-muted: #41454d;
+  --m-on-dark: #ffffff;
+
+  /* Borders */
+  --m-hairline: #dddddd;
+  --m-border-strong: #9297a0;
+
+  /* Signature card surfaces */
+  --m-sig-coral: #aa2d00;
+  --m-sig-forest: #0a2e0e;
+  --m-sig-cream: #f5e9d4;
+  --m-sig-peach: #fcab79;
+  --m-sig-mint: #a8d8c4;
+
+  /* Spacing */
+  --m-section: 96px;
+
+  /* Radius */
+  --m-radius-sm: 6px;
+  --m-radius-md: 10px;
+  --m-radius-lg: 12px;
+
+  /* Legacy vars — mapped to light values so existing components don't break */
+  --color-silk: #f0f2f5;
+  --color-glow: rgba(24, 29, 38, 0.06);
+  --color-spotlight: rgba(24, 29, 38, 0.08);
+  --color-hairline: #dddddd;
+
+  /* Shadcn compat */
+  --background: #ffffff;
+  --foreground: #181d26;
+  --card: #ffffff;
+  --card-foreground: #181d26;
+  --popover: #ffffff;
+  --popover-foreground: #181d26;
+  --primary: #181d26;
+  --primary-foreground: #ffffff;
+  --secondary: #f8fafc;
+  --secondary-foreground: #181d26;
+  --muted: #f8fafc;
+  --muted-foreground: #41454d;
+  --accent: #f8fafc;
+  --accent-foreground: #181d26;
+  --destructive: #dc2626;
+  --border: #dddddd;
+  --input: #dddddd;
+  --ring: #9297a0;
+  --chart-1: #aa2d00;
+  --chart-2: #0a2e0e;
+  --chart-3: #181d26;
+  --chart-4: #f5e9d4;
+  --chart-5: #e0e2e6;
+  --radius: 0.75rem;
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #181d26;
+  --sidebar-primary: #181d26;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e0e2e6;
+  --sidebar-accent-foreground: #181d26;
+  --sidebar-border: #dddddd;
+  --sidebar-ring: #9297a0;
 }
 
-/* ── Chill Spice ────────────────────────────────────────────────────────── */
-html.theme-spice {
-  --color-accent-dark: #9B1313;
-  --color-accent: #CD1C18;
-  --color-accent-light: #FFA896;
-  --color-surface: #0d0808;
-  --color-surface-2: #180f0f;
-  --color-surface-3: #221414;
-  --color-text: #f0e6e6;
-  --color-muted: #a89090;
-  --color-silk: #2a0808;
-  --color-glow: rgba(205, 28, 24, 0.18);
-  --color-spotlight: rgba(255, 168, 150, 0.5);
-}
-
-/* ── Tuscan Sunset ──────────────────────────────────────────────────────── */
-html.theme-tuscan {
-  --color-accent-dark: #8A2B0E;
-  --color-accent: #E35336;
-  --color-accent-light: #FFD3AC;
-  --color-surface: #0e0c0b;
-  --color-surface-2: #181410;
-  --color-surface-3: #221c16;
-  --color-text: #f0ece6;
-  --color-muted: #9988A1;
-  --color-silk: #2a1208;
-  --color-glow: rgba(227, 83, 54, 0.18);
-  --color-spotlight: rgba(255, 211, 172, 0.5);
-}
-
-/* ── Aurora (electric cyan) ─────────────────────────────────────────────── */
-html.theme-aurora {
-  --color-accent-dark: #0e7490;
-  --color-accent: #06b6d4;
-  --color-accent-light: #67e8f9;
-  --color-surface: #030f12;
-  --color-surface-2: #071820;
-  --color-surface-3: #0d242e;
-  --color-text: #e0f5f8;
-  --color-muted: #7ab8c8;
-  --color-silk: #041820;
-  --color-glow: rgba(6, 182, 212, 0.18);
-  --color-spotlight: rgba(103, 232, 249, 0.5);
-}
-
-/* ── Gilded (warm amber/gold) ───────────────────────────────────────────── */
-html.theme-gilded {
-  --color-accent-dark: #92400e;
-  --color-accent: #d97706;
-  --color-accent-light: #fbbf24;
-  --color-accent-text: #1a0e00;
-  --color-surface: #0f0d08;
-  --color-surface-2: #1a1710;
-  --color-surface-3: #252015;
-  --color-text: #f5ede0;
-  --color-muted: #a89568;
-  --color-silk: #1e1508;
-  --color-glow: rgba(217, 119, 6, 0.18);
-  --color-spotlight: rgba(251, 191, 36, 0.45);
-}
-
-/* ── Sakura (deep rose/pink) ────────────────────────────────────────────── */
-html.theme-sakura {
-  --color-accent-dark: #9d1a52;
-  --color-accent: #e8799f;
-  --color-accent-light: #f9b8d0;
-  --color-accent-text: #2d0a18;
-  --color-surface: #120a0f;
-  --color-surface-2: #1e1018;
-  --color-surface-3: #2a1420;
-  --color-text: #f5e6ee;
-  --color-muted: #c090a8;
-  --color-silk: #1e0812;
-  --color-glow: rgba(232, 121, 159, 0.18);
-  --color-spotlight: rgba(249, 184, 208, 0.5);
-}
-
-/* ── Forest (deep emerald green) ────────────────────────────────────────── */
-html.theme-forest {
-  --color-accent-dark: #14532d;
-  --color-accent: #16a34a;
-  --color-accent-light: #86efac;
-  --color-surface: #060e08;
-  --color-surface-2: #0c1810;
-  --color-surface-3: #122218;
-  --color-text: #e6f5ea;
-  --color-muted: #7aaa88;
-  --color-silk: #081808;
-  --color-glow: rgba(22, 163, 74, 0.18);
-  --color-spotlight: rgba(134, 239, 172, 0.45);
-}
-
-/* ── Cobalt (deep navy blue) ────────────────────────────────────────────── */
-html.theme-cobalt {
-  --color-accent-dark: #1e3a8a;
-  --color-accent: #4f80f7;
-  --color-accent-light: #93c5fd;
-  --color-surface: #06080f;
-  --color-surface-2: #0c1020;
-  --color-surface-3: #12182e;
-  --color-text: #e0e8ff;
-  --color-muted: #7890cc;
-  --color-silk: #080f28;
-  --color-glow: rgba(79, 128, 247, 0.18);
-  --color-spotlight: rgba(147, 197, 253, 0.5);
-}
-
-/* ── Light mode (Ctrl+Shift+L easter egg) ──────────────────────────────── */
-html.light {
-  --color-surface: #f5f3ff;
-  --color-surface-2: #ede9fe;
-  --color-surface-3: #ddd6fe;
-  --color-text: #1e1b4b;
-  --color-muted: #5b21b6;
-  --color-accent: #7c3aed;
-  --color-accent-light: #6d28d9;
-  --color-accent-dark: #4c1d95;
-  --color-silk: #c4b5fd;
-  --color-glow: rgba(124, 58, 237, 0.12);
-  --color-spotlight: rgba(109, 40, 217, 0.3);
-}
-
+/* ── Global base ──────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
 }
 
-/* ── Noise / grain texture overlay ────────────────────────────────────── */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9998;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
+body {
+  background-color: var(--m-canvas);
+  color: var(--m-body);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: none;
 }
 
-/* ── Custom scrollbar (Chromium + Firefox) ─────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--color-surface); }
-::-webkit-scrollbar-thumb {
-  background: var(--color-accent-dark);
-  border-radius: 9999px;
+code, kbd, pre, .font-mono {
+  font-family: 'Geist Mono', 'SF Mono', ui-monospace, 'Cascadia Code',
+    'Roboto Mono', monospace;
 }
-::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
-* { scrollbar-width: thin; scrollbar-color: var(--color-accent-dark) var(--color-surface); }
 
-/* ── Focus styles ──────────────────────────────────────────────────────── */
+/* ── Focus styles ─────────────────────────────────────────────────────────── */
 *:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--m-ink);
   outline-offset: 3px;
   border-radius: 4px;
 }
 
-/* ── Hero animated gradient — CSS Houdini @property ───────────────────── */
-@property --o1x { syntax: '<percentage>'; initial-value: 15%; inherits: false; }
-@property --o1y { syntax: '<percentage>'; initial-value: 20%; inherits: false; }
-@property --o2x { syntax: '<percentage>'; initial-value: 82%; inherits: false; }
-@property --o2y { syntax: '<percentage>'; initial-value: 72%; inherits: false; }
-@property --o3x { syntax: '<percentage>'; initial-value: 50%; inherits: false; }
-@property --o3y { syntax: '<percentage>'; initial-value: 48%; inherits: false; }
+/* ── Custom scrollbar ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--m-surface-soft); }
+::-webkit-scrollbar-thumb {
+  background: var(--m-border-strong);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--m-ink); }
+* { scrollbar-width: thin; scrollbar-color: var(--m-border-strong) var(--m-surface-soft); }
 
-@keyframes hero-gradient {
-  0%, 100% {
-    --o1x: 15%; --o1y: 20%;
-    --o2x: 82%; --o2y: 72%;
-    --o3x: 50%; --o3y: 48%;
-  }
-  25% {
-    --o1x: 22%; --o1y: 10%;
-    --o2x: 74%; --o2y: 82%;
-    --o3x: 55%; --o3y: 38%;
-  }
-  50% {
-    --o1x: 10%; --o1y: 32%;
-    --o2x: 88%; --o2y: 60%;
-    --o3x: 44%; --o3y: 56%;
-  }
-  75% {
-    --o1x: 20%; --o1y: 15%;
-    --o2x: 78%; --o2y: 78%;
-    --o3x: 52%; --o3y: 42%;
-  }
+/* ── Section scroll-margin ────────────────────────────────────────────────── */
+section[id] {
+  scroll-margin-top: 64px;
 }
 
-.hero-gradient {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 55% 50% at var(--o1x) var(--o1y), color-mix(in srgb, var(--color-accent) 32%, transparent), transparent),
-    radial-gradient(ellipse 45% 40% at var(--o2x) var(--o2y), color-mix(in srgb, var(--color-accent-light) 18%, transparent), transparent),
-    radial-gradient(ellipse 40% 45% at var(--o3x) var(--o3y), color-mix(in srgb, var(--color-accent-dark) 22%, transparent), transparent);
-  animation: hero-gradient 18s ease-in-out infinite;
-  pointer-events: none;
-}
+/* ── Typography helpers ───────────────────────────────────────────────────── */
+/* Display scale — weight 400 for all display sizes (Airtable principle) */
+.display-xl  { font-size: 48px; font-weight: 500; line-height: 1.1; }
+.display-lg  { font-size: 40px; font-weight: 400; line-height: 1.2; }
+.display-md  { font-size: 32px; font-weight: 400; line-height: 1.2; }
+.title-lg    { font-size: 24px; font-weight: 400; line-height: 1.35; }
+.title-md    { font-size: 20px; font-weight: 400; line-height: 1.5; }
+.title-sm    { font-size: 18px; font-weight: 500; line-height: 1.4; }
+.label-md    { font-size: 16px; font-weight: 500; line-height: 1.4; }
+.body-md     { font-size: 14px; font-weight: 400; line-height: 1.6; }
+.caption-md  { font-size: 14px; font-weight: 500; line-height: 1.35; letter-spacing: 0.16px; }
+.eyebrow     { font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
 
-/* ── Hero shimmer (mobile gradient name) ──────────────────────────────── */
-@keyframes text-shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position:  200% center; }
-}
-.shimmer-text {
-  background: linear-gradient(90deg, white 0%, var(--color-accent-light) 40%, white 60%, var(--color-accent-light) 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: text-shimmer 4s linear infinite;
-}
-
-/* ── About section keyword gradient ───────────────────────────────────── */
-.keyword-text {
-  background: linear-gradient(135deg, var(--color-accent-light), var(--color-accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* ── Button base styles ───────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  background: var(--m-ink);
+  color: var(--m-on-dark);
+  border-radius: var(--m-radius-lg);
+  font-size: 16px;
   font-weight: 500;
+  line-height: 1.4;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  min-height: 48px;
+  transition: background 0.15s ease;
+}
+.btn-primary:active { background: var(--m-ink-active); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  background: var(--m-canvas);
+  color: var(--m-ink);
+  border-radius: var(--m-radius-lg);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-decoration: none;
+  border: 1px solid var(--m-hairline);
+  cursor: pointer;
+  min-height: 48px;
+  transition: border-color 0.15s ease;
+}
+.btn-secondary:active { border-color: var(--m-border-strong); }
+
+.btn-secondary-on-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  background: var(--m-canvas);
+  color: var(--m-ink);
+  border-radius: var(--m-radius-lg);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  min-height: 48px;
+  transition: opacity 0.15s ease;
+}
+.btn-secondary-on-dark:active { opacity: 0.85; }
+
+/* ── Skill pill ───────────────────────────────────────────────────────────── */
+.skill-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--m-canvas);
+  color: var(--m-ink);
+  border: 1px solid var(--m-hairline);
+  border-radius: var(--m-radius-md);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: default;
+  transition: border-color 0.15s ease;
+}
+.skill-pill:hover { border-color: var(--m-border-strong); }
+
+/* ── Section headings ─────────────────────────────────────────────────────── */
+section h2 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
 }
 
-/* ── Waveform animation (music portfolio cards) ────────────────────────── */
-@keyframes waveBar {
-  from { transform: scaleY(1); }
-  to   { transform: scaleY(0.4); }
-}
-
-/* ── Cursor blink (TextType — replaces GSAP) ───────────────────────────── */
+/* ── Cursor blink ─────────────────────────────────────────────────────────── */
 @keyframes cursor-blink {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
@@ -292,7 +243,13 @@ body::after {
   animation: cursor-blink 1s ease-in-out infinite;
 }
 
-/* ── Party mode ───────────────────────────────────────────────────────── */
+/* ── Waveform ─────────────────────────────────────────────────────────────── */
+@keyframes waveBar {
+  from { transform: scaleY(1); }
+  to   { transform: scaleY(0.4); }
+}
+
+/* ── Party mode ───────────────────────────────────────────────────────────── */
 @keyframes party-hue {
   to { filter: hue-rotate(360deg) saturate(1.4); }
 }
@@ -314,53 +271,62 @@ body::after {
   animation: party-pulse 1.5s ease-in-out infinite;
 }
 
-section[id] {
-  scroll-margin-top: 72px;
-}
-
-/* ── Accent bar draw-on ────────────────────────────────────────────────── */
-@keyframes accent-draw {
-  from { width: 0; opacity: 0; }
-  to   { width: 3rem; opacity: 1; }
-}
-
-.accent-bar {
-  height: 4px;
+/* ── Inline badge ─────────────────────────────────────────────────────────── */
+.badge-hairline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid var(--m-hairline);
   border-radius: 9999px;
-  margin-bottom: 2.5rem;
-  background: linear-gradient(to right, var(--color-accent-dark), var(--color-accent));
-  animation: accent-draw 0.5s ease-out forwards;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--m-muted);
+  background: transparent;
 }
 
-section h2 {
-  font-family: 'Libre Baskerville', serif;
+/* ── Project tag pills ────────────────────────────────────────────────────── */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid var(--m-hairline);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--m-body);
+  background: transparent;
 }
 
-body {
-  background-color: var(--color-surface);
-  color: var(--color-text);
-  font-family: 'Geist', system-ui, sans-serif;
-  transition: background-color 0.3s, color 0.3s;
+/* ── Contact card link ────────────────────────────────────────────────────── */
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  background: var(--m-canvas);
+  border: 1px solid var(--m-hairline);
+  border-radius: var(--m-radius-md);
+  text-decoration: none;
+  color: var(--m-ink);
+  transition: border-color 0.15s ease;
 }
+.contact-card:hover { border-color: var(--m-border-strong); }
 
-code, kbd, pre, .font-mono {
-  font-family: 'Geist Mono', ui-monospace, monospace;
-}
-
-/* ── prefers-reduced-motion ────────────────────────────────────────────── */
+/* ── prefers-reduced-motion ───────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .hero-gradient { animation: none; }
   html { scroll-behavior: auto; }
 }
 
+/* ── Tailwind inline theme ────────────────────────────────────────────────── */
 @theme inline {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-heading: var(--font-sans);
-  --font-sans: 'Geist Variable', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -369,11 +335,6 @@ code, kbd, pre, .font-mono {
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -396,43 +357,6 @@ code, kbd, pre, .font-mono {
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @layer base {
