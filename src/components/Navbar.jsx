@@ -117,10 +117,10 @@ export default function Navbar() {
           <PillNav
             items={links}
             activeHref={activeSection ? `#${activeSection}` : ''}
-            baseColor="#181d26"
-            pillColor="#ffffff"
-            pillTextColor="#181d26"
-            hoveredPillTextColor="#ffffff"
+            baseColor="var(--m-ink)"
+            pillColor="var(--m-canvas)"
+            pillTextColor="var(--m-ink)"
+            hoveredPillTextColor="var(--m-on-dark)"
           />
         </div>
 
