@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import signatureImg from '../assets/signature.png'
+import PillNav from './PillNav'
 
 const links = [
   { label: 'About',    href: '#about'    },
@@ -108,59 +109,20 @@ export default function Navbar() {
           <img src={signatureImg} alt="Ryan Wetzstein" style={{ height: 28, width: 'auto' }} />
         </a>
 
-        {/* Desktop nav */}
-        <ul
-          className="hidden md:flex"
-          style={{
-            listStyle: 'none',
-            margin: 0,
-            padding: 0,
-            gap: 4,
-            alignItems: 'center',
-            position: 'absolute',
-            left: '50%',
-            transform: 'translateX(-50%)',
-          }}
+        {/* Desktop nav — PillNav */}
+        <div
+          className="hidden md:block"
+          style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}
         >
-          {links.map(({ label, href }) => {
-            const id = href.slice(1)
-            const isActive = activeSection === id
-            return (
-              <li key={label}>
-                <a
-                  href={href}
-                  style={{
-                    display: 'block',
-                    padding: '6px 14px',
-                    fontSize: 14,
-                    fontWeight: isActive ? 500 : 400,
-                    color: isActive ? '#181d26' : '#41454d',
-                    textDecoration: 'none',
-                    borderRadius: 6,
-                    position: 'relative',
-                    transition: 'color 0.15s ease',
-                  }}
-                >
-                  {label}
-                  {isActive && (
-                    <motion.span
-                      layoutId="nav-indicator"
-                      style={{
-                        position: 'absolute',
-                        bottom: 2,
-                        left: 14,
-                        right: 14,
-                        height: 1,
-                        background: '#181d26',
-                        borderRadius: 9999,
-                      }}
-                    />
-                  )}
-                </a>
-              </li>
-            )
-          })}
-        </ul>
+          <PillNav
+            items={links}
+            activeHref={activeSection ? `#${activeSection}` : ''}
+            baseColor="#181d26"
+            pillColor="#ffffff"
+            pillTextColor="#181d26"
+            hoveredPillTextColor="#ffffff"
+          />
+        </div>
 
         {/* Right cluster */}
         <div className="hidden md:flex" style={{ alignItems: 'center', gap: 12, flexShrink: 0 }}>

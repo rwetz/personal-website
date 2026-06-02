@@ -23,7 +23,7 @@ export default function About() {
             About
           </p>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: 0, maxWidth: 560 }}>
-            Computer Science student at NDSU, graduating 2026.
+            Computer Science student at NDSU, graduating 2027.
           </h2>
         </motion.div>
 
@@ -61,22 +61,22 @@ export default function About() {
           {/* Bio */}
           <motion.div {...fadeUp(0.15)} style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             <p style={{ fontSize: 16, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
-              Hi, I'm Ryan — a junior at <span style={{ color: '#181d26' }}>North Dakota State University</span> pursuing
+              Hi, I'm Ryan — a Senior at <span style={{ color: '#181d26' }}>North Dakota State University</span> pursuing
               a Bachelor's in Computer Science with a minor in Artificial Intelligence.
             </p>
             <p style={{ fontSize: 16, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
               My core interests are <span style={{ color: '#181d26' }}>machine learning</span>,{' '}
               <span style={{ color: '#181d26' }}>neural networks</span>, and{' '}
-              <span style={{ color: '#181d26' }}>backend development</span>. I have two years of
+              <span style={{ color: '#181d26' }}>backend development</span>. I have three years of
               experience with OOP in Java, C#, and Python — and hands-on web development using TypeScript, React,
               and FastAPI.
             </p>
             <p style={{ fontSize: 16, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
-              Currently interning as a <span style={{ color: '#181d26' }}>[Role]</span> at{' '}
-              <span style={{ color: '#181d26' }}>[Company]</span> — [timeframe].
+              Currently interning as a <span style={{ color: '#181d26' }}>Full-Stack Development Intern</span> at{' '}
+              <span style={{ color: '#181d26' }}>[Company]</span> — [May 2026 - ].
             </p>
             <p style={{ fontSize: 16, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
-              Outside of code you'll find me lifting, making music, and exploring the outdoors.
+              Outside of development you'll find me lifting, making music, and exploring the outdoors.
             </p>
 
           </motion.div>
