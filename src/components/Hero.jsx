@@ -58,28 +58,16 @@ export default function Hero() {
               backgroundColor: '#ffffff',
             }}
           >
-            <span style={{ position: 'relative', display: 'flex', width: 8, height: 8 }}>
-              <motion.span
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  borderRadius: '50%',
-                  backgroundColor: '#22c55e',
-                }}
-                animate={{ scale: [1, 1.9, 1], opacity: [0.6, 0, 0.6] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-              />
-              <span
-                style={{
-                  position: 'relative',
-                  display: 'block',
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  backgroundColor: '#22c55e',
-                }}
-              />
-            </span>
+            <span
+              style={{
+                display: 'block',
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                backgroundColor: '#22c55e',
+                flexShrink: 0,
+              }}
+            />
             Currently interning
           </span>
         </motion.div>
@@ -97,8 +85,7 @@ export default function Hero() {
           }}
         >
           CS student at NDSU building clean, modern software. Focused on AI,
-          backend development, and full-stack web. Always shipping, always
-          learning.
+          backend development, and full-stack web.
         </motion.p>
 
         {/* Button pair */}

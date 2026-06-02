@@ -51,7 +51,8 @@ async function fetchGithubProjects() {
   if (!res.ok) throw new Error(`GitHub API ${res.status}`)
 
   const repos    = await res.json()
-  const filtered = repos.filter(r => !r.fork && !r.archived).slice(0, 6)
+  const EXCLUDE = ['personal-website']
+  const filtered = repos.filter(r => !r.fork && !r.archived && !EXCLUDE.includes(r.name)).slice(0, 6)
   const maxStars = Math.max(...filtered.map(r => r.stargazers_count))
 
   const descriptions = await Promise.all(
@@ -261,7 +262,7 @@ export default function Projects() {
             Projects
           </p>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: 0 }}>
-            Things I've built.
+            Selected projects.
           </h2>
         </motion.div>
 

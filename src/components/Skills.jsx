@@ -49,13 +49,7 @@ const skillGroups = [
   },
 ]
 
-const LEVEL_DOT = {
-  Advanced:     '#22c55e',
-  Intermediate: '#f59e0b',
-  Beginner:     '#94a3b8',
-}
-
-function SkillPill({ name, icon, color, level, years, note }) {
+function SkillPill({ name, icon, color, years, note }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -87,20 +81,8 @@ function SkillPill({ name, icon, color, level, years, note }) {
         </motion.span>
       </TooltipTrigger>
       <TooltipContent side="top" style={{ maxWidth: 220 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-          <span
-            style={{
-              width: 6,
-              height: 6,
-              borderRadius: '50%',
-              background: LEVEL_DOT[level] ?? '#9297a0',
-              flexShrink: 0,
-            }}
-          />
-          <span style={{ fontSize: 11, fontWeight: 500, color: '#41454d', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-            {level}
-          </span>
-          <span style={{ fontSize: 11, color: '#9297a0' }}>· {years}</span>
+        <div style={{ marginBottom: 4 }}>
+          <span style={{ fontSize: 11, fontWeight: 500, color: '#41454d', letterSpacing: '0.04em' }}>{years}</span>
         </div>
         <p style={{ fontSize: 12, color: '#333840', lineHeight: 1.5, margin: 0 }}>{note}</p>
       </TooltipContent>

@@ -23,7 +23,7 @@ export default function About() {
             About
           </p>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: 0, maxWidth: 560 }}>
-            A junior CS student who builds for the real world.
+            Computer Science student at NDSU, graduating 2026.
           </h2>
         </motion.div>
 
@@ -72,8 +72,11 @@ export default function About() {
               and FastAPI.
             </p>
             <p style={{ fontSize: 16, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
+              Currently interning as a <span style={{ color: '#181d26' }}>[Role]</span> at{' '}
+              <span style={{ color: '#181d26' }}>[Company]</span> — [timeframe].
+            </p>
+            <p style={{ fontSize: 16, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
               Outside of code you'll find me lifting, making music, and exploring the outdoors.
-              I'm actively seeking an internship or co-op — remote-friendly.
             </p>
 
           </motion.div>

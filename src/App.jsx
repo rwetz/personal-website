@@ -115,7 +115,7 @@ export default function App() {
                     </h2>
                     <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.65, maxWidth: 480, margin: '0 0 36px' }}>
                       Two years of object-oriented experience, hands-on with ML frameworks, and shipping
-                      real web apps. Every project teaches me something I can't learn in a classroom.
+                      real web apps.
                     </p>
                     <a
                       href="#about"
@@ -313,13 +313,6 @@ export default function App() {
                     </div>
                   </div>
 
-                  <p style={{ fontSize: 11, color: '#9297a0', textAlign: 'center' }}>
-                    press{' '}
-                    <kbd style={{ fontFamily: 'monospace', background: '#f0f2f5', border: '1px solid #dddddd', padding: '1px 5px', borderRadius: 4, fontSize: 11 }}>
-                      Ctrl+K
-                    </kbd>
-                    {' '}for commands
-                  </p>
                 </div>
               </footer>
             </motion.div>

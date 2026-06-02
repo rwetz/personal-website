@@ -174,7 +174,7 @@ export default function Navbar() {
               textDecoration: 'none',
             }}
           >
-            Resume ↓
+            Resume
           </a>
           <a
             href="#contact"
@@ -284,7 +284,7 @@ export default function Navbar() {
                   textDecoration: 'none',
                 }}
               >
-                Resume ↓
+                Resume
               </a>
               <a
                 href="#contact"

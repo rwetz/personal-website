@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { User, FolderKanban, Zap, FileText, Mail, Music, Copy, Download, Sparkles, BookOpen, Activity, ExternalLink } from 'lucide-react'
+import { User, FolderKanban, Wrench, Mail, Terminal, Copy, Download, ExternalLink } from 'lucide-react'
 import {
   CommandDialog,
   CommandEmpty,
@@ -15,19 +15,14 @@ import { toast } from '@/components/ui/sonner'
 const EMAIL = 'rwetz00@gmail.com'
 
 const navigate = [
-  { id: 'about',    label: 'About',    icon: User,         hash: '#about' },
-  { id: 'now',      label: 'Now',      icon: Sparkles,     hash: '#now' },
+  { id: 'about',    label: 'About',    icon: User,         hash: '#about'    },
   { id: 'projects', label: 'Projects', icon: FolderKanban, hash: '#projects' },
-  { id: 'skills',   label: 'Skills',   icon: Zap,          hash: '#skills' },
-  { id: 'stats',    label: 'GitHub Stats', icon: Activity, hash: '#stats' },
-  { id: 'resume',   label: 'Resume',   icon: FileText,     hash: '#resume' },
-  { id: 'inspiration', label: 'Inspiration', icon: BookOpen, hash: '#inspiration' },
-  { id: 'contact',  label: 'Contact',  icon: Mail,         hash: '#contact' },
+  { id: 'skills',   label: 'Skills',   icon: Wrench,       hash: '#skills'   },
+  { id: 'contact',  label: 'Contact',  icon: Mail,         hash: '#contact'  },
 ]
 
 const tools = [
-  { id: 'music', label: 'Music page',  icon: Music,        hash: '#music' },
-  { id: 'nexis', label: 'Nexis',       icon: ExternalLink, hash: '#nexis' },
+  { id: 'nexis', label: 'Nexis', icon: Terminal, hash: '#nexis' },
 ]
 
 export default function CommandPalette({ open, onClose }) {
