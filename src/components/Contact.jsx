@@ -72,7 +72,7 @@ export default function Contact() {
     fontSize: 14,
     color: '#181d26',
     background: '#ffffff',
-    border: `1px solid ${hasError ? '#dc2626' : '#dddddd'}`,
+    border: `1px solid ${hasError ? '#dc2626' : '#c8ccd2'}`,
     borderRadius: 6,
     outline: 'none',
     boxSizing: 'border-box',
@@ -82,7 +82,8 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      style={{ backgroundColor: '#ffffff', padding: '96px 24px' }}
+      className="dot-grid"
+      style={{ padding: '96px 24px' }}
     >
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
 
@@ -98,10 +99,10 @@ export default function Contact() {
             Contact
           </p>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: '0 0 12px' }}>
-            Let's work together.
+            How to reach me.
           </h2>
           <p style={{ fontSize: 14, color: '#333840', margin: 0 }}>
-            Open to internships, collaborations, or just a conversation. Reach out any time.
+            Pick whichever channel works for you — I respond to everything.
           </p>
         </motion.div>
 
@@ -132,14 +133,14 @@ export default function Contact() {
                   gap: 14,
                   padding: '20px 24px',
                   background: '#ffffff',
-                  border: '1px solid #dddddd',
+                  border: '1px solid #c8ccd2',
                   borderRadius: 10,
                   textDecoration: 'none',
                   color: '#181d26',
                   transition: 'border-color 0.15s ease',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = '#9297a0' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = '#dddddd' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#c8ccd2' }}
               >
                 <span style={{ color: '#9297a0', flexShrink: 0 }}>{icon}</span>
                 <span style={{ flex: 1, fontSize: 13, color: '#333840', minWidth: 0 }}>
@@ -231,7 +232,7 @@ export default function Contact() {
                     alignItems: 'center',
                     gap: 8,
                     padding: '12px 22px',
-                    background: '#181d26',
+                    backgroundColor: '#181d26',
                     color: '#ffffff',
                     borderRadius: 12,
                     fontSize: 14,

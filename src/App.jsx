@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Terminal } from 'lucide-react'
 import './index.css'
 import Navbar         from './components/Navbar'
 import Hero           from './components/Hero'
@@ -9,14 +10,11 @@ import Skills         from './components/Skills'
 import Contact        from './components/Contact'
 import SignatureCard  from './components/SignatureCard'
 import CommandPalette from './components/CommandPalette'
-import PartyMode      from './components/PartyMode'
 import { Toaster }    from '@/components/ui/sonner'
 
 const Music = lazy(() => import('./components/Music'))
 const DAW   = lazy(() => import('./components/DAW'))
 const Nexis = lazy(() => import('./components/Nexis'))
-
-const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
 
 function useHash() {
   const [hash, setHash] = useState(() => window.location.hash)
@@ -58,8 +56,6 @@ export default function App() {
   useSubpageExit(isMusic || isDAW || isNexis, hash)
 
   const [paletteOpen, setPaletteOpen] = useState(false)
-  const [partyMode, setPartyMode]     = useState(false)
-  const konamiProgress                = useRef(0)
 
   // Cmd+K
   useEffect(() => {
@@ -67,23 +63,6 @@ export default function App() {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault()
         setPaletteOpen(v => !v)
-      }
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
-
-  // Konami code easter egg
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === KONAMI[konamiProgress.current]) {
-        konamiProgress.current += 1
-        if (konamiProgress.current === KONAMI.length) {
-          konamiProgress.current = 0
-          setPartyMode(v => !v)
-        }
-      } else {
-        konamiProgress.current = 0
       }
     }
     window.addEventListener('keydown', onKey)
@@ -99,11 +78,10 @@ export default function App() {
 
   return (
     <>
-      <PartyMode active={partyMode} onExit={() => setPartyMode(false)} />
       <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
       <Toaster />
 
-      <div className={partyMode ? 'party-active' : ''}>
+      <div>
         <AnimatePresence mode="wait">
           {isNexis ? (
             <motion.div key="nexis" {...subpageProps}>
@@ -127,33 +105,50 @@ export default function App() {
 
                 {/* 2. Coral signature card — brand voltage moment */}
                 <SignatureCard variant="coral">
-                  <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.65, marginBottom: 20 }}>
-                    What I'm about
-                  </p>
-                  <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 24px', maxWidth: 560 }}>
-                    Building production-ready software as a student — not waiting until I graduate.
-                  </h2>
-                  <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.65, maxWidth: 480, margin: '0 0 36px' }}>
-                    Two years of object-oriented experience, hands-on with ML frameworks, and shipping
-                    real web apps. Every project teaches me something I can't learn in a classroom.
-                  </p>
-                  <a
-                    href="#about"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      padding: '14px 24px',
-                      background: '#ffffff',
-                      color: '#181d26',
-                      borderRadius: 12,
-                      fontSize: 16,
-                      fontWeight: 500,
-                      textDecoration: 'none',
-                      minHeight: 48,
-                    }}
-                  >
-                    Learn more
-                  </a>
+                  {/* Left */}
+                  <div>
+                    <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.65, marginBottom: 20 }}>
+                      What I'm about
+                    </p>
+                    <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 24px', maxWidth: 560 }}>
+                      Building production-ready software as a student — not waiting until I graduate.
+                    </h2>
+                    <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.65, maxWidth: 480, margin: '0 0 36px' }}>
+                      Two years of object-oriented experience, hands-on with ML frameworks, and shipping
+                      real web apps. Every project teaches me something I can't learn in a classroom.
+                    </p>
+                    <a
+                      href="#about"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        padding: '14px 24px',
+                        backgroundColor: '#ffffff',
+                        color: '#181d26',
+                        borderRadius: 12,
+                        fontSize: 16,
+                        fontWeight: 500,
+                        textDecoration: 'none',
+                        minHeight: 48,
+                      }}
+                    >
+                      Learn more
+                    </a>
+                  </div>
+
+                  {/* Right — stats */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
+                    {[
+                      { num: '2+', label: 'Years of OOP experience' },
+                      { num: '6+', label: 'Projects shipped on GitHub' },
+                      { num: '5', label: 'Core languages & frameworks' },
+                    ].map(({ num, label }) => (
+                      <div key={label}>
+                        <p style={{ fontSize: 56, fontWeight: 400, color: '#ffffff', lineHeight: 1, margin: '0 0 8px', letterSpacing: '-0.03em' }}>{num}</p>
+                        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: 0, letterSpacing: '0.02em' }}>{label}</p>
+                      </div>
+                    ))}
+                  </div>
                 </SignatureCard>
 
                 {/* 3. White — About */}
@@ -164,33 +159,37 @@ export default function App() {
 
                 {/* 5. Forest signature card */}
                 <SignatureCard variant="forest">
-                  <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.55, marginBottom: 20 }}>
-                    My stack
-                  </p>
-                  <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 20px', maxWidth: 520 }}>
-                    Depth across the full stack — always adding more.
-                  </h2>
-                  <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.65, maxWidth: 440, margin: '0 0 36px' }}>
-                    Java · Python · TypeScript · React · Node.js · FastAPI · PyTorch — and always curious
-                    about what's next.
-                  </p>
-                  <a
-                    href="#skills"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      padding: '14px 24px',
-                      background: '#ffffff',
-                      color: '#181d26',
-                      borderRadius: 12,
-                      fontSize: 16,
-                      fontWeight: 500,
-                      textDecoration: 'none',
-                      minHeight: 48,
-                    }}
-                  >
-                    View skills
-                  </a>
+                  {/* Left */}
+                  <div>
+                    <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.55, marginBottom: 20 }}>
+                      My stack
+                    </p>
+                    <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 20px', maxWidth: 520 }}>
+                      Depth across the full stack — always adding more.
+                    </h2>
+                    <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.65, maxWidth: 440, margin: '0 0 36px' }}>
+                      From low-level OOP to ML pipelines and clean UIs — I build across the whole spectrum
+                      and keep learning what's next.
+                    </p>
+                    <a
+                      href="#skills"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        padding: '14px 24px',
+                        backgroundColor: '#ffffff',
+                        color: '#181d26',
+                        borderRadius: 12,
+                        fontSize: 16,
+                        fontWeight: 500,
+                        textDecoration: 'none',
+                        minHeight: 48,
+                      }}
+                    >
+                      View skills
+                    </a>
+                  </div>
+
                 </SignatureCard>
 
                 {/* 6. White — Skills */}
@@ -198,23 +197,24 @@ export default function App() {
 
                 {/* 7. Dark navy CTA card — contact teaser */}
                 <SignatureCard variant="dark">
-                  <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.45, marginBottom: 20 }}>
-                    Let's connect
-                  </p>
-                  <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 20px', maxWidth: 520 }}>
-                    Open to internships, collaborations, and good conversations.
-                  </h2>
-                  <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.65, maxWidth: 420, margin: '0 0 36px' }}>
-                    Remote-friendly. Reach out any time — I reply to every message.
-                  </p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                  {/* Left */}
+                  <div>
+                    <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.45, marginBottom: 20 }}>
+                      Let's connect
+                    </p>
+                    <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 20px', maxWidth: 520 }}>
+                      Open to internships, collaborations, and good conversations.
+                    </h2>
+                    <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.65, maxWidth: 420, margin: '0 0 36px' }}>
+                      Remote-friendly. Reach out any time — I reply to every message.
+                    </p>
                     <a
                       href="#contact"
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
                         padding: '14px 24px',
-                        background: '#ffffff',
+                        backgroundColor: '#ffffff',
                         color: '#181d26',
                         borderRadius: 12,
                         fontSize: 16,
@@ -225,24 +225,25 @@ export default function App() {
                     >
                       Get in touch
                     </a>
-                    <a
-                      href="mailto:rwetz00@gmail.com"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        padding: '14px 24px',
-                        background: 'transparent',
-                        color: 'rgba(255,255,255,0.7)',
-                        borderRadius: 12,
-                        fontSize: 16,
-                        fontWeight: 400,
-                        textDecoration: 'none',
-                        minHeight: 48,
-                        border: '1px solid rgba(255,255,255,0.2)',
-                      }}
-                    >
-                      rwetz00@gmail.com
-                    </a>
+                  </div>
+
+                  {/* Right — availability details (#12: replaces ghost email button) */}
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    {[
+                      { label: 'Available from', value: 'Fall 2026' },
+                      { label: 'Preferred roles', value: 'SWE Intern · ML / AI Intern' },
+                      { label: 'Location', value: 'Remote-friendly · Fargo, ND' },
+                      { label: 'Email', value: 'rwetz00@gmail.com', href: 'mailto:rwetz00@gmail.com' },
+                    ].map(({ label, value, href }) => (
+                      <div key={label} style={{ borderTop: '1px solid rgba(255,255,255,0.1)', padding: '20px 0' }}>
+                        <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', margin: '0 0 6px' }}>{label}</p>
+                        {href ? (
+                          <a href={href} style={{ fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', paddingBottom: 1 }}>{value}</a>
+                        ) : (
+                          <p style={{ fontSize: 15, color: '#ffffff', margin: 0 }}>{value}</p>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </SignatureCard>
 
@@ -252,8 +253,8 @@ export default function App() {
 
               {/* Footer */}
               <footer
+                className="dot-grid"
                 style={{
-                  backgroundColor: '#ffffff',
                   borderTop: '1px solid #dddddd',
                   padding: '40px 24px',
                 }}
@@ -271,7 +272,7 @@ export default function App() {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap', gap: 12 }}>
                     <span style={{ fontSize: 13, color: '#9297a0' }}>
-                      Built with React + Vite + Tailwind CSS
+                      © 2026 Ryan Wetzstein
                       {' · '}
                       <a
                         href="https://github.com/rwetz/personal-website"
@@ -303,13 +304,11 @@ export default function App() {
                         <svg width="18" height="18"><use href="/icons.svg#x-icon" /></svg>
                       </a>
                       <a
-                        href="#music"
-                        aria-label="Music"
+                        href="#nexis"
+                        aria-label="Nexis"
                         style={{ color: '#9297a0', display: 'flex' }}
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-                        </svg>
+                        <Terminal size={18} strokeWidth={1.75} />
                       </a>
                     </div>
                   </div>
@@ -319,7 +318,7 @@ export default function App() {
                     <kbd style={{ fontFamily: 'monospace', background: '#f0f2f5', border: '1px solid #dddddd', padding: '1px 5px', borderRadius: 4, fontSize: 11 }}>
                       Ctrl+K
                     </kbd>
-                    {' '}for commands · Konami code for a surprise
+                    {' '}for commands
                   </p>
                 </div>
               </footer>

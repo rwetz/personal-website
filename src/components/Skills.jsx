@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Info } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -67,7 +68,7 @@ function SkillPill({ name, icon, color, level, years, note }) {
             gap: 8,
             padding: '8px 14px',
             background: '#ffffff',
-            border: '1px solid #dddddd',
+            border: '1px solid #c8ccd2',
             borderRadius: 10,
             fontSize: 13,
             fontWeight: 400,
@@ -112,7 +113,8 @@ export default function Skills() {
     <TooltipProvider delayDuration={120}>
       <section
         id="skills"
-        style={{ backgroundColor: '#ffffff', padding: '96px 24px' }}
+        className="dot-grid"
+        style={{ padding: '96px 24px' }}
       >
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
 
@@ -130,7 +132,8 @@ export default function Skills() {
             <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: '0 0 12px' }}>
               What I work with.
             </h2>
-            <p style={{ fontSize: 13, color: '#41454d', margin: 0 }}>
+            <p style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#9297a0', margin: 0 }}>
+              <Info size={13} strokeWidth={1.8} />
               Hover any pill for details.
             </p>
           </motion.div>
@@ -149,7 +152,7 @@ export default function Skills() {
                   fontWeight: 500,
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
-                  color: '#9297a0',
+                  color: '#41454d',
                   marginBottom: 16,
                   margin: '0 0 16px',
                 }}>

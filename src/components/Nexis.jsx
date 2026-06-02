@@ -931,38 +931,6 @@ function NexisDemo({ version = 'v1.13.0' }) {
   )
 }
 
-// ── Marquee ───────────────────────────────────────────────────────────────────
-const MARQUEE_ITEMS = [
-  'WebGL Terminal', 'AI Diff Approval', 'CodeMirror 6', 'Multi-provider AI',
-  'Custom Themes', 'Native PTY', 'Vim Mode', 'Split Panes', 'Agent Mode',
-  'Shell History', 'Offline AI', 'OS Keychain', 'F2 Rename', 'Jupyter Viewer',
-  'Live Linting', 'Background Images', 'Plugin API', 'Zero Telemetry',
-]
-
-function Marquee() {
-  const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS]
-  return (
-    <div className="relative overflow-hidden py-3" style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}>
-      <style>{`@keyframes nx-marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }`}</style>
-      <div
-        className="flex gap-6 w-max"
-        style={{ animation: 'nx-marquee 30s linear infinite' }}
-      >
-        {items.map((item, i) => (
-          <span
-            key={i}
-            className="flex items-center gap-2 text-xs font-mono whitespace-nowrap shrink-0"
-            style={{ color: N.mutedFg }}
-          >
-            <span style={{ color: i % 3 === 0 ? N.blue : i % 3 === 1 ? N.purple : N.teal, fontSize: 10 }}>◆</span>
-            {item}
-          </span>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 // ── Feature cards ─────────────────────────────────────────────────────────────
 const FEATURES = [
   {
@@ -991,201 +959,247 @@ const FEATURES = [
   },
 ]
 
-const STATS = [
-  { value: '< 10 MB', label: 'app size' },
-  { value: '0',       label: 'telemetry' },
-  { value: '3',       label: 'platforms' },
-  { value: '10',      label: 'themes' },
-]
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' },
+  transition: { duration: 0.55, ease: 'easeOut', delay },
+})
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function Nexis() {
   const gh = useNexisGithub()
-
   const version = gh.version ?? 'v1.13.0'
 
-  // Merge live GitHub stats with the static ones
-  const liveStats = [
-    ...(gh.stars != null ? [{ value: gh.stars.toLocaleString(), label: 'stars' }] : []),
-    ...(gh.forks != null ? [{ value: gh.forks.toLocaleString(), label: 'forks'  }] : []),
-    ...STATS,
+  const stats = [
+    { num: version,   label: 'Latest release' },
+    { num: '< 10 MB', label: 'App size'        },
+    { num: '0',       label: 'Telemetry'       },
+    { num: '3',       label: 'Platforms'       },
+    ...(gh.stars != null ? [{ num: gh.stars.toLocaleString(), label: 'GitHub stars' }] : []),
   ]
 
   return (
-    <div className="relative min-h-screen" style={{ background: N.bg, color: N.fg }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
 
-      {/* Nav */}
-      <div
-        className="sticky top-0 z-40 border-b"
-        style={{ background: `${N.bg}d8`, backdropFilter: 'blur(16px)', borderColor: N.border, position: 'relative', zIndex: 40 }}
+      {/* ── Nav ── */}
+      <nav
+        className="dot-grid"
+        style={{
+          position: 'sticky', top: 0, zIndex: 40,
+          borderBottom: '1px solid #dddddd',
+          backgroundColor: 'rgba(255,255,255,0.9)',
+          backdropFilter: 'blur(12px)',
+        }}
       >
-        <div className="max-w-5xl mx-auto px-6 py-3 flex items-center gap-3">
-          <a href="#hero" aria-label="Go home" className="hover:opacity-70 transition-opacity shrink-0">
-            <img src={signatureImg} alt="Ryan Wetzstein" className="h-7 w-auto invert" />
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: 56, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <a href="#hero" style={{ display: 'flex', textDecoration: 'none', opacity: 1, transition: 'opacity 0.15s' }}
+            onMouseEnter={e => { e.currentTarget.style.opacity = 0.6 }}
+            onMouseLeave={e => { e.currentTarget.style.opacity = 1 }}
+          >
+            <img src={signatureImg} alt="Ryan Wetzstein" style={{ height: 18, width: 'auto' }} />
           </a>
-          <ChevronRight className="w-3.5 h-3.5" style={{ color: N.border }} />
-          <div className="flex items-center gap-2">
+          <span style={{ color: '#dddddd', fontSize: 18, fontWeight: 300, lineHeight: 1 }}>/</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <NexisLogo className="size-5" />
-            <span className="text-sm font-semibold" style={{ color: N.fg }}>Nexis</span>
+            <span style={{ fontSize: 14, fontWeight: 500, color: '#181d26' }}>Nexis</span>
           </div>
         </div>
-      </div>
+      </nav>
 
-      <div className="relative max-w-5xl mx-auto px-6 py-16 space-y-20" style={{ zIndex: 1 }}>
-
-        {/* Hero */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-          className="flex flex-col items-center text-center gap-6"
-        >
-          {/* Logo */}
-          <div
-            className="p-3 rounded-2xl border"
-            style={{ background: N.card, borderColor: N.borderBr }}
+      {/* ── Hero ── */}
+      <section className="dot-grid" style={{ padding: '96px 24px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: 'easeOut' }}
           >
-            <NexisLogo className="size-14" />
-          </div>
-
-          <div>
-            <h1
-              className="text-6xl font-bold tracking-tight"
-              style={{
-                background: `linear-gradient(135deg, ${N.fg} 0%, ${N.blue} 55%, ${N.purple} 100%)`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              Nexis
-            </h1>
-            <p className="mt-3 text-lg max-w-xl mx-auto" style={{ color: N.mutedFg }}>
-              Open-source AI-native terminal and developer environment.<br />
-              Under 10 MB. Zero telemetry. Runs on your own API keys.
+            <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#41454d', marginBottom: 20 }}>
+              Project
             </p>
-          </div>
-
-          {/* Stats strip */}
-          <div className="flex flex-wrap gap-px rounded-xl overflow-hidden border" style={{ borderColor: N.border }}>
-            {liveStats.map(({ value, label }) => (
-              <div
-                key={label}
-                className="flex flex-col items-center px-6 py-3"
-                style={{ background: N.card, minWidth: 80 }}
-              >
-                <span className="text-lg font-bold font-mono" style={{ color: N.primary }}>{value}</span>
-                <span className="text-[10px] uppercase tracking-widest mt-0.5" style={{ color: N.mutedFg }}>{label}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex flex-wrap gap-2 justify-center">
-            {[version, 'Apache-2.0', 'Tauri 2 · Rust · React 19'].map(b => (
-              <span key={b} className="px-2.5 py-1 rounded-full text-xs border font-mono" style={{ borderColor: N.border, color: N.mutedFg }}>
-                {b}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex gap-3">
-            <a
-              href="https://github.com/rwetz/Nexis"
-              target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold border transition-all duration-200"
-              style={{ borderColor: N.borderBr, color: N.fg, background: N.card }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = `${N.blue}60` }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = N.borderBr }}
-            >
-              <ExternalLink className="w-4 h-4" />
-              View on GitHub
-              {gh.stars != null && (
-                <span className="flex items-center gap-1 ml-1 pl-2 border-l text-[11px]" style={{ borderColor: N.border, color: N.mutedFg }}>
-                  <Star className="w-3 h-3" />
-                  {gh.stars.toLocaleString()}
-                </span>
-              )}
-            </a>
-            <a
-              href="https://github.com/rwetz/Nexis/releases"
-              target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
-              style={{ background: '#238636', color: '#fff' }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#2ea043' }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#238636' }}
-            >
-              <Download className="w-4 h-4" />
-              Download
-            </a>
-          </div>
-        </motion.div>
-
-        {/* Marquee */}
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <Marquee />
-        </motion.div>
-
-        {/* Features */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.12 }}
-          className="grid sm:grid-cols-2 gap-4"
-        >
-          {FEATURES.map(({ icon: Icon, title, color, bullets }, i) => (
-            <motion.div
-              key={title}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.15 + i * 0.07 }}
-              className="group relative rounded-xl p-5 border overflow-hidden transition-all duration-300"
-              style={{ background: N.card, borderColor: N.border }}
-              onMouseEnter={e => {
-                e.currentTarget.style.borderColor = `${color}40`
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = N.border
-              }}
-            >
-              <div className="relative flex items-center gap-3 mb-4">
-                <div
-                  className="p-2.5 rounded-lg"
-                  style={{ background: `${color}15` }}
-                >
-                  <Icon className="w-4 h-4 transition-all duration-300 group-hover:scale-110" style={{ color }} />
-                </div>
-                <h3 className="font-semibold" style={{ color: N.fg }}>{title}</h3>
-              </div>
-              <ul className="relative space-y-2">
-                {bullets.map(b => (
-                  <li key={b} className="flex items-start gap-2 text-sm" style={{ color: N.mutedFg }}>
-                    <span className="mt-0.5 shrink-0 font-mono text-[10px]" style={{ color }}>▸</span>
-                    {b}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Demo */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.24 }}
-        >
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-mono px-2 py-0.5 rounded" style={{ background: `${N.blue}20`, color: N.blue }}>
-                live demo
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
+              <NexisLogo className="size-12" />
+              <h1 style={{ fontSize: 'clamp(40px, 6.5vw, 72px)', fontWeight: 400, color: '#181d26', lineHeight: 1.1, letterSpacing: '-0.02em', margin: 0 }}>
+                Nexis
+              </h1>
             </div>
-            <h2 className="text-2xl font-bold" style={{ color: N.fg }}>Try it yourself</h2>
-            <p className="text-sm mt-1" style={{ color: N.mutedFg }}>
+            <p style={{ fontSize: 16, color: '#333840', lineHeight: 1.65, maxWidth: 520, margin: '0 0 36px' }}>
+              Open-source, AI-native terminal and developer environment built with Tauri and React.
+              Under 10 MB, zero telemetry, runs on your own API keys.
+            </p>
+
+            {/* CTA buttons */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 56 }}>
+              <a
+                href="https://github.com/rwetz/Nexis"
+                target="_blank" rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  padding: '14px 24px',
+                  backgroundColor: '#181d26', color: '#ffffff',
+                  borderRadius: 12, fontSize: 15, fontWeight: 500,
+                  textDecoration: 'none', minHeight: 48,
+                }}
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                </svg>
+                View on GitHub
+                {gh.stars != null && (
+                  <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: 10, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Star style={{ width: 11, height: 11 }} /> {gh.stars}
+                  </span>
+                )}
+              </a>
+              <a
+                href="https://github.com/rwetz/Nexis/releases"
+                target="_blank" rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  padding: '14px 24px',
+                  backgroundColor: '#ffffff', color: '#181d26',
+                  border: '1px solid #c8ccd2',
+                  borderRadius: 12, fontSize: 15, fontWeight: 500,
+                  textDecoration: 'none', minHeight: 48,
+                }}
+              >
+                <Download style={{ width: 15, height: 15 }} />
+                Download {version}
+              </a>
+            </div>
+
+            {/* Stats strip */}
+            <div style={{ borderTop: '1px solid #dddddd', paddingTop: 32, display: 'flex', flexWrap: 'wrap', gap: '0' }}>
+              {stats.map(({ num, label }, i) => (
+                <div
+                  key={label}
+                  style={{
+                    paddingRight: 40, marginRight: 40, paddingBottom: 8,
+                    borderRight: i < stats.length - 1 ? '1px solid #dddddd' : 'none',
+                  }}
+                >
+                  <p style={{ fontSize: 28, fontWeight: 400, color: '#181d26', lineHeight: 1, margin: '0 0 6px', letterSpacing: '-0.02em', fontFamily: 'monospace' }}>{num}</p>
+                  <p style={{ fontSize: 11, color: '#9297a0', margin: 0, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{label}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── Features ── */}
+      <section
+        style={{
+          backgroundColor: '#f8fafc',
+          backgroundImage: 'radial-gradient(circle, #d0d3d8 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+          padding: '96px 24px',
+        }}
+      >
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <motion.div {...fadeUp(0)} style={{ marginBottom: 56 }}>
+            <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#41454d', marginBottom: 12 }}>
+              Features
+            </p>
+            <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: 0 }}>
+              Everything in one window.
+            </h2>
+          </motion.div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 24 }}>
+            {FEATURES.map(({ icon: Icon, title, color, bullets }, i) => (
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.45, ease: 'easeOut', delay: i * 0.08 }}
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid #c8ccd2',
+                  borderRadius: 10,
+                  padding: 32,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 16,
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ padding: 8, background: `${color}15`, borderRadius: 8, display: 'flex' }}>
+                    <Icon style={{ width: 16, height: 16, color }} />
+                  </div>
+                  <h3 style={{ fontSize: 15, fontWeight: 500, color: '#181d26', margin: 0 }}>{title}</h3>
+                </div>
+                <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {bullets.map(b => (
+                    <li key={b} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 13, color: '#333840', lineHeight: 1.55 }}>
+                      <span style={{ color: '#9297a0', flexShrink: 0, marginTop: 1 }}>—</span>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Interactive demo ── */}
+      <section className="dot-grid" style={{ padding: '96px 24px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <motion.div {...fadeUp(0)} style={{ marginBottom: 40 }}>
+            <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#41454d', marginBottom: 12 }}>
+              Interactive demo
+            </p>
+            <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: '0 0 12px' }}>
+              Try it yourself.
+            </h2>
+            <p style={{ fontSize: 14, color: '#41454d', margin: 0 }}>
               Click files in the explorer · switch tabs · type commands · toggle the AI panel with ✦
             </p>
-          </div>
+          </motion.div>
 
-          <NexisDemo version={version} />
+          <motion.div {...fadeUp(0.1)}>
+            <NexisDemo version={version} />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── CTA — dark ── */}
+      <section style={{ backgroundColor: '#181d26', padding: '96px 24px' }}>
+        <motion.div
+          style={{ maxWidth: 1280, margin: '0 auto' }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 20 }}>
+            Open source
+          </p>
+          <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 20px', maxWidth: 520 }}>
+            Star the repo, file issues, or open a pull request.
+          </h2>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.65, maxWidth: 400, margin: '0 0 36px' }}>
+            Apache-2.0 licensed. Contributions of all kinds welcome.
+          </p>
+          <a
+            href="https://github.com/rwetz/Nexis"
+            target="_blank" rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '14px 24px',
+              backgroundColor: '#ffffff', color: '#181d26',
+              borderRadius: 12, fontSize: 16, fontWeight: 500,
+              textDecoration: 'none', minHeight: 48,
+            }}
+          >
+            View on GitHub
+          </a>
         </motion.div>
+      </section>
 
-      </div>
     </div>
   )
 }

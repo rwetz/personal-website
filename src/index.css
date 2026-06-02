@@ -271,6 +271,13 @@ section h2 {
   animation: party-pulse 1.5s ease-in-out infinite;
 }
 
+/* ── Dot grid texture (applied to all white sections) ────────────────────── */
+.dot-grid {
+  background-color: #ffffff;
+  background-image: radial-gradient(circle, #d8dade 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
 /* ── Inline badge ─────────────────────────────────────────────────────────── */
 .badge-hairline {
   display: inline-flex;

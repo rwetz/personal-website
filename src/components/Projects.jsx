@@ -83,7 +83,7 @@ function ProjectCard({ project, index }) {
       transition={{ duration: 0.45, ease: 'easeOut', delay: index * 0.08 }}
       style={{
         background: '#ffffff',
-        border: '1px solid #dddddd',
+        border: '1px solid #c8ccd2',
         borderRadius: 10,
         padding: 32,
         display: 'flex',
@@ -169,8 +169,9 @@ function ProjectCard({ project, index }) {
             alignItems: 'center',
             gap: 6,
             padding: '8px 16px',
-            background: '#181d26',
-            color: '#ffffff',
+            backgroundColor: '#ffffff',
+            color: '#181d26',
+            border: '1px solid #c8ccd2',
             borderRadius: 10,
             fontSize: 13,
             fontWeight: 500,
@@ -189,9 +190,9 @@ function ProjectCard({ project, index }) {
               alignItems: 'center',
               gap: 6,
               padding: '8px 16px',
-              background: '#ffffff',
+              backgroundColor: '#ffffff',
               color: '#181d26',
-              border: '1px solid #dddddd',
+              border: '1px solid #c8ccd2',
               borderRadius: 10,
               fontSize: 13,
               fontWeight: 500,
@@ -217,7 +218,7 @@ function Skeleton() {
           key={i}
           style={{
             background: '#f8fafc',
-            border: '1px solid #dddddd',
+            border: '1px solid #c8ccd2',
             borderRadius: 10,
             padding: 32,
             height: 240,
@@ -244,7 +245,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      style={{ backgroundColor: '#f8fafc', padding: '96px 24px' }}
+      style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(circle, #d0d3d8 1px, transparent 1px)', backgroundSize: '28px 28px', padding: '96px 24px' }}
     >
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
 

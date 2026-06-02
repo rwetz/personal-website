@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { User, FolderKanban, Zap, FileText, Mail, Music, Piano, Copy, Download, Sparkles, BookOpen, Activity, ExternalLink } from 'lucide-react'
+import { User, FolderKanban, Zap, FileText, Mail, Music, Copy, Download, Sparkles, BookOpen, Activity, ExternalLink } from 'lucide-react'
 import {
   CommandDialog,
   CommandEmpty,
@@ -26,8 +26,7 @@ const navigate = [
 ]
 
 const tools = [
-  { id: 'music', label: 'Music page',  icon: Music,       hash: '#music' },
-  { id: 'daw',   label: 'Open DAW',    icon: Piano,       hash: '#daw' },
+  { id: 'music', label: 'Music page',  icon: Music,        hash: '#music' },
   { id: 'nexis', label: 'Nexis',       icon: ExternalLink, hash: '#nexis' },
 ]
 

@@ -34,7 +34,7 @@ export default function SignatureCard({ variant = 'coral', id, children }) {
       }}
     >
       <motion.div
-        className="max-w-5xl mx-auto"
+        style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 64, alignItems: 'center' }}
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
