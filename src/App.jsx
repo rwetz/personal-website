@@ -10,6 +10,8 @@ import Skills         from './components/Skills'
 import Contact        from './components/Contact'
 import SignatureCard  from './components/SignatureCard'
 import CommandPalette from './components/CommandPalette'
+import Cubes         from './components/Cubes'
+import MagnetLines   from './components/MagnetLines'
 import { Toaster }    from '@/components/ui/sonner'
 
 const Music = lazy(() => import('./components/Music'))
@@ -149,6 +151,19 @@ export default function App() {
                       </div>
                     ))}
                   </div>
+
+                  {/* Far right — MagnetLines */}
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingRight: 160 }}>
+                    <MagnetLines
+                      rows={12}
+                      columns={12}
+                      containerSize="340px"
+                      lineColor="rgba(255,255,255,0.25)"
+                      lineWidth="2px"
+                      lineHeight="28px"
+                      baseAngle={-160}
+                    />
+                  </div>
                 </SignatureCard>
 
                 {/* 3. White — About */}
@@ -188,6 +203,23 @@ export default function App() {
                     >
                       View skills
                     </a>
+                  </div>
+
+                  {/* Right — Cubes */}
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingRight: 160 }}>
+                    <div style={{ width: '100%', maxWidth: 420, aspectRatio: '1 / 1' }}>
+                      <Cubes
+                        gridSize={12}
+                        maxAngle={180}
+                        radius={2}
+                        borderStyle="1px solid rgba(255,255,255,0.12)"
+                        faceColor="#0a2e0e"
+                        rippleColor="rgba(255,255,255,0.35)"
+                        rippleSpeed={1.5}
+                        autoAnimate
+                        rippleOnClick
+                      />
+                    </div>
                   </div>
 
                 </SignatureCard>

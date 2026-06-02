@@ -85,7 +85,7 @@ export default function Contact() {
       className="dot-grid"
       style={{ padding: '96px 24px' }}
     >
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1280, margin: '0' }}>
 
         {/* Heading */}
         <motion.div

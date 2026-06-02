@@ -178,7 +178,7 @@ export default function Hero() {
         transition={{ duration: 0.65, ease: 'easeOut', delay: 0.4 }}
         style={{
           position: 'absolute',
-          bottom: 56,
+          bottom: 96,
           right: 56,
           width: 520,
           background: 'var(--m-ink)',
