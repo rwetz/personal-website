@@ -142,7 +142,7 @@ export default function Hero() {
           }}
         >
           <span style={{ fontSize: 12, color: 'var(--m-border-strong)' }}>
-            North Dakota State University · Computer Science · Class of 2026
+            North Dakota State University · Computer Science · Class of 2027
           </span>
           <span style={{ color: 'var(--m-hairline)', fontSize: 12 }}>|</span>
           {[
