@@ -2,6 +2,14 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import nexisLogoSrc from '../assets/logo (1) (1).png'
 import signatureImg from '../assets/signature.png'
+import ssWelcome   from '../assets/nexis/welcome.png'
+import ssEditor    from '../assets/nexis/editor.png'
+import ssAI        from '../assets/nexis/ai.png'
+import ssTerminal  from '../assets/nexis/terminal.png'
+import ssSettings  from '../assets/nexis/settings.png'
+import ssShortcuts from '../assets/nexis/shortcuts.png'
+import ssMarkdown  from '../assets/nexis/markdown.png'
+import ssFeatures  from '../assets/nexis/features.png'
 import {
   ChevronRight, Download, ExternalLink, Star,
   Terminal, FileCode2, Bot, Palette,
@@ -935,28 +943,87 @@ function NexisDemo({ version = 'v1.13.0' }) {
 const FEATURES = [
   {
     icon: Terminal,
-    title: 'Native Terminal',
+    title: 'Terminal',
     color: N.green,
-    bullets: ['WebGL xterm.js rendering', 'Unlimited tabs + split panes', 'Native PTY — zsh, bash, fish, pwsh', 'Shell history fuzzy search (Ctrl+R)'],
+    bullets: ['Full PTY — PowerShell, cmd, WSL distros', 'Unlimited tabs + split panes', 'Shell integration & history search', 'WebGL xterm.js rendering'],
   },
   {
     icon: FileCode2,
     title: 'Code Editor',
     color: N.blue,
-    bullets: ['CodeMirror 6, 15+ languages', 'AI inline autocomplete', 'Per-hunk AI diff approval', 'Vim mode, Prettier, F2 rename'],
+    bullets: ['JS/TS, Python, Rust, HTML, CSS, Markdown, JSON', 'AI inline autocomplete & per-hunk diff approval', 'Vim mode + Prettier formatting', 'Minimap, breadcrumbs, F2 rename'],
   },
   {
     icon: Bot,
-    title: 'AI Panel',
+    title: 'AI Agent',
     color: N.purple,
-    bullets: ['Claude, GPT-4, Gemini, local models', 'Fully offline via Ollama / LM Studio', 'Keys stored in OS keychain', 'Agent-mode with file diffs'],
+    bullets: ['Reads & edits files, runs shell commands', 'Searches the codebase, spawns sub-agents', 'Claude, GPT-4, Gemini, Ollama support', 'Keys stored in OS keychain — zero telemetry'],
   },
   {
-    icon: Palette,
-    title: 'Themes',
-    color: N.yellow,
-    bullets: ['10 built-in: Nexis Default, Nord, Tokyo Night…', 'Custom .nexis-theme files', 'Live theme editor', 'Background images with blur'],
+    icon: GitBranch,
+    title: 'Git & Source Control',
+    color: '#f97316',
+    bullets: ['Staging, diffs, and commit history', 'Conflict resolution & stash management', 'Worktrees & PR description generation'],
   },
+  {
+    icon: Code2,
+    title: 'Debugger',
+    color: N.red,
+    bullets: ['DAP-based debugger', 'Breakpoints & debug toolbar', 'Variable inspection & call stack'],
+  },
+  {
+    icon: Zap,
+    title: 'Language Intelligence',
+    color: N.teal,
+    bullets: ['LSP completions & go-to-definition', 'Hover docs & inline diagnostics', 'Symbol search & F2 rename'],
+  },
+  {
+    icon: Layers,
+    title: 'Notebooks',
+    color: N.yellow,
+    bullets: ['Jupyter-style interactive notebooks', 'Run cells inline with rich output', 'Mix code, markdown, and results'],
+  },
+  {
+    icon: Globe,
+    title: 'Web Preview',
+    color: '#06b6d4',
+    bullets: ['Inline browser preview pane', 'Live reload alongside your editor', 'No context switching needed'],
+  },
+  {
+    icon: Server,
+    title: 'SSH & Containers',
+    color: '#a78bfa',
+    bullets: ['Connect to remote machines', 'Full workspace over SSH', 'Container environment support'],
+  },
+  {
+    icon: Cpu,
+    title: 'Process & Port Manager',
+    color: '#ec4899',
+    bullets: ['View all running processes', 'Monitor open ports alongside your workspace', 'Kill or inspect processes inline'],
+  },
+]
+
+// ── Keyboard shortcuts ────────────────────────────────────────────────────────
+const SHORTCUTS = [
+  { label: 'New terminal',        keys: ['Ctrl', 'T'] },
+  { label: 'New editor tab',      keys: ['Ctrl', 'E'] },
+  { label: 'Quick open file',     keys: ['Ctrl', 'P'] },
+  { label: 'Command palette',     keys: ['Ctrl', 'Shift', 'P'] },
+  { label: 'Split pane',          keys: ['Ctrl', 'D'] },
+  { label: 'Open AI agent',       keys: ['Ctrl', 'I'] },
+  { label: 'Keyboard shortcuts',  keys: ['Ctrl', 'K'] },
+  { label: 'Open settings',       keys: ['Ctrl', ','] },
+  { label: 'New window',          keys: ['Ctrl', 'Shift', 'N'] },
+  { label: 'Switch workspace',    keys: ['Ctrl', '`'] },
+]
+
+// ── Sidebar panels ────────────────────────────────────────────────────────────
+const PANELS = [
+  'Files', 'Recent Files', 'Source Control', 'Processes', 'Outline',
+  'Debugger', 'Tests', 'Build', 'Bookmarks', 'Ports', 'Profiles',
+  'REPL', 'Snippets', 'Database', 'Code Review', 'Agent Queue',
+  'Symbol Search', 'AI Refactor', 'Prompt Templates', 'Workspace Notes',
+  'Shell Snippets', 'SSH', 'Release',
 ]
 
 const fadeUp = (delay = 0) => ({
@@ -968,6 +1035,8 @@ const fadeUp = (delay = 0) => ({
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function Nexis() {
+  useEffect(() => { window.scrollTo(0, 0) }, [])
+
   const gh = useNexisGithub()
   const version = gh.version ?? 'v1.13.0'
 
@@ -1024,10 +1093,63 @@ export default function Nexis() {
                 Nexis
               </h1>
             </div>
-            <p style={{ fontSize: 16, color: '#333840', lineHeight: 1.65, maxWidth: 520, margin: '0 0 36px' }}>
+            <p style={{ fontSize: 16, color: '#333840', lineHeight: 1.65, maxWidth: 520, margin: '0 0 20px' }}>
               Open-source, AI-native terminal and developer environment built with Tauri and React.
               Under 10 MB, zero telemetry, runs on your own API keys.
             </p>
+
+            {/* Attribution */}
+            <div
+              style={{
+                display: 'inline-flex', flexDirection: 'column', gap: 8,
+                padding: '14px 18px',
+                background: '#f8fafc',
+                border: '1px solid #dddddd',
+                borderRadius: 10,
+                marginBottom: 36,
+                maxWidth: 520,
+              }}
+            >
+              <p style={{ fontSize: 13, color: '#41454d', lineHeight: 1.6, margin: 0 }}>
+                Forked from{' '}
+                <a href="https://github.com/crynta/terax-ai" target="_blank" rel="noopener noreferrer"
+                  style={{ color: '#181d26', fontWeight: 500, textDecoration: 'none', borderBottom: '1px solid #dddddd' }}>
+                  Terax
+                </a>
+                {' '}by{' '}
+                <a href="https://github.com/crynta" target="_blank" rel="noopener noreferrer"
+                  style={{ color: '#181d26', fontWeight: 500, textDecoration: 'none', borderBottom: '1px solid #dddddd' }}>
+                  crynta
+                </a>
+                . I extended the original project with additional features, panels, and AI integrations
+                under the{' '}
+                <span style={{ fontFamily: 'monospace', fontSize: 12, background: '#ebebeb', padding: '1px 5px', borderRadius: 4 }}>Apache-2.0</span>
+                {' '}license.
+              </p>
+              <div style={{ display: 'flex', gap: 16 }}>
+                <a href="https://github.com/crynta/terax-ai" target="_blank" rel="noopener noreferrer"
+                  style={{ fontSize: 12, color: '#9297a0', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                  </svg>
+                  terax-ai
+                </a>
+                <a href="https://github.com/crynta" target="_blank" rel="noopener noreferrer"
+                  style={{ fontSize: 12, color: '#9297a0', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                  </svg>
+                  crynta
+                </a>
+                <a href="https://www.youtube.com/channel/UC59t7lAzjS0yA6HTk9Eg34A" target="_blank" rel="noopener noreferrer"
+                  style={{ fontSize: 12, color: '#9297a0', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                  YouTube
+                </a>
+              </div>
+            </div>
 
             {/* CTA buttons */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 56 }}>
@@ -1143,6 +1265,154 @@ export default function Nexis() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* ── Shortcuts + Panels ── */}
+      <section style={{ backgroundColor: '#181d26', padding: '96px 24px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 64 }}>
+
+          {/* Shortcuts */}
+          <motion.div {...fadeUp(0)}>
+            <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 12 }}>
+              Keyboard shortcuts
+            </p>
+            <h2 style={{ fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 32px' }}>
+              Every action, one keystroke away.
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {SHORTCUTS.map(({ label, keys }, i) => (
+                <motion.div
+                  key={label}
+                  initial={{ opacity: 0, x: -12 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.35, ease: 'easeOut', delay: i * 0.05 }}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '10px 0',
+                    borderBottom: '1px solid rgba(255,255,255,0.06)',
+                  }}
+                >
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)' }}>{label}</span>
+                  <div style={{ display: 'flex', gap: 4 }}>
+                    {keys.map(k => (
+                      <kbd
+                        key={k}
+                        style={{
+                          fontSize: 11, fontFamily: 'monospace',
+                          padding: '3px 7px', borderRadius: 5,
+                          background: 'rgba(255,255,255,0.08)',
+                          border: '1px solid rgba(255,255,255,0.14)',
+                          color: 'rgba(255,255,255,0.75)',
+                          lineHeight: 1.4,
+                        }}
+                      >
+                        {k}
+                      </kbd>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Panels */}
+          <motion.div {...fadeUp(0.1)}>
+            <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 12 }}>
+              Sidebar panels
+            </p>
+            <h2 style={{ fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 32px' }}>
+              {PANELS.length} panels. Pin only what you use.
+            </h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {PANELS.map((panel, i) => (
+                <motion.span
+                  key={panel}
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.3, ease: 'easeOut', delay: i * 0.03 }}
+                  style={{
+                    fontSize: 12, fontWeight: 400,
+                    padding: '5px 12px', borderRadius: 9999,
+                    background: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    color: 'rgba(255,255,255,0.6)',
+                  }}
+                >
+                  {panel}
+                </motion.span>
+              ))}
+            </div>
+          </motion.div>
+
+        </div>
+      </section>
+
+      {/* ── Screenshot showcase ── */}
+      <section
+        style={{
+          backgroundColor: '#f8fafc',
+          backgroundImage: 'radial-gradient(circle, #d0d3d8 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+          padding: '96px 40px',
+          borderTop: '1px solid #dddddd',
+        }}
+      >
+          <motion.div {...fadeUp(0)} style={{ marginBottom: 56 }}>
+            <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#41454d', marginBottom: 12 }}>
+              In practice
+            </p>
+            <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: 0 }}>
+              Built for real workflows.
+            </h2>
+          </motion.div>
+
+          {/* 2-column showcase grid — full bleed */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 32 }}>
+            {[
+              { label: 'Welcome screen',     caption: 'Clean start. Quick access to recent workspaces and projects the moment you open the app.',           accent: N.blue,    img: ssWelcome   },
+              { label: 'Code editor',        caption: 'Syntax highlighting, AI inline completions, breadcrumbs, and a minimap — all in one pane.',           accent: N.teal,    img: ssEditor    },
+              { label: 'AI agent',           caption: 'Bring your own API key. Claude, GPT-4, Gemini, or a local Ollama model — zero telemetry.',            accent: N.purple,  img: ssAI        },
+              { label: 'Terminal',           caption: 'Full PTY with WebGL rendering. Split panes, tab history, and shell integration built in.',             accent: N.green,   img: ssTerminal  },
+              { label: 'Markdown viewer',    caption: 'Render README files, docs, and notes inline. No switching to a browser to preview markdown.',         accent: N.mutedFg, img: ssMarkdown  },
+              { label: 'Feature browser',    caption: 'Every capability listed and searchable from inside the app. Discover what Nexis can do at a glance.', accent: '#f97316', img: ssFeatures  },
+              { label: 'Settings',           caption: 'Granular control over themes, keybinds, AI models, fonts, and workspace behaviour.',                  accent: '#f97316', img: ssSettings  },
+              { label: 'Keyboard shortcuts', caption: 'Every command is customizable. Remap anything from a searchable shortcuts panel.',                    accent: N.yellow,  img: ssShortcuts },
+            ].map(({ label, caption, accent, img }, i) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.45, ease: 'easeOut', delay: (i % 2) * 0.08 }}
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid #c8ccd2',
+                  borderRadius: 14,
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Screenshot — natural height, no crop */}
+                <div style={{ background: N.bg, lineHeight: 0 }}>
+                  <img
+                    src={img}
+                    alt={label}
+                    style={{ width: '100%', height: 'auto', display: 'block' }}
+                  />
+                </div>
+
+                {/* Caption */}
+                <div style={{ padding: '24px 32px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: accent, flexShrink: 0 }} />
+                    <span style={{ fontSize: 14, fontWeight: 500, color: '#181d26' }}>{label}</span>
+                  </div>
+                  <p style={{ fontSize: 13, color: '#41454d', lineHeight: 1.6, margin: 0 }}>{caption}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
       </section>
 
       {/* ── Interactive demo ── */}

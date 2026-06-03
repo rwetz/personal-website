@@ -83,9 +83,9 @@ export default function Contact() {
     <section
       id="contact"
       className="dot-grid"
-      style={{ padding: '96px 24px' }}
+      style={{ padding: '96px 80px' }}
     >
-      <div style={{ maxWidth: 1280, margin: '0' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
 
         {/* Heading */}
         <motion.div

@@ -51,7 +51,7 @@ async function fetchGithubProjects() {
   if (!res.ok) throw new Error(`GitHub API ${res.status}`)
 
   const repos    = await res.json()
-  const EXCLUDE = ['personal-website']
+  const EXCLUDE = []
   const filtered = repos.filter(r => !r.fork && !r.archived && !EXCLUDE.includes(r.name)).slice(0, 6)
   const maxStars = Math.max(...filtered.map(r => r.stargazers_count))
 
@@ -146,7 +146,7 @@ function ProjectCard({ project, index }) {
       </h3>
 
       {/* Description */}
-      <p style={{ fontSize: 14, color: '#333840', lineHeight: 1.65, margin: 0, flex: 1 }}>
+      <p style={{ fontSize: 14, color: '#333840', lineHeight: 1.65, margin: 0, flex: 1, display: '-webkit-box', WebkitLineClamp: 8, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
         {project.description}
       </p>
 
@@ -257,9 +257,9 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(circle, #d0d3d8 1px, transparent 1px)', backgroundSize: '28px 28px', padding: '96px 24px' }}
+      style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(circle, #d0d3d8 1px, transparent 1px)', backgroundSize: '28px 28px', padding: '64px 0', borderTop: '1px solid #dddddd' }}
     >
-      <div style={{ maxWidth: 1280, margin: '0' }}>
+      <div>
 
         {/* Heading */}
         <motion.div
@@ -267,7 +267,7 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.55, ease: 'easeOut' }}
-          style={{ marginBottom: 56 }}
+          style={{ marginBottom: 56, paddingLeft: 24 }}
         >
           <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#41454d', marginBottom: 12 }}>
             Projects
@@ -290,8 +290,9 @@ export default function Projects() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-              gap: 24,
+              gridAutoFlow: 'column',
+              gridAutoColumns: '1fr',
+              gap: 16,
             }}
           >
             {projects.map((project, i) => (

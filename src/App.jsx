@@ -139,7 +139,7 @@ export default function App() {
                   </div>
 
                   {/* Right — stats */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 40, paddingLeft: 180 }}>
                     {[
                       { num: '2+', label: 'Years of OOP experience' },
                       { num: '6+', label: 'Projects shipped on GitHub' },
@@ -288,7 +288,7 @@ export default function App() {
                 className="dot-grid"
                 style={{
                   borderTop: '1px solid #dddddd',
-                  padding: '40px 24px',
+                  padding: '40px 80px',
                 }}
               >
                 <div
