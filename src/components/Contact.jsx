@@ -1,3 +1,8 @@
+// ╔══════════════════════════════════════╗
+// ║  Ryan Wetzstein                      ║
+// ║  Personal Website                    ║
+// ║  2026                                ║
+// ╚══════════════════════════════════════╝
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Copy, Send } from 'lucide-react'

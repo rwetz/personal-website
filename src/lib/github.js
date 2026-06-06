@@ -1,3 +1,8 @@
+// ╔══════════════════════════════════════╗
+// ║  Ryan Wetzstein                      ║
+// ║  Personal Website                    ║
+// ║  2026                                ║
+// ╚══════════════════════════════════════╝
 // Shared GitHub stats fetcher used by Stats.jsx and Resume.jsx so they hit
 // the same sessionStorage cache instead of double-fetching.
 

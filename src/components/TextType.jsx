@@ -1,3 +1,8 @@
+// ╔══════════════════════════════════════╗
+// ║  Ryan Wetzstein                      ║
+// ║  Personal Website                    ║
+// ║  2026                                ║
+// ╚══════════════════════════════════════╝
 'use client';
 
 import { useRef, useState, createElement, useMemo, useCallback, useEffect } from 'react';

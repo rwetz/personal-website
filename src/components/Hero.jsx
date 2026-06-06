@@ -1,3 +1,8 @@
+// ╔══════════════════════════════════════╗
+// ║  Ryan Wetzstein                      ║
+// ║  Personal Website                    ║
+// ║  2026                                ║
+// ╚══════════════════════════════════════╝
 import { motion } from 'framer-motion'
 import { FolderKanban, Download, ArrowUpRight } from 'lucide-react'
 

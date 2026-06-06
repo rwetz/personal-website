@@ -1,3 +1,8 @@
+// ╔══════════════════════════════════════╗
+// ║  Ryan Wetzstein                      ║
+// ║  Personal Website                    ║
+// ║  2026                                ║
+// ╚══════════════════════════════════════╝
 import { motion } from 'framer-motion'
 import { Sparkles, BookOpen, Headphones, Hammer, MapPin, Coffee } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'

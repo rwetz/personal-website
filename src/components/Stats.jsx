@@ -1,3 +1,8 @@
+// ╔══════════════════════════════════════╗
+// ║  Ryan Wetzstein                      ║
+// ║  Personal Website                    ║
+// ║  2026                                ║
+// ╚══════════════════════════════════════╝
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { GitCommit, GitFork, Star, FolderGit2 } from 'lucide-react'

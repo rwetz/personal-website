@@ -1,3 +1,8 @@
+// ╔══════════════════════════════════════╗
+// ║  Ryan Wetzstein                      ║
+// ║  Personal Website                    ║
+// ║  2026                                ║
+// ╚══════════════════════════════════════╝
 import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react'
 
 // ─── Constants ────────────────────────────────────────────────────────────────

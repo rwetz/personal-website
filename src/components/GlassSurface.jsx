@@ -1,3 +1,8 @@
+// ╔══════════════════════════════════════╗
+// ║  Ryan Wetzstein                      ║
+// ║  Personal Website                    ║
+// ║  2026                                ║
+// ╚══════════════════════════════════════╝
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState, useId } from 'react';
 

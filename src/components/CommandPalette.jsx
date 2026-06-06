@@ -1,3 +1,8 @@
+// ╔══════════════════════════════════════╗
+// ║  Ryan Wetzstein                      ║
+// ║  Personal Website                    ║
+// ║  2026                                ║
+// ╚══════════════════════════════════════╝
 import { useEffect } from 'react'
 import { User, FolderKanban, Wrench, Mail, Terminal, Copy, Download, ExternalLink } from 'lucide-react'
 import {
