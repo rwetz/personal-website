@@ -167,7 +167,7 @@ const skillGroups = [
         color: "#007ACC",
         level: "Beginner",
         years: "2 yrs",
-        note: "Just what I\'m accustomed to currently",
+        note: "Just what I'm accustomed to currently",
       },
       {
         name: "Vite",

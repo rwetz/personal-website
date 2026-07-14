@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react'
+import { useState, useEffect, useRef, useCallback, memo, useMemo, useLayoutEffect } from 'react'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const STEPS       = 32
@@ -357,14 +357,19 @@ export default function DAW() {
   const drawMode     = useRef(true)
   const histRef      = useRef({ stack: [initNotes()], idx: 0 })
 
-  notesRef.current    = notes
-  tracksRef.current   = tracks
-  loopRef.current     = loop
-  bpmRef.current      = bpm
-  volRef.current      = volume
-  noteLenRef.current  = noteLen
-  trackFxRef.current  = trackFx
-  clipboardRef.current = clipboard
+  // Keep "latest value" refs for the playback interval and event handlers.
+  // Assigned in a layout effect (not during render) so a discarded concurrent
+  // render can never leak state into the refs.
+  useLayoutEffect(() => {
+    notesRef.current    = notes
+    tracksRef.current   = tracks
+    loopRef.current     = loop
+    bpmRef.current      = bpm
+    volRef.current      = volume
+    noteLenRef.current  = noteLen
+    trackFxRef.current  = trackFx
+    clipboardRef.current = clipboard
+  })
 
   // ── Undo / Redo ───────────────────────────────────────────────────────────
   const undo = useCallback(() => {

@@ -152,6 +152,7 @@ const TextType = ({
       <span
         ref={cursorRef}
         className={`ml-1 inline-block cursor-blink ${shouldHideCursor ? 'hidden' : ''} ${cursorClassName}`}
+        style={{ animationDuration: `${cursorBlinkDuration * 2}s` }}
       >
         {cursorCharacter}
       </span>

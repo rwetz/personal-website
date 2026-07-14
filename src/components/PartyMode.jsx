@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const COLORS = [
@@ -6,9 +6,8 @@ const COLORS = [
   '#ff922b','#a9e34b','#74c0fc','#da77f2','#ff8787',
 ]
 
-function Confetti() {
-  const pieces = useMemo(() =>
-    Array.from({ length: 80 }, (_, i) => ({
+function makeConfettiPieces() {
+  return Array.from({ length: 80 }, (_, i) => ({
       id: i,
       left: Math.random() * 100,
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
@@ -19,7 +18,12 @@ function Confetti() {
       rotation: Math.random() * 360,
       drift: (Math.random() - 0.5) * 200,
       borderRadius: Math.random() > 0.5 ? '50%' : '2px',
-    })), [])
+  }))
+}
+
+function Confetti() {
+  // Lazy initializer: randomness runs once at mount, never on re-render.
+  const [pieces] = useState(makeConfettiPieces)
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-[99998]">

@@ -15,7 +15,7 @@ const books = [
   {
     title: "The Bazaar of Bad Dreams",
     author: "Stephen King",
-    why: ' Just a "For Fun" book I\'ve been reading recently. ',
+    why: ` Just a "For Fun" book I've been reading recently. `,
   },
 ];
 
@@ -26,7 +26,7 @@ const albums = [
     why: ' "Greatest Hits" albums are always full of bangers. ',
   },
   {
-    title: "Wonder What\'s Next (Expanded Edition)",
+    title: "Wonder What's Next (Expanded Edition)",
     artist: "Chevelle",
     why: "Emphasis on the expanded edition.",
   },
@@ -43,7 +43,7 @@ const albums = [
   {
     title: "Unmusique",
     artist: "Lucy Bedroque",
-    why: " This album has been on repeat for me since it\'s come out, it turned me into a Lucy Bedroque fan. ",
+    why: " This album has been on repeat for me since it's come out, it turned me into a Lucy Bedroque fan. ",
   },
 ];
 
@@ -51,7 +51,7 @@ const films = [
   {
     title: "Lord of the Rings Series",
     director: "Peter Jackson",
-    why: " Can\'t believe it took me this long to watch these movies I absolutely love them. ",
+    why: " Can't believe it took me this long to watch these movies I absolutely love them. ",
   },
   {
     title: "Tropic Thunder",
