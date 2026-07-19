@@ -21,7 +21,9 @@ import { Toaster }    from '@/components/ui/sonner'
 
 const Music = lazy(() => import('./components/Music'))
 const DAW   = lazy(() => import('./components/DAW'))
-const Nexis = lazy(() => import('./components/Nexis'))
+
+/** Nexis moved off this site to its own domain; #nexis is kept only as a redirect. */
+const NEXIS_URL = 'https://nexisdev.org'
 
 function useHash() {
   const [hash, setHash] = useState(() => window.location.hash)
@@ -59,8 +61,13 @@ export default function App() {
   const hash    = useHash()
   const isMusic = hash === '#music'
   const isDAW   = hash === '#daw'
-  const isNexis = hash === '#nexis'
-  useSubpageExit(isMusic || isDAW || isNexis, hash)
+  useSubpageExit(isMusic || isDAW, hash)
+
+  // Send old bookmarks and inbound links to the standalone Nexis site.
+  // replace() rather than assign() so Back doesn't bounce them straight here again.
+  useEffect(() => {
+    if (hash === '#nexis') window.location.replace(NEXIS_URL)
+  }, [hash])
 
   const [paletteOpen, setPaletteOpen] = useState(false)
 
@@ -90,11 +97,7 @@ export default function App() {
 
       <div>
         <AnimatePresence mode="wait">
-          {isNexis ? (
-            <motion.div key="nexis" {...subpageProps}>
-              <Suspense fallback={<LoadingScreen />}><Nexis /></Suspense>
-            </motion.div>
-          ) : isDAW ? (
+          {isDAW ? (
             <motion.div key="daw" {...subpageProps}>
               <Suspense fallback={<LoadingScreen />}><DAW /></Suspense>
             </motion.div>
@@ -341,7 +344,9 @@ export default function App() {
                         <svg width="18" height="18"><use href="/icons.svg#x-icon" /></svg>
                       </a>
                       <a
-                        href="#nexis"
+                        href={NEXIS_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         aria-label="Nexis"
                         style={{ color: '#9297a0', display: 'flex' }}
                       >

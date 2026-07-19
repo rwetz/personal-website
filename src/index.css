@@ -98,6 +98,40 @@
   --sidebar-ring: #9297a0;
 }
 
+/* ── Hero sizing ──────────────────────────────────────────────────────────────
+   Lives here rather than inline because it keys off viewport *height*, which
+   inline styles can't express. The hero pins to one screen only when a screen
+   is actually tall enough to hold it; below that it falls back to its natural
+   height so the content is never squeezed against the navbar or clipped.     */
+.hero-shell {
+  min-height: 100dvh;
+  align-items: flex-end;
+}
+
+.hero-inner {
+  padding: 120px 24px clamp(48px, 9vh, 96px) 56px;
+}
+
+/* Short viewports — small phones upright, and any phone in landscape. */
+@media (max-height: 700px) {
+  .hero-shell {
+    min-height: 0;
+    align-items: flex-start;
+  }
+  .hero-inner {
+    padding-top: 116px;
+    padding-bottom: 56px;
+  }
+}
+
+/* Narrow phones: reclaim the 56px indent so lines wrap less and the block
+   stays shorter overall. */
+@media (max-width: 640px) {
+  .hero-inner {
+    padding-left: 24px;
+  }
+}
+
 /* ── Global base ──────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;

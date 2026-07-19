@@ -5,8 +5,13 @@
 // ╚══════════════════════════════════════╝
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowUpRight } from 'lucide-react'
 import signatureImg from '../assets/signature.png'
+import nexisLogoSrc from '../assets/logo (1) (1).png'
 import PillNav from './PillNav'
+
+/** Nexis lives on its own domain; the navbar carries the only top-level pointer to it. */
+const NEXIS_URL = 'https://nexisdev.org'
 
 const links = [
   { label: 'About',    href: '#about'    },
@@ -129,6 +134,33 @@ export default function Navbar() {
 
         {/* Right cluster */}
         <div className="hidden md:flex" style={{ alignItems: 'center', gap: 12, flexShrink: 0 }}>
+          {/* Flagship project — outlined pill so it reads as a destination, not a section */}
+          <a
+            href={NEXIS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 7,
+              padding: '11px 18px',
+              border: '1px solid var(--m-hairline)',
+              borderRadius: 16,
+              fontSize: 16,
+              fontWeight: 500,
+              color: '#181d26',
+              textDecoration: 'none',
+            }}
+          >
+            <img
+              src={nexisLogoSrc}
+              alt=""
+              aria-hidden="true"
+              style={{ width: 18, height: 18, borderRadius: 5, flexShrink: 0 }}
+            />
+            Nexis
+            <ArrowUpRight size={14} strokeWidth={2} />
+          </a>
           <a
             href="/resume.pdf"
             download
@@ -167,7 +199,12 @@ export default function Navbar() {
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           style={{
-            padding: 8,
+            /* 44px minimum so the target clears the touch-accessibility floor. */
+            /* No `display` here — it would override the md:hidden class.       */
+            width: 44,
+            height: 44,
+            padding: 0,
+            margin: -3,
             background: 'none',
             border: 'none',
             cursor: 'pointer',
@@ -228,6 +265,34 @@ export default function Navbar() {
                   </a>
                 </li>
               ))}
+              <li>
+                <a
+                  href={NEXIS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMenuOpen(false)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '12px 0',
+                    fontSize: 16,
+                    fontWeight: 400,
+                    color: '#333840',
+                    textDecoration: 'none',
+                    borderBottom: '1px solid #f0f0f0',
+                  }}
+                >
+                  <img
+                    src={nexisLogoSrc}
+                    alt=""
+                    aria-hidden="true"
+                    style={{ width: 18, height: 18, borderRadius: 5, flexShrink: 0 }}
+                  />
+                  Nexis
+                  <ArrowUpRight size={14} strokeWidth={2} />
+                </a>
+              </li>
             </ul>
             <div style={{ marginTop: 20, display: 'flex', gap: 12 }}>
               <a

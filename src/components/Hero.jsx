@@ -4,7 +4,9 @@
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
 import { motion } from 'framer-motion'
-import { FolderKanban, Download, ArrowUpRight } from 'lucide-react'
+import { FolderKanban, Download } from 'lucide-react'
+import ShaderPanel from './ShaderPanel'
+import { MOIRE_CFG, CELLS_CFG, CONTOUR_CFG } from '@/lib/shaders'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -12,22 +14,24 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.55, ease: 'easeOut', delay },
 })
 
-const FEATURED_TAGS = ['Python', 'FastAPI', 'React', 'PostgreSQL']
+/** Purely decorative — ordered coarse to fine so the stack reads top-down. */
+const SHADER_CARDS = [
+  { key: 'contour', cfg: CONTOUR_CFG },
+  { key: 'moire',   cfg: MOIRE_CFG   },
+  { key: 'cells',   cfg: CELLS_CFG   },
+]
 
 export default function Hero() {
   return (
     <section
       id="hero"
-      className="dot-grid"
-      style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'flex-start' }}
+      className="dot-grid hero-shell"
+      style={{ position: 'relative', display: 'flex' }}
     >
       {/* ── Text content — pushed to lower-left ──────────────────────────── */}
-      <div
-        style={{
-          padding: 'calc(64px + 58vh) 24px 48px 56px',
-          width: '100%',
-        }}
-      >
+      {/* Sizing lives in .hero-shell / .hero-inner (index.css) so it can key   */}
+      {/* off viewport height; short screens drop the one-screen pin entirely.  */}
+      <div className="hero-inner" style={{ width: '100%' }}>
         <div style={{ maxWidth: 480 }}>
         <motion.h1
           {...fadeUp(0)}
@@ -165,6 +169,11 @@ export default function Hero() {
                 color: 'var(--m-muted)',
                 textDecoration: 'none',
                 borderBottom: '1px solid var(--m-hairline)',
+                /* Vertical padding lifts these off the 20px-tall touch floor  */
+                /* without moving the underline or the row's visual rhythm.    */
+                display: 'inline-flex',
+                alignItems: 'center',
+                minHeight: 44,
                 paddingBottom: 1,
               }}
             >
@@ -175,147 +184,32 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── Featured project card — anchored bottom-right (lg+ only) ── */}
-      <motion.div
-        className="hidden lg:block"
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.65, ease: 'easeOut', delay: 0.4 }}
+      {/* ── Right rail — three decorative shader cards (lg+ only) ────────── */}
+      {/* Bottom-anchored so the column grows upward; heights are clamped to    */}
+      {/* keep the stack clear of the 90px navbar on short viewports.           */}
+      <div
+        className="hidden lg:flex"
         style={{
           position: 'absolute',
           bottom: 96,
           right: 56,
           width: 520,
-          background: 'var(--m-ink)',
-          borderRadius: 18,
-          overflow: 'hidden',
+          flexDirection: 'column',
+          gap: 24,
         }}
       >
-        {/* macOS header bar */}
-        <div
-          style={{
-            padding: '13px 18px',
-            borderBottom: '1px solid rgba(255,255,255,0.07)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-          }}
-        >
-          <div style={{ display: 'flex', gap: 6 }}>
-            {['#ff5f57', '#febc2e', '#28c840'].map(c => (
-              <span key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c, opacity: 0.7 }} />
-            ))}
-          </div>
-          <span
-            style={{
-              fontSize: 11,
-              color: 'rgba(255,255,255,0.25)',
-              marginLeft: 8,
-              fontFamily: 'monospace',
-              letterSpacing: '0.04em',
-            }}
+        {SHADER_CARDS.map(({ key, cfg }, i) => (
+          <motion.div
+            key={key}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: 'easeOut', delay: 0.4 + i * 0.1 }}
+            style={{ borderRadius: 18, overflow: 'hidden' }}
           >
-            featured-project
-          </span>
-        </div>
-
-        {/* Card body */}
-        <div style={{ padding: '32px 36px 36px' }}>
-          <div
-            style={{
-              fontSize: 10,
-              fontWeight: 500,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.3)',
-              marginBottom: 16,
-            }}
-          >
-            Featured project
-          </div>
-
-          <div
-            style={{
-              fontSize: 40,
-              fontWeight: 400,
-              color: '#ffffff',
-              letterSpacing: '-0.02em',
-              lineHeight: 1.05,
-              marginBottom: 16,
-            }}
-          >
-            Nexis
-          </div>
-
-          <p
-            style={{
-              fontSize: 14,
-              lineHeight: 1.7,
-              color: 'rgba(255,255,255,0.48)',
-              margin: '0 0 28px',
-              maxWidth: 380,
-            }}
-          >
-            AI-powered developer productivity platform — semantic code search,
-            inline AI assistance, and context-aware completions.
-          </p>
-
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 32 }}>
-            {FEATURED_TAGS.map(tag => (
-              <span
-                key={tag}
-                style={{
-                  padding: '4px 12px',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: 6,
-                  fontSize: 12,
-                  color: 'rgba(255,255,255,0.4)',
-                  fontWeight: 400,
-                }}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-            <a
-              href="https://github.com/rwetz/Nexis"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 5,
-                fontSize: 13,
-                fontWeight: 500,
-                color: 'rgba(255,255,255,0.6)',
-                textDecoration: 'none',
-                borderBottom: '1px solid rgba(255,255,255,0.18)',
-                paddingBottom: 2,
-              }}
-            >
-              GitHub <ArrowUpRight size={12} />
-            </a>
-            <a
-              href="#projects"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 5,
-                fontSize: 13,
-                fontWeight: 500,
-                color: 'rgba(255,255,255,0.6)',
-                textDecoration: 'none',
-                borderBottom: '1px solid rgba(255,255,255,0.18)',
-                paddingBottom: 2,
-              }}
-            >
-              All projects <ArrowUpRight size={12} />
-            </a>
-          </div>
-        </div>
-      </motion.div>
+            <ShaderPanel {...cfg} style={{ height: 'clamp(120px, 17vh, 190px)' }} />
+          </motion.div>
+        ))}
+      </div>
     </section>
   )
 }

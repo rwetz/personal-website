@@ -85,7 +85,7 @@ export default function About() {
           <p style={{ fontSize: 18, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
             Currently interning as a{' '}
             <span style={{ color: '#181d26' }}>Full-Stack Development Intern</span> at{' '}
-            <span style={{ color: '#181d26' }}>[Company]</span>: May 2026 – present.
+            <span style={{ color: '#181d26' }}>Lemhi</span>: May 2026 – present.
           </p>
           <p style={{ fontSize: 18, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
             Outside of development you'll find me lifting, making music, and exploring the outdoors. I've been

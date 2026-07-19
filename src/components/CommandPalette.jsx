@@ -4,7 +4,7 @@
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
 import { useEffect } from 'react'
-import { User, FolderKanban, Wrench, Mail, Terminal, Copy, Download, ExternalLink } from 'lucide-react'
+import { User, FolderKanban, Wrench, Mail, Copy, Download, ExternalLink } from 'lucide-react'
 import {
   CommandDialog,
   CommandEmpty,
@@ -24,10 +24,6 @@ const navigate = [
   { id: 'projects', label: 'Projects', icon: FolderKanban, hash: '#projects' },
   { id: 'skills',   label: 'Skills',   icon: Wrench,       hash: '#skills'   },
   { id: 'contact',  label: 'Contact',  icon: Mail,         hash: '#contact'  },
-]
-
-const tools = [
-  { id: 'nexis', label: 'Nexis', icon: Terminal, hash: '#nexis' },
 ]
 
 export default function CommandPalette({ open, onClose }) {
@@ -69,16 +65,6 @@ export default function CommandPalette({ open, onClose }) {
 
         <CommandSeparator />
 
-        <CommandGroup heading="Tools">
-          {tools.map(({ id, label, icon: Icon, hash }) => (
-            <CommandItem key={id} onSelect={go(hash)}>
-              <Icon /> <span>{label}</span>
-            </CommandItem>
-          ))}
-        </CommandGroup>
-
-        <CommandSeparator />
-
         <CommandGroup heading="Actions">
           <CommandItem onSelect={copyEmail}>
             <Copy /> <span>Copy email address</span>
@@ -92,6 +78,9 @@ export default function CommandPalette({ open, onClose }) {
         <CommandSeparator />
 
         <CommandGroup heading="External">
+          <CommandItem onSelect={openExternal('https://nexisdev.org')}>
+            <ExternalLink /> <span>Nexis</span>
+          </CommandItem>
           <CommandItem onSelect={openExternal('https://github.com/rwetz')}>
             <ExternalLink /> <span>GitHub</span>
           </CommandItem>
