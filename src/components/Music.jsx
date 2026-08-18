@@ -117,8 +117,10 @@ function LiteYouTube({ embedId, title }) {
         <iframe
           title={`YouTube video: ${title}`}
           className="absolute inset-0 w-full h-full"
-          src={`https://www.youtube.com/embed/${embedId}?autoplay=1`}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          src={`https://www.youtube-nocookie.com/embed/${embedId}?autoplay=1`}
+          allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+          referrerPolicy="strict-origin-when-cross-origin"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"
           allowFullScreen
         />
       )}
@@ -346,6 +348,8 @@ export default function Music() {
                   frameBorder="no"
                   allow="autoplay"
                   loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"
                   src={embedUrl}
                   className="w-full"
                 />

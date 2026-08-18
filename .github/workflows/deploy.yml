@@ -28,6 +28,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Don't leave the job's GITHUB_TOKEN in .git/config, where any later
+          # build step (or a compromised transitive dep) could read it.
+          persist-credentials: false
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -36,7 +40,12 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        # --ignore-scripts blocks postinstall hooks, the main way a malicious
+        # transitive dependency gets code execution inside CI.
+        run: npm ci --ignore-scripts
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
 
       - name: Build
         run: npm run build

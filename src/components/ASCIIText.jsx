@@ -172,7 +172,9 @@ class AsciiFilter {
         }
         str += '\n';
       }
-      this.pre.innerHTML = str;
+      // textContent, not innerHTML: the charset contains "&", which innerHTML would
+      // parse as an entity, and this keeps a markup sink out of the render path entirely.
+      this.pre.textContent = str;
     }
   }
 

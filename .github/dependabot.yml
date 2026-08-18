@@ -1,0 +1,20 @@
+# Automated dependency updates. The npm audit fix applied on 2026-08-18 cleared 13
+# advisories; this keeps them from silently accumulating again.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # One PR for routine bumps; security fixes still come through individually.
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  # Actions are referenced by mutable tags (@v4). Dependabot bumping them is the
+  # cheapest defense against a compromised tag being silently re-pointed.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

@@ -12,6 +12,32 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- GitHub Pages cannot set response headers, so policy is delivered via meta.
+         'unsafe-inline' on style-src is required by the inline-style patterns this app
+         uses; script-src stays strict (no inline, no eval) - verified: the built
+         bundles contain no eval/Function constructor.
+         NOTE: per CSP spec, frame-ancestors is IGNORED when delivered via <meta>. It is
+         kept here so the policy is correct if this ever moves behind a host/proxy that
+         can send real headers, but clickjacking is NOT actually blocked on Pages today.
+         Same caveat applies to report-uri and sandbox. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self';
+               style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+               font-src 'self' https://cdn.jsdelivr.net data:;
+               img-src 'self' data: blob: https://img.youtube.com https://i.ytimg.com https://i1.sndcdn.com https://i.sndcdn.com;
+               media-src 'self' blob:;
+               connect-src 'self' blob: https://api.github.com;
+               frame-src https://www.youtube-nocookie.com https://www.youtube.com https://w.soundcloud.com;
+               worker-src 'self' blob:;
+               object-src 'none';
+               base-uri 'none';
+               form-action 'none';
+               frame-ancestors 'none';
+               upgrade-insecure-requests"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="theme-color" content="#181d26" />
     <title>Ryan Wetzstein</title>
     <meta name="description" content="Ryan's personal portfolio — software developer building clean, modern web experiences." />
@@ -23,10 +49,15 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Ryan Wetzstein" />
     <meta name="twitter:description" content="Software developer building clean, modern web experiences." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <!-- Pinned + Subresource Integrity: a tampered CDN response is rejected by the browser.
+         Never use @latest here — it lets upstream change what executes on this origin. -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.17.0/devicon.min.css"
+      integrity="sha384-6iv3tXABd3c9DYulXujJl8n22ahn/12f45MomxoPv6jBX4LBE4gNJjfkx5mAKIqR"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <!-- Skip navigation for keyboard users -->
     <style>
       .skip-nav {

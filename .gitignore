@@ -22,3 +22,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Secrets — never commit environment files.
+# Vite inlines any VITE_-prefixed var into the public bundle, so a leaked .env
+# here is a leaked credential on a static site: there is no server to hide it.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa*
+secrets.json
+credentials.json
+
+# Local agent/editor state (contains absolute machine paths)
+.claude/settings.local.json

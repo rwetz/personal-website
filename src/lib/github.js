@@ -11,10 +11,16 @@ const CACHE_KEY = 'gh_stats_cache_v1'
 const CACHE_TTL = 30 * 60 * 1000
 
 export async function fetchGithubStats() {
-  const cached = sessionStorage.getItem(CACHE_KEY)
-  if (cached) {
-    const { ts, data } = JSON.parse(cached)
-    if (Date.now() - ts < CACHE_TTL) return data
+  // sessionStorage is attacker-writable from any script on this origin, so a corrupt
+  // or hostile entry must degrade to a refetch rather than throw out of the component.
+  try {
+    const cached = sessionStorage.getItem(CACHE_KEY)
+    if (cached) {
+      const { ts, data } = JSON.parse(cached)
+      if (typeof ts === 'number' && data && Date.now() - ts < CACHE_TTL) return data
+    }
+  } catch {
+    sessionStorage.removeItem(CACHE_KEY)
   }
 
   const [userRes, reposRes] = await Promise.all([
@@ -49,6 +55,10 @@ export async function fetchGithubStats() {
     languageCount: Object.keys(langCounts).length,
     bio: user.bio,
   }
-  sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }))
+  try {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }))
+  } catch {
+    // Private-mode / quota-exceeded: caching is best-effort, never fatal.
+  }
   return data
 }
