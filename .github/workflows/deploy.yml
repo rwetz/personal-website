@@ -27,7 +27,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # Don't leave the job's GITHUB_TOKEN in .git/config, where any later
           # build step (or a compromised transitive dep) could read it.
