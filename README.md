@@ -1,6 +1,18 @@
 # Personal Website
 
-Single-page portfolio site + music page + browser DAW built with React and Vite. Features a CSS Houdini animated gradient hero, ASCII name art, typewriter subtitle, scroll-reveal animations, gradient keyword highlights in the About section, a `/now` page-style life snapshot, GitHub-API-driven projects + live language stats, tabbed resume with vertical timeline + highlights, skill pills with proficiency tooltips, an Inspiration shelf (books / albums / films), embedded PDF resume viewer, WebGL dither background on the music page, Wavesurfer.js audio portfolio cards, SoundCloud/YouTube embeds, and a fully in-browser DAW with Web Audio API synthesis. Built on a custom shadcn/ui (radix-nova) component layer wired into the per-theme accent token system.
+My portfolio site: a single-page React + Vite app with a music page and an in-browser DAW.
+
+**Live at [ryanwetzstein.com](https://ryanwetzstein.com).**
+
+## Highlights
+
+- **Portfolio page**: CSS Houdini animated gradient hero, Three.js ASCII name art, typewriter subtitle, scroll-reveal animations, and a tabbed resume with a vertical timeline plus an embedded PDF viewer.
+- **Live GitHub data**: the projects deck and the language-breakdown stats bar are both built from the GitHub API at runtime, cached in `sessionStorage`.
+- **Music page**: WebGL dither background, Wavesurfer.js audio cards with real waveforms and seeking, and SoundCloud/YouTube embeds.
+- **Browser DAW**: a 5-track piano roll sequencer running entirely on the Web Audio API, with swappable instruments, per-track reverb and delay sends, and full undo/redo.
+- **8 color themes**: every component reads from CSS custom properties, so switching a theme repaints the WebGL texture, the waveform, and the hero gradient along with the UI.
+
+Built on a custom shadcn/ui (radix-nova) component layer wired into a per-theme accent token system. The rest of this README documents that system.
 
 ---
 
@@ -24,15 +36,15 @@ Single-page portfolio site + music page + browser DAW built with React and Vite.
 
 | Component | Source |
 |---|---|
-| `ASCIIText` | Reactbits — Three.js ASCII text renderer |
-| `GlassSurface` | Reactbits — SVG displacement map glass effect |
-| `SpotlightCard` | Reactbits — radial gradient spotlight card |
-| `TextType` | Reactbits — typewriter cycling text |
-| `Dither` | Reactbits — WebGL dithered wave background |
+| `ASCIIText` | Reactbits: Three.js ASCII text renderer |
+| `GlassSurface` | Reactbits: SVG displacement map glass effect |
+| `SpotlightCard` | Reactbits: radial gradient spotlight card |
+| `TextType` | Reactbits: typewriter cycling text |
+| `Dither` | Reactbits: WebGL dithered wave background |
 
 ## shadcn/ui layer (`src/components/ui/`)
 
-All built on `radix-ui` primitives, themed via the site's `--color-accent / --color-surface-*` CSS variables so they inherit the active theme. No `oklch` token plumbing — components reference the project palette directly.
+All built on `radix-ui` primitives, themed via the site's `--color-accent / --color-surface-*` CSS variables so they inherit the active theme. No `oklch` token plumbing; components reference the project palette directly.
 
 | Component | Used by |
 |---|---|
@@ -46,12 +58,12 @@ All built on `radix-ui` primitives, themed via the site's `--color-accent / --co
 | `badge` | Project tags, stats counts, dialog metadata |
 | `input` / `textarea` / `label` | Contact form |
 | `button` | Form submits, dialog actions |
-| `sonner` | Global toast — copy-email feedback, form validation errors |
+| `sonner` | Global toast: copy-email feedback, form validation errors |
 | `card` | (available) |
 
 ## Color System
 
-All colors are CSS custom properties defined in `index.css`. Every component references these variables — no hardcoded hex values in component files. Switching theme swaps the full palette site-wide including the WebGL Silk texture, Dither wave, WaveSurfer waveform, hero gradient, and spotlight effects.
+All colors are CSS custom properties defined in `index.css`. Every component references these variables, so no hardcoded hex values appear in component files. Switching theme swaps the full palette site-wide including the WebGL Silk texture, Dither wave, WaveSurfer waveform, hero gradient, and spotlight effects.
 
 ### CSS tokens (all themes share these names)
 
@@ -63,7 +75,7 @@ All colors are CSS custom properties defined in `index.css`. Every component ref
 | `--color-text` | Primary text |
 | `--color-muted` | Secondary text, nav links, placeholders |
 | `--color-accent-dark` | Hover/pressed states, deep accent |
-| `--color-accent` | Primary accent — buttons, underlines, borders |
+| `--color-accent` | Primary accent: buttons, underlines, borders |
 | `--color-accent-light` | Nav active state, tags, cursor, badges |
 | `--color-silk` | WebGL Silk texture base color |
 | `--color-glow` | Profile photo box-shadow |
@@ -73,7 +85,7 @@ All colors are CSS custom properties defined in `index.css`. Every component ref
 
 | ID | Name | Accent | Vibe |
 |---|---|---|---|
-| `default` | Amethyst | `#7c3aed` | Deep purple — default |
+| `default` | Amethyst | `#7c3aed` | Deep purple (default) |
 | `spice` | Chill Spice | `#CD1C18` | Deep red |
 | `tuscan` | Tuscan Sunset | `#E35336` | Warm orange |
 | `aurora` | Aurora | `#06b6d4` | Electric cyan |
@@ -88,10 +100,10 @@ Theme is selected via the color swatch button in the navbar and persisted to `lo
 
 ## Fonts & Icons
 
-- **Geist** / **Geist Mono** — body and code (Google Fonts)
-- **Libre Baskerville** — section headings (Google Fonts)
-- **IBM Plex Mono** — used by ASCIIText renderer (Google Fonts)
-- **Devicons** — skill pill icons via CDN
+- **Geist** / **Geist Mono**: body and code (Google Fonts)
+- **Libre Baskerville**: section headings (Google Fonts)
+- **IBM Plex Mono**: used by ASCIIText renderer (Google Fonts)
+- **Devicons**: skill pill icons via CDN
 
 ---
 
@@ -132,12 +144,12 @@ Theme is selected via the color swatch button in the navbar and persisted to `lo
 │   │   │   └── tooltip.tsx
 │   │   ├── ASCIIText.jsx      # Three.js ASCII name effect
 │   │   ├── About.jsx
-│   │   ├── CommandPalette.jsx # ⌘K palette — cmdk + Dialog + sonner
+│   │   ├── CommandPalette.jsx # ⌘K palette: cmdk + Dialog + sonner
 │   │   ├── Contact.jsx        # shadcn Input/Textarea/Label + sonner toast feedback
 │   │   ├── Dither.jsx         # WebGL dithered wave background
 │   │   ├── GlassSurface.jsx   # SVG displacement glass effect
 │   │   ├── Hero.jsx           # Parallax gradient + scroll indicator
-│   │   ├── DAW.jsx            # Browser DAW — Web Audio piano roll (lazy-loaded)
+│   │   ├── DAW.jsx            # Browser DAW: Web Audio piano roll (lazy-loaded)
 │   │   ├── Inspiration.jsx    # Books / albums / films grid with HoverCard reveal
 │   │   ├── Music.jsx          # Music page (lazy-loaded)
 │   │   ├── Navbar.jsx         # Scroll-spy + DropdownMenu theme picker
@@ -165,30 +177,30 @@ Theme is selected via the color swatch button in the navbar and persisted to `lo
 
 ## Sections (top to bottom)
 
-1. **Hero** — ASCII name + typewriter subtitle on a Houdini animated gradient
-2. **About** — bio with gradient keyword highlights
-3. **Now** — `/now`-style live snapshot (building / reading / listening / learning / location / drinking)
-4. **Projects** — top GitHub repos via the API; CardSwap deck with HoverCard previews + Dialog deep-dive
-5. **Skills** — grouped pills, each with a Tooltip showing level / years / note
-6. **GitHub Stats** — live repos / stars / forks / followers + 6-language stacked breakdown
-7. **Resume** — Tabs (Timeline ▸ Highlights ▸ PDF). Timeline is a vertical icon-coded list; Highlights are stat cards + 4 strengths
-8. **Inspiration** — Books / Albums / Films grid; HoverCard reveals the *why* for each
-9. **Contact** — clickable cards (email / GitHub / LinkedIn) + validated form, sonner toast for copy/submit feedback
+1. **Hero**: ASCII name + typewriter subtitle on a Houdini animated gradient
+2. **About**: bio with gradient keyword highlights
+3. **Now**: `/now`-style live snapshot (building / reading / listening / learning / location / drinking)
+4. **Projects**: top GitHub repos via the API; CardSwap deck with HoverCard previews + Dialog deep-dive
+5. **Skills**: grouped pills, each with a Tooltip showing level / years / note
+6. **GitHub Stats**: live repos / stars / forks / followers + 6-language stacked breakdown
+7. **Resume**: Tabs (Timeline ▸ Highlights ▸ PDF). Timeline is a vertical icon-coded list; Highlights are stat cards + 4 strengths
+8. **Inspiration**: Books / Albums / Films grid; HoverCard reveals the *why* for each
+9. **Contact**: clickable cards (email / GitHub / LinkedIn) + validated form, sonner toast for copy/submit feedback
 
 ## Features
 
-- **8 color themes** — navbar `DropdownMenu` swatch picker cycles between Amethyst, Chill Spice, Tuscan Sunset, Aurora, Gilded, Sakura, Forest, and Cobalt; persisted to `localStorage`
-- **⌘K Command Palette** — cmdk-powered, with Navigate / Tools / Actions / External groups; jump to any section, copy email (toast confirm), download resume
-- **Live GitHub data** — Projects + Stats sections both pull from the GitHub API at runtime, with sessionStorage caching
-- **Inline form validation** — Contact form validates name / email / message and surfaces errors with sonner toast + per-field hints
-- **Custom cursor** — dot + lagging ring on desktop pointer devices
-- **Konami code** — toggles party mode easter egg
-- **Ctrl+Shift+L** — toggles light mode easter egg
-- **Music page** (`/#music`) — SoundCloud embeds, YouTube videos, Wavesurfer.js audio portfolio with real waveforms, seek, and live timestamps
-- **PWA** — installable via `manifest.json`
-- **Section URL updates** — hash updates as you scroll
-- **Lazy-loaded Music bundle** — Three.js/WebGL only loads when navigating to `/#music`
-- **Browser DAW** (`/#daw`, also in ⌘K palette) — 5-track piano roll sequencer powered entirely by Web Audio API; each track has an icon + dropdown to swap between Piano, Synth, Strings, Bass, and Drums; 32-step grid with note velocity (right-click to cycle 4 levels) and note length (1/2/4/8 steps via transport selector); per-track reverb and delay sends routed through a global convolution reverb (synthetically generated IR, no audio files) and BPM-synced feedback delay; full undo/redo (Ctrl+Z/Shift+Z, up to 60 states) and per-track copy/paste; spacebar play/pause, BPM control, loop toggle; all colors follow the site theme system
+- **8 color themes**: navbar `DropdownMenu` swatch picker cycles between Amethyst, Chill Spice, Tuscan Sunset, Aurora, Gilded, Sakura, Forest, and Cobalt; persisted to `localStorage`
+- **⌘K Command Palette**: cmdk-powered, with Navigate / Tools / Actions / External groups; jump to any section, copy email (toast confirm), download resume
+- **Live GitHub data**: Projects + Stats sections both pull from the GitHub API at runtime, with sessionStorage caching
+- **Inline form validation**: Contact form validates name / email / message and surfaces errors with sonner toast + per-field hints
+- **Custom cursor**: dot + lagging ring on desktop pointer devices
+- **Konami code**: toggles party mode easter egg
+- **Ctrl+Shift+L**: toggles light mode easter egg
+- **Music page** (`/#music`): SoundCloud embeds, YouTube videos, Wavesurfer.js audio portfolio with real waveforms, seek, and live timestamps
+- **PWA**: installable via `manifest.json`
+- **Section URL updates**: hash updates as you scroll
+- **Lazy-loaded Music bundle**: Three.js/WebGL only loads when navigating to `/#music`
+- **Browser DAW** (`/#daw`, also in ⌘K palette): 5-track piano roll sequencer powered entirely by Web Audio API; each track has an icon + dropdown to swap between Piano, Synth, Strings, Bass, and Drums; 32-step grid with note velocity (right-click to cycle 4 levels) and note length (1/2/4/8 steps via transport selector); per-track reverb and delay sends routed through a global convolution reverb (synthetically generated IR, no audio files) and BPM-synced feedback delay; full undo/redo (Ctrl+Z/Shift+Z, up to 60 states) and per-track copy/paste; spacebar play/pause, BPM control, loop toggle; all colors follow the site theme system
 
 ## Dev
 
@@ -197,3 +209,7 @@ npm run dev      # start dev server
 npm run build    # production build
 npm run lint     # eslint
 ```
+
+## License
+
+[MIT](LICENSE).
