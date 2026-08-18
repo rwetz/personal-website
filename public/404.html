@@ -1,0 +1,259 @@
+<!--
+  ╔══════════════════════════════════════╗
+  ║  Ryan Wetzstein                      ║
+  ║  Personal Website                    ║
+  ║  2026                                ║
+  ╚══════════════════════════════════════╝
+
+  GitHub Pages serves this file for any unknown path. It is intentionally
+  standalone: the React bundle has a content-hashed filename, so a static page
+  can't reference it without going stale on every build. Everything below is
+  plain HTML/CSS with one same-origin script.
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Tighter than the app's policy: this page loads no CDN, fonts or frames.
+         'unsafe-inline' is style-src only, for the <style> block below; scripts
+         stay strict ('self', no inline, no eval). -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self';
+               style-src 'self' 'unsafe-inline';
+               img-src 'self' data:;
+               connect-src 'none';
+               object-src 'none';
+               base-uri 'none';
+               form-action 'none';
+               frame-ancestors 'none';
+               upgrade-insecure-requests"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="robots" content="noindex" />
+    <title>404 — Ryan Wetzstein</title>
+    <style>
+      :root {
+        --m-canvas: #ffffff;
+        --m-surface-soft: #f8fafc;
+        --m-ink: #181d26;
+        --m-ink-active: #0d1218;
+        --m-body: #333840;
+        --m-muted: #41454d;
+        --m-hairline: #dddddd;
+        --m-border-strong: #9297a0;
+        --m-on-dark: #ffffff;
+        --m-radius-lg: 12px;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body { height: 100%; }
+
+      body {
+        margin: 0;
+        background-color: var(--m-canvas);
+        background-image: radial-gradient(circle, #d8dade 1px, transparent 1px);
+        background-size: 28px 28px;
+        color: var(--m-body);
+        font-family: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      main {
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 96px 24px 64px 56px;
+      }
+
+      @media (max-width: 640px) {
+        main { padding-left: 24px; padding-right: 24px; }
+      }
+
+      .stack { width: 100%; max-width: 520px; }
+
+      /* Each child eases up a beat after the one before it — same feel as the
+         hero's staggered fade, without pulling in framer-motion. */
+      .fade { animation: fade-up 0.55s ease-out both; }
+      .fade:nth-child(1) { animation-delay: 0s; }
+      .fade:nth-child(2) { animation-delay: 0.08s; }
+      .fade:nth-child(3) { animation-delay: 0.16s; }
+      .fade:nth-child(4) { animation-delay: 0.24s; }
+      .fade:nth-child(5) { animation-delay: 0.32s; }
+      .fade:nth-child(6) { animation-delay: 0.4s; }
+
+      @keyframes fade-up {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .fade { animation: none; }
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 14px;
+        border: 1px solid var(--m-hairline);
+        border-radius: 9999px;
+        background: var(--m-canvas);
+        color: var(--m-muted);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #aa2d00;
+        flex-shrink: 0;
+      }
+
+      h1 {
+        margin: 20px 0 0;
+        font-size: clamp(40px, 6.5vw, 72px);
+        font-weight: 400;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        color: var(--m-ink);
+      }
+
+      p {
+        margin: 16px 0 0;
+        font-size: 15px;
+        line-height: 1.65;
+        max-width: 460px;
+      }
+
+      /* Filled in by 404.js; stays out of the layout when there's no path to
+         show (e.g. scripts blocked), rather than rendering an empty box. */
+      #path {
+        display: none;
+        margin-top: 20px;
+        padding: 8px 14px;
+        border: 1px solid var(--m-hairline);
+        border-radius: 8px;
+        background: var(--m-surface-soft);
+        color: var(--m-muted);
+        font-family: 'Geist Mono', 'SF Mono', ui-monospace, 'Cascadia Code',
+          'Roboto Mono', monospace;
+        font-size: 13px;
+        word-break: break-all;
+      }
+      #path.is-shown { display: block; }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 36px;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 48px;
+        padding: 14px 24px;
+        border-radius: var(--m-radius-lg);
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1.4;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: var(--m-ink);
+        color: var(--m-on-dark);
+        border: none;
+        transition: background 0.15s ease;
+      }
+      .btn-primary:hover,
+      .btn-primary:active { background: var(--m-ink-active); }
+
+      .btn-secondary {
+        background: var(--m-canvas);
+        color: var(--m-ink);
+        border: 1px solid var(--m-hairline);
+        transition: border-color 0.15s ease;
+      }
+      .btn-secondary:hover,
+      .btn-secondary:active { border-color: var(--m-border-strong); }
+
+      .jump {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 20px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid var(--m-hairline);
+        max-width: 460px;
+      }
+
+      .jump a {
+        color: var(--m-muted);
+        font-size: 14px;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: color 0.15s ease, border-color 0.15s ease;
+      }
+      .jump a:hover {
+        color: var(--m-ink);
+        border-bottom-color: var(--m-ink);
+      }
+
+      *:focus-visible {
+        outline: 2px solid var(--m-ink);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="stack">
+        <span class="eyebrow fade"><span class="dot"></span>Error 404</span>
+
+        <h1 class="fade">This page doesn&rsquo;t exist.</h1>
+
+        <p class="fade">
+          The link may be out of date, or the address might have a typo in it.
+          Everything on this site lives on the home page &mdash; head back and it
+          should be a scroll away.
+        </p>
+
+        <p id="path" class="fade"></p>
+
+        <div class="actions fade">
+          <a class="btn-primary" href="/">Back to home</a>
+          <a class="btn-secondary" href="/#projects">View projects</a>
+        </div>
+
+        <nav class="jump fade" aria-label="Jump to a section">
+          <a href="/#about">About</a>
+          <a href="/#skills">Skills</a>
+          <a href="/#music">Music</a>
+          <a href="/#contact">Contact</a>
+          <a href="/resume.pdf">R&eacute;sum&eacute;</a>
+        </nav>
+      </div>
+    </main>
+
+    <script src="/404.js" type="module"></script>
+  </body>
+</html>
