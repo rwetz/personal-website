@@ -62,7 +62,7 @@ export default function About() {
           </div>
 
           <p style={{ fontSize: 18, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
-            Hi, I'm Ryan — a Senior at <span style={{ color: '#181d26' }}>North Dakota State University</span> pursuing
+            Hi, I'm Ryan. I'm a Senior at <span style={{ color: '#181d26' }}>North Dakota State University</span> pursuing
             a Bachelor's in Computer Science with a minor in Artificial Intelligence.
           </p>
           <p style={{ fontSize: 18, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
@@ -74,7 +74,7 @@ export default function About() {
           </p>
           <p style={{ fontSize: 18, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
             Coursework in AI and Operating Systems has deepened my curiosity about the underlying systems
-            that power modern software — pushing me toward low-level computing concepts, systems programming,
+            that power modern software, pushing me toward low-level computing concepts, systems programming,
             and how things actually work under the hood.
           </p>
           <p style={{ fontSize: 18, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
@@ -83,9 +83,9 @@ export default function About() {
             experience with agentic systems, prompt engineering, and AI-assisted development workflows.
           </p>
           <p style={{ fontSize: 18, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
-            Currently interning as a{' '}
-            <span style={{ color: '#181d26' }}>Full-Stack Development Intern</span> at{' '}
-            <span style={{ color: '#181d26' }}>Lemhi</span>: May 2026 – present.
+            Currently attending my senior fall semester at NDSU. My most recent work experience was this summer where I was working as a{' '}
+            <span style={{ color: '#181d26' }}>Full-Stack Development Intern for a family friend</span> at{' '}
+            <span style={{ color: '#181d26' }}>a startup called Lemhi Technologies</span>, from May 2026 – August 2026.
           </p>
           <p style={{ fontSize: 18, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
             Outside of development you'll find me lifting, making music, and exploring the outdoors. I've been
