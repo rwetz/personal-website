@@ -87,7 +87,7 @@ export default function App() {
                     Building production-ready software as a student — not waiting until I graduate.
                   </h2>
                   <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.65, maxWidth: 480, margin: '0 0 36px' }}>
-                    Two years of object-oriented experience, hands-on with ML frameworks, and shipping
+                    Three years of object-oriented experience, hands-on with ML frameworks, and shipping
                     real web apps.
                   </p>
                   <a
@@ -112,7 +112,7 @@ export default function App() {
                 {/* Right — stats */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 40, paddingLeft: 180 }}>
                   {[
-                    { num: '2+', label: 'Years of OOP experience' },
+                    { num: '3+', label: 'Years of OOP experience' },
                     { num: '6+', label: 'Projects shipped on GitHub' },
                     { num: '5', label: 'Core languages & frameworks' },
                   ].map(({ num, label }) => (

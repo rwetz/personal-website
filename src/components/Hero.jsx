@@ -73,7 +73,7 @@ export default function Hero() {
                 flexShrink: 0,
               }}
             />
-            Currently interning
+            Senior at NDSU
           </span>
         </motion.div>
 
