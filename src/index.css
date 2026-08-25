@@ -132,6 +132,23 @@
   }
 }
 
+/* ── Experience rows ──────────────────────────────────────────────────────── */
+/* Date rail beside the detail on wide screens; stacked once the detail column
+   would be squeezed narrower than the rail itself. */
+.exp-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(0, 3fr);
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .exp-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
 /* ── Global base ──────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;

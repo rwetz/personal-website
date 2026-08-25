@@ -83,9 +83,9 @@ export default function About() {
             experience with agentic systems, prompt engineering, and AI-assisted development workflows.
           </p>
           <p style={{ fontSize: 18, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
-            Currently attending my senior fall semester at NDSU. My most recent work experience was this summer where I was working as a{' '}
-            <span style={{ color: '#181d26' }}>Full-Stack Development Intern for a family friend</span> at{' '}
-            <span style={{ color: '#181d26' }}>a startup called Lemhi Technologies</span>, from May 2026 – August 2026.
+            Currently in my senior fall semester at NDSU, coming off a summer as a{' '}
+            <span style={{ color: '#181d26' }}>Full-Stack Development Intern</span> at{' '}
+            <span style={{ color: '#181d26' }}>Lemhi Technologies</span> — the full write-up is just below.
           </p>
           <p style={{ fontSize: 18, color: '#1e2228', lineHeight: 1.75, margin: 0 }}>
             Outside of development you'll find me lifting, making music, and exploring the outdoors. I've been

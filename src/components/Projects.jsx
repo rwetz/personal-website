@@ -31,7 +31,8 @@ const PROJECTS = [
   },
   {
     title:       'ArcGIS Parcel Harvester',
-    description: 'Generalized ArcGIS FeatureLayer harvester for farmland parcel research across any US state.',
+    context:     'Built at Lemhi Technologies',
+    description: 'Generalized ArcGIS FeatureLayer harvester for farmland parcel research across any US state. Collects public agriculture and land GIS data into the dataset underpinning the company’s product.',
     tags:        ['Python', 'ArcGIS', 'GIS', 'Data'],
     github:      'https://github.com/rwetz/arcgis-parcel-harvester',
     live:        null,
@@ -255,6 +256,13 @@ function ProjectCard({ project, index }) {
           <ArrowRight size={16} strokeWidth={2} />
         </motion.span>
       </div>
+
+      {/* Provenance — only on work built for someone else */}
+      {project.context && (
+        <p style={{ fontSize: 12, color: '#9297a0', margin: '-4px 0 0' }}>
+          {project.context}
+        </p>
+      )}
 
       {/* Description */}
       <p style={{ fontSize: 14, color: '#333840', lineHeight: 1.65, margin: 0, flex: 1, display: '-webkit-box', WebkitLineClamp: 8, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>

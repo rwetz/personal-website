@@ -14,13 +14,14 @@ import PillNav from './PillNav'
 const NEXIS_URL = 'https://nexisdev.org'
 
 const links = [
-  { label: 'About',    href: '#about'    },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Skills',   href: '#skills'   },
-  { label: 'Contact',  href: '#contact'  },
+  { label: 'About',      href: '#about'      },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Projects',   href: '#projects'   },
+  { label: 'Skills',     href: '#skills'     },
+  { label: 'Contact',    href: '#contact'    },
 ]
 
-const sectionIds = ['hero', 'about', 'projects', 'skills', 'contact']
+const sectionIds = ['hero', 'about', 'experience', 'projects', 'skills', 'contact']
 
 export default function Navbar() {
   const [scrolled, setScrolled]    = useState(false)

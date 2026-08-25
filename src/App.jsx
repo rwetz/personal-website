@@ -10,6 +10,7 @@ import './index.css'
 import Navbar         from './components/Navbar'
 import Hero           from './components/Hero'
 import About          from './components/About'
+import Experience     from './components/Experience'
 import Projects       from './components/Projects'
 import Skills         from './components/Skills'
 import Contact        from './components/Contact'
@@ -140,10 +141,13 @@ export default function App() {
               {/* 3. White — About */}
               <About />
 
-              {/* 4. Surface-soft — Projects */}
+              {/* 4. White — Experience */}
+              <Experience />
+
+              {/* 5. Surface-soft — Projects */}
               <Projects />
 
-              {/* 5. Forest signature card */}
+              {/* 6. Forest signature card */}
               <SignatureCard variant="forest">
                 {/* Left */}
                 <div>
@@ -195,10 +199,10 @@ export default function App() {
 
               </SignatureCard>
 
-              {/* 6. White — Skills */}
+              {/* 7. White — Skills */}
               <Skills />
 
-              {/* 7. Dark navy CTA card — contact teaser */}
+              {/* 8. Dark navy CTA card — contact teaser */}
               <SignatureCard variant="dark">
                 {/* Left */}
                 <div>
@@ -250,7 +254,7 @@ export default function App() {
                 </div>
               </SignatureCard>
 
-              {/* 8. White — Contact form */}
+              {/* 9. White — Contact form */}
               <Contact />
             </main>
 
