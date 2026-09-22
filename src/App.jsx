@@ -111,7 +111,7 @@ export default function App() {
                 </div>
 
                 {/* Right — stats */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 40, paddingLeft: 180 }}>
+                <div className="sig-stats" style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
                   {[
                     { num: '3+', label: 'Years of OOP experience' },
                     { num: '6+', label: 'Projects shipped on GitHub' },
@@ -125,11 +125,11 @@ export default function App() {
                 </div>
 
                 {/* Far right — MagnetLines */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingRight: 160 }}>
+                <div className="sig-visual" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                   <MagnetLines
                     rows={12}
                     columns={12}
-                    containerSize="340px"
+                    containerSize="min(340px, calc(100vw - 48px))"
                     lineColor="rgba(255,255,255,0.25)"
                     lineWidth="2px"
                     lineHeight="28px"
@@ -181,7 +181,7 @@ export default function App() {
                 </div>
 
                 {/* Right — Cubes */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingRight: 160 }}>
+                <div className="sig-visual" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                   <div style={{ width: '100%', maxWidth: 420, aspectRatio: '1 / 1' }}>
                     <Cubes
                       gridSize={12}
@@ -260,11 +260,8 @@ export default function App() {
 
             {/* Footer */}
             <footer
-              className="dot-grid"
-              style={{
-                borderTop: '1px solid #dddddd',
-                padding: '40px 80px',
-              }}
+              className="dot-grid footer-shell"
+              style={{ borderTop: '1px solid #dddddd' }}
             >
               <div
                 style={{

@@ -87,8 +87,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="dot-grid"
-      style={{ padding: '96px 80px' }}
+      className="dot-grid contact-shell"
     >
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
 
@@ -185,7 +184,7 @@ export default function Contact() {
               Send a message
             </p>
             <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
                 <div>
                   <label htmlFor="contact-name" style={{ display: 'block', fontSize: 11, fontWeight: 500, color: '#41454d', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
                     Name

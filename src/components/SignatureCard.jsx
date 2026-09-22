@@ -36,6 +36,8 @@ export default function SignatureCard({ variant = 'coral', id, children }) {
         backgroundColor: bg,
         color: text,
         padding: '96px 24px',
+        // Cubes' hover hit-areas extend past the grid; clip so they can't widen the page.
+        overflowX: 'clip',
       }}
     >
       <motion.div

@@ -38,17 +38,22 @@
                upgrade-insecure-requests"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="theme-color" content="#181d26" />
+    <meta name="theme-color" content="#ffffff" />
     <title>Ryan Wetzstein</title>
     <meta name="description" content="Ryan's personal portfolio — software developer building clean, modern web experiences." />
     <meta property="og:title" content="Ryan Wetzstein" />
     <meta property="og:description" content="Software developer building clean, modern web experiences." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ryanwetzstein.com" />
-    <meta property="og:image" content="/og-image.png" />
+    <!-- Crawlers don't resolve relative URLs, so the image must be absolute. -->
+    <meta property="og:image" content="https://ryanwetzstein.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Ryan Wetzstein — software developer, CS senior at NDSU" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Ryan Wetzstein" />
     <meta name="twitter:description" content="Software developer building clean, modern web experiences." />
+    <meta name="twitter:image" content="https://ryanwetzstein.com/og-image.png" />
     <!-- Pinned + Subresource Integrity: a tampered CDN response is rejected by the browser.
          Never use @latest here — it lets upstream change what executes on this origin. -->
     <link

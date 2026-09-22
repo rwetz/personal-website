@@ -20,14 +20,7 @@ export default function About() {
       className="dot-grid"
       style={{ padding: '96px 24px' }}
     >
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '2fr 3fr',
-          gap: 80,
-          alignItems: 'start',
-        }}
-      >
+      <div className="about-grid">
         {/* Left — photo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}

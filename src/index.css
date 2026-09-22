@@ -149,6 +149,40 @@
   }
 }
 
+/* ── About ────────────────────────────────────────────────────────────────── */
+/* Photo beside the bio on wide screens; stacked on narrow ones so the bio
+   isn't squeezed into a sliver of a column. */
+.about-grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 80px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .about-grid img {
+    max-width: 360px !important;
+  }
+}
+
+/* ── Signature card columns ───────────────────────────────────────────────── */
+/* The wide-screen insets only make sense when the columns sit side by side. */
+.sig-stats  { padding-left: 180px; }
+.sig-visual { padding-right: 160px; }
+
+@media (max-width: 1100px) {
+  .sig-stats  { padding-left: 0; }
+  .sig-visual { padding-right: 0; justify-content: center !important; }
+}
+
+/* ── Contact / footer gutters ─────────────────────────────────────────────── */
+.contact-shell { padding: 96px clamp(24px, 6vw, 80px); }
+.footer-shell  { padding: 40px clamp(24px, 6vw, 80px); }
+
 /* ── Global base ──────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
@@ -189,8 +223,9 @@ code, kbd, pre, .font-mono {
 * { scrollbar-width: thin; scrollbar-color: var(--m-border-strong) var(--m-surface-soft); }
 
 /* ── Section scroll-margin ────────────────────────────────────────────────── */
+/* Matches the 90px fixed navbar so jumped-to headings aren't hidden under it. */
 section[id] {
-  scroll-margin-top: 64px;
+  scroll-margin-top: 90px;
 }
 
 /* ── Typography helpers ───────────────────────────────────────────────────── */
