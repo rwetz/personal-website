@@ -137,44 +137,42 @@ export default function Hero() {
           className="hero-rise"
           style={{
             animationDelay: '0.28s',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            gap: '10px 20px',
             paddingTop: 28,
             borderTop: '1px solid var(--m-hairline)',
           }}
         >
-          <span style={{ fontSize: 12, color: 'var(--m-subtle)' }}>
+          {/* School on its own line so the links below always stay together */}
+          <p style={{ fontSize: 13, color: 'var(--m-subtle)', margin: '0 0 4px' }}>
             North Dakota State University · Computer Science · Class of 2027
-          </span>
-          <span aria-hidden="true" style={{ color: 'var(--m-hairline)', fontSize: 12 }}>|</span>
-          {[
-            { label: 'GitHub',   href: 'https://github.com/rwetz' },
-            { label: 'LinkedIn', href: 'https://linkedin.com/in/ryan-wetzstein' },
-            { label: 'Email',    href: 'mailto:rwetz00@gmail.com' },
-          ].map(({ label, href }) => (
-            <a
-              key={label}
-              href={href}
-              target={href.startsWith('http') ? '_blank' : undefined}
-              rel="noopener noreferrer"
-              style={{
-                fontSize: 12,
-                color: 'var(--m-muted)',
-                textDecoration: 'none',
-                borderBottom: '1px solid var(--m-hairline)',
-                /* Vertical padding lifts these off the 20px-tall touch floor  */
-                /* without moving the underline or the row's visual rhythm.    */
-                display: 'inline-flex',
-                alignItems: 'center',
-                minHeight: 44,
-                paddingBottom: 1,
-              }}
-            >
-              {label}
-            </a>
-          ))}
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', columnGap: 24 }}>
+            {[
+              { label: 'GitHub',   href: 'https://github.com/rwetz' },
+              { label: 'LinkedIn', href: 'https://linkedin.com/in/ryan-wetzstein' },
+              { label: 'Email',    href: 'mailto:rwetz00@gmail.com' },
+            ].map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                target={href.startsWith('http') ? '_blank' : undefined}
+                rel="noopener noreferrer"
+                style={{
+                  fontSize: 13,
+                  color: 'var(--m-muted)',
+                  /* A text underline (not a border) stays hugging the text even   */
+                  /* though the box is 44px tall to clear the touch-target floor. */
+                  textDecoration: 'underline',
+                  textDecorationColor: 'var(--m-border-strong)',
+                  textUnderlineOffset: 4,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  minHeight: 44,
+                }}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
         </div>
         </div>
       </div>

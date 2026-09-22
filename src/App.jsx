@@ -53,14 +53,14 @@ export default function App() {
             {/* 1. White canvas hero */}
             <Hero />
 
-            {/* 2. White — About */}
+            {/* 2. Surface-soft — Projects, straight after the intro: it's the strongest evidence */}
+            <Projects />
+
+            {/* 3. White — About */}
             <About />
 
-            {/* 3. White — Experience */}
+            {/* 4. White — Experience */}
             <Experience />
-
-            {/* 4. Surface-soft — Projects */}
-            <Projects />
 
             {/* 5. White — Skills */}
             <Skills />

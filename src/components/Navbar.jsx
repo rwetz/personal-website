@@ -14,14 +14,15 @@ import PillNav from './PillNav'
 const NEXIS_URL = 'https://nexisdev.org'
 
 const links = [
+  { label: 'Projects',   href: '#projects'   },
   { label: 'About',      href: '#about'      },
   { label: 'Experience', href: '#experience' },
-  { label: 'Projects',   href: '#projects'   },
   { label: 'Skills',     href: '#skills'     },
   { label: 'Contact',    href: '#contact'    },
 ]
 
-const sectionIds = ['hero', 'about', 'experience', 'projects', 'skills', 'contact']
+// Page order — the active-section lookup depends on it.
+const sectionIds = ['hero', 'projects', 'about', 'experience', 'skills', 'contact']
 
 /* Logo + pill nav + right cluster need ~1140px side by side; below this the
    hamburger takes over. Keep in step with the min-[1180px] classes below. */
@@ -164,7 +165,9 @@ export default function Navbar() {
               src={nexisLogoSrc}
               alt=""
               aria-hidden="true"
-              width={18} height={18} style={{ borderRadius: 5, flexShrink: 0 }}
+              width={18}
+              height={18}
+              style={{ borderRadius: 5, flexShrink: 0 }}
             />
             Nexis
             <ArrowUpRight size={14} strokeWidth={2} />
@@ -295,7 +298,9 @@ export default function Navbar() {
                     src={nexisLogoSrc}
                     alt=""
                     aria-hidden="true"
-                    width={18} height={18} style={{ borderRadius: 5, flexShrink: 0 }}
+                    width={18}
+                    height={18}
+                    style={{ borderRadius: 5, flexShrink: 0 }}
                   />
                   Nexis
                   <ArrowUpRight size={14} strokeWidth={2} />

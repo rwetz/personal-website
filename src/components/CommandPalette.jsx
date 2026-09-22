@@ -19,9 +19,9 @@ import { toast } from '@/components/ui/sonner'
 const EMAIL = 'rwetz00@gmail.com'
 
 const navigate = [
+  { id: 'projects',   label: 'Projects',   icon: FolderKanban, hash: '#projects'   },
   { id: 'about',      label: 'About',      icon: User,         hash: '#about'      },
   { id: 'experience', label: 'Experience', icon: Briefcase,    hash: '#experience' },
-  { id: 'projects',   label: 'Projects',   icon: FolderKanban, hash: '#projects'   },
   { id: 'skills',     label: 'Skills',     icon: Wrench,       hash: '#skills'     },
   { id: 'contact',    label: 'Contact',    icon: Mail,         hash: '#contact'    },
 ]
