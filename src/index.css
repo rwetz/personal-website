@@ -169,14 +169,62 @@
   }
 }
 
-/* ── Signature card columns ───────────────────────────────────────────────── */
-/* The wide-screen insets only make sense when the columns sit side by side. */
-.sig-stats  { padding-left: 180px; }
-.sig-visual { padding-right: 160px; }
+/* ── Featured project ─────────────────────────────────────────────────────── */
+/* Copy on the left, screenshot on a dark stage on the right; stacked below
+   960px with the shot underneath so the pitch is read first. */
+.featured-project {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  background: #ffffff;
+  border: 1px solid #c8ccd2;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.featured-project:hover {
+  border-color: var(--m-ink);
+  box-shadow: 0 16px 36px -18px rgba(24, 29, 38, 0.3);
+}
 
-@media (max-width: 1100px) {
-  .sig-stats  { padding-left: 0; }
-  .sig-visual { padding-right: 0; justify-content: center !important; }
+.featured-project-copy {
+  display: flex;
+  flex-direction: column;
+  padding: 48px;
+}
+
+.featured-project-shot {
+  position: relative;
+  min-height: 360px;
+  background:
+    radial-gradient(120% 90% at 85% 100%, rgba(80, 60, 220, 0.35), transparent 60%),
+    #0d1017;
+  padding: 48px 0 0 48px;
+}
+.featured-project-shot img {
+  display: block;
+  width: 118%;
+  max-width: none;
+  height: auto;
+  border-radius: 10px 0 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+}
+
+@media (max-width: 960px) {
+  .featured-project { grid-template-columns: 1fr; }
+  .featured-project-copy { padding: 32px 24px; }
+  .featured-project-shot { min-height: 0; padding: 32px 0 0 24px; }
+}
+
+/* Four supporting projects: always 2x2 so none is left orphaned on a row. */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+@media (max-width: 720px) {
+  .project-grid { grid-template-columns: 1fr; }
 }
 
 /* ── Contact / footer gutters ─────────────────────────────────────────────── */

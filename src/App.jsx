@@ -16,8 +16,6 @@ import Skills         from './components/Skills'
 import Contact        from './components/Contact'
 import SignatureCard  from './components/SignatureCard'
 import CommandPalette from './components/CommandPalette'
-import Cubes         from './components/Cubes'
-import MagnetLines   from './components/MagnetLines'
 import { Toaster }    from '@/components/ui/sonner'
 
 /** Nexis moved off this site to its own domain; #nexis is kept only as a redirect. */
@@ -77,132 +75,19 @@ export default function App() {
               {/* 1. White canvas hero */}
               <Hero />
 
-              {/* 2. Coral signature card — brand voltage moment */}
-              <SignatureCard variant="coral">
-                {/* Left */}
-                <div>
-                  <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.65, marginBottom: 20 }}>
-                    What I'm about
-                  </p>
-                  <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 24px', maxWidth: 560 }}>
-                    Building production-ready software as a student — not waiting until I graduate.
-                  </h2>
-                  <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.65, maxWidth: 480, margin: '0 0 36px' }}>
-                    Three years of object-oriented experience, hands-on with ML frameworks, and shipping
-                    real web apps.
-                  </p>
-                  <a
-                    href="#about"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      padding: '14px 24px',
-                      backgroundColor: '#ffffff',
-                      color: '#181d26',
-                      borderRadius: 12,
-                      fontSize: 16,
-                      fontWeight: 500,
-                      textDecoration: 'none',
-                      minHeight: 48,
-                    }}
-                  >
-                    Learn more
-                  </a>
-                </div>
-
-                {/* Right — stats */}
-                <div className="sig-stats" style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
-                  {[
-                    { num: '3+', label: 'Years of OOP experience' },
-                    { num: '6+', label: 'Projects shipped on GitHub' },
-                    { num: '5', label: 'Core languages & frameworks' },
-                  ].map(({ num, label }) => (
-                    <div key={label}>
-                      <p style={{ fontSize: 56, fontWeight: 400, color: '#ffffff', lineHeight: 1, margin: '0 0 8px', letterSpacing: '-0.03em' }}>{num}</p>
-                      <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: 0, letterSpacing: '0.02em' }}>{label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Far right — MagnetLines */}
-                <div className="sig-visual" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                  <MagnetLines
-                    rows={12}
-                    columns={12}
-                    containerSize="min(340px, calc(100vw - 48px))"
-                    lineColor="rgba(255,255,255,0.25)"
-                    lineWidth="2px"
-                    lineHeight="28px"
-                    baseAngle={-160}
-                  />
-                </div>
-              </SignatureCard>
-
-              {/* 3. White — About */}
+              {/* 2. White — About */}
               <About />
 
-              {/* 4. White — Experience */}
+              {/* 3. White — Experience */}
               <Experience />
 
-              {/* 5. Surface-soft — Projects */}
+              {/* 4. Surface-soft — Projects */}
               <Projects />
 
-              {/* 6. Forest signature card */}
-              <SignatureCard variant="forest">
-                {/* Left */}
-                <div>
-                  <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.55, marginBottom: 20 }}>
-                    My stack
-                  </p>
-                  <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 20px', maxWidth: 520 }}>
-                    Depth across the full stack — always adding more.
-                  </h2>
-                  <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.65, maxWidth: 440, margin: '0 0 36px' }}>
-                    From low-level OOP to ML pipelines and clean UIs — I build across the whole spectrum
-                    and keep learning what's next.
-                  </p>
-                  <a
-                    href="#skills"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      padding: '14px 24px',
-                      backgroundColor: '#ffffff',
-                      color: '#181d26',
-                      borderRadius: 12,
-                      fontSize: 16,
-                      fontWeight: 500,
-                      textDecoration: 'none',
-                      minHeight: 48,
-                    }}
-                  >
-                    View skills
-                  </a>
-                </div>
-
-                {/* Right — Cubes */}
-                <div className="sig-visual" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                  <div style={{ width: '100%', maxWidth: 420, aspectRatio: '1 / 1' }}>
-                    <Cubes
-                      gridSize={12}
-                      maxAngle={180}
-                      radius={2}
-                      borderStyle="1px solid rgba(255,255,255,0.12)"
-                      faceColor="#0a2e0e"
-                      rippleColor="rgba(255,255,255,0.35)"
-                      rippleSpeed={1.5}
-                      autoAnimate
-                      rippleOnClick
-                    />
-                  </div>
-                </div>
-
-              </SignatureCard>
-
-              {/* 7. White — Skills */}
+              {/* 5. White — Skills */}
               <Skills />
 
-              {/* 8. Dark navy CTA card — contact teaser */}
+              {/* 6. Dark navy CTA card — contact teaser */}
               <SignatureCard variant="dark">
                 {/* Left */}
                 <div>
@@ -254,7 +139,7 @@ export default function App() {
                 </div>
               </SignatureCard>
 
-              {/* 9. White — Contact form */}
+              {/* 7. White — Contact form */}
               <Contact />
             </main>
 

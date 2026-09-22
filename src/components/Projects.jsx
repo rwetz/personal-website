@@ -4,8 +4,10 @@
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
 import { motion } from 'framer-motion'
-import { ExternalLink, ArrowRight } from 'lucide-react'
+import { ExternalLink, ArrowRight, ArrowUpRight } from 'lucide-react'
 import nexisLogoSrc from '../assets/logo (1) (1).png'
+import nexisShot1600 from '../assets/nexis/welcome-1600.webp'
+import nexisShot900 from '../assets/nexis/welcome-900.webp'
 
 const GITHUB_USER = 'rwetz'
 
@@ -13,15 +15,21 @@ const GITHUB_USER = 'rwetz'
  * Hand-picked and hardcoded — this section is a curated shortlist, not a feed.
  * Copy is lifted from each repo's GitHub description; update here when it drifts.
  */
+/** The flagship gets its own full-width card; everything else shares the grid. */
+const FEATURED = {
+  title:       'Nexis',
+  description: 'Open-source AI-native terminal emulator with an integrated editor, file explorer, and multi-provider AI agents.',
+  highlights: [
+    'Multi-provider AI agents in a side panel, working against your real shell',
+    'Built-in code editor, file explorer, and live Markdown preview',
+    'Keyboard-first: command palette, split panes, customizable shortcuts',
+  ],
+  tags:        ['Rust', 'Tauri 2', 'React 19', 'TypeScript'],
+  github:      'https://github.com/rwetz/Nexis',
+  live:        'https://nexisdev.org',
+}
+
 const PROJECTS = [
-  {
-    title:       'Nexis',
-    description: 'Open-source AI-native terminal emulator with integrated editor, file explorer, and multi-provider AI agents. Built on Tauri 2 + Rust + React 19.',
-    tags:        ['TypeScript', 'Rust', 'Tauri', 'AI'],
-    github:      'https://github.com/rwetz/Nexis',
-    live:        'https://nexisdev.org',
-    featured:    true,
-  },
   {
     title:       'BibleLM',
     description: 'A tiny GPT-style transformer trained from scratch on the Bible, with a live training dashboard. Tauri + React + PyTorch.',
@@ -183,22 +191,7 @@ function ProjectCard({ project, index }) {
     >
       {/* Header row */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
-          {project.featured && (
-            <span style={{
-              fontSize: 11,
-              fontWeight: 500,
-              color: '#41454d',
-              border: '1px solid #dddddd',
-              borderRadius: 9999,
-              padding: '2px 8px',
-              letterSpacing: '0.04em',
-              textTransform: 'uppercase',
-            }}>
-              Featured
-            </span>
-          )}
-        </div>
+        <div />
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
           {project.live && (
             <a
@@ -225,20 +218,15 @@ function ProjectCard({ project, index }) {
         </div>
       </div>
 
-      {/* Glyph — centred above the title; Nexis carries its real mark instead */}
-      <motion.div
-        variants={glyphVariants}
-        style={{ display: 'flex', justifyContent: 'center', padding: '4px 0' }}
-      >
-        {Glyph
-          ? <Glyph />
-          : <img
-              src={nexisLogoSrc}
-              alt=""
-              aria-hidden="true"
-              style={{ width: 64, height: 64, borderRadius: 15 }}
-            />}
-      </motion.div>
+      {/* Glyph — centred above the title */}
+      {Glyph && (
+        <motion.div
+          variants={glyphVariants}
+          style={{ display: 'flex', justifyContent: 'center', padding: '4px 0' }}
+        >
+          <Glyph />
+        </motion.div>
+      )}
 
       {/* Title — nudges right on hover, trailing arrow fades in beside it */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -322,6 +310,7 @@ function ProjectCard({ project, index }) {
               alignItems: 'center',
               gap: 6,
               padding: '8px 16px',
+              minHeight: 44,
               border: '1px solid #c8ccd2',
               borderRadius: 10,
               fontSize: 13,
@@ -339,15 +328,105 @@ function ProjectCard({ project, index }) {
   )
 }
 
+// ── Featured project ────────────────────────────────────────────────────────
+
+function FeaturedProject({ project }) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="featured-project"
+    >
+      <div className="featured-project-copy">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
+          <img
+            src={nexisLogoSrc}
+            alt=""
+            aria-hidden="true"
+            width={44}
+            height={44}
+            style={{ borderRadius: 11, flexShrink: 0 }}
+          />
+          <span style={{
+            fontSize: 11,
+            fontWeight: 500,
+            color: '#41454d',
+            border: '1px solid #dddddd',
+            borderRadius: 9999,
+            padding: '3px 10px',
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+          }}>
+            Flagship · Open source
+          </span>
+        </div>
+
+        <h3 style={{ fontSize: 'clamp(28px, 3vw, 36px)', fontWeight: 400, color: '#181d26', lineHeight: 1.15, letterSpacing: '-0.01em', margin: '0 0 12px' }}>
+          {project.title}
+        </h3>
+        <p style={{ fontSize: 16, color: '#333840', lineHeight: 1.65, margin: '0 0 24px', maxWidth: 460 }}>
+          {project.description}
+        </p>
+
+        <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {project.highlights.map(point => (
+            <li key={point} style={{ position: 'relative', paddingLeft: 20, fontSize: 14, color: '#333840', lineHeight: 1.6 }}>
+              <span
+                aria-hidden="true"
+                style={{ position: 'absolute', left: 0, top: 8, width: 5, height: 5, borderRadius: '50%', backgroundColor: '#9297a0' }}
+              />
+              {point}
+            </li>
+          ))}
+        </ul>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 32 }}>
+          {project.tags.map(tag => (
+            <span key={tag} style={{ fontSize: 12, color: '#41454d', border: '1px solid #dddddd', borderRadius: 6, padding: '2px 8px' }}>
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 'auto' }}>
+          <a href={project.live} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 15 }}>
+            Visit nexisdev.org
+            <ArrowUpRight size={16} strokeWidth={2} aria-hidden="true" />
+          </a>
+          <a href={project.github} target="_blank" rel="noopener noreferrer" className="btn-secondary" style={{ fontSize: 15 }}>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+      {/* Screenshot bleeds off the bottom-right edge, like a window peeking out */}
+      <div className="featured-project-shot">
+        <img
+          src={nexisShot1600}
+          srcSet={`${nexisShot900} 900w, ${nexisShot1600} 1600w`}
+          sizes="(max-width: 960px) 100vw, 720px"
+          width={1600}
+          height={955}
+          loading="lazy"
+          decoding="async"
+          alt="The Nexis welcome screen: a dark window with a New Terminal button and keyboard shortcut hints."
+        />
+      </div>
+    </motion.article>
+  )
+}
+
 // ── Section ─────────────────────────────────────────────────────────────────
 
 export default function Projects() {
   return (
     <section
       id="projects"
-      style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(circle, #d0d3d8 1px, transparent 1px)', backgroundSize: '28px 28px', padding: '64px 0', borderTop: '1px solid #dddddd' }}
+      style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(circle, #d0d3d8 1px, transparent 1px)', backgroundSize: '28px 28px', padding: '96px 0', borderTop: '1px solid #dddddd' }}
     >
-      <div>
+      <div style={{ maxWidth: 1280, margin: '0', padding: '0 24px' }}>
 
         {/* Heading */}
         <motion.div
@@ -355,25 +434,20 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.55, ease: 'easeOut' }}
-          style={{ marginBottom: 56, paddingLeft: 24 }}
+          style={{ marginBottom: 56 }}
         >
           <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#41454d', marginBottom: 12 }}>
             Projects
           </p>
-          <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: 0 }}>
+          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 40px)', fontWeight: 400, color: '#181d26', lineHeight: 1.15, margin: 0 }}>
             Selected projects.
           </h2>
         </motion.div>
 
-        {/* Content — wraps instead of forcing 5 columns into narrow viewports */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: 16,
-            padding: '0 24px',
-          }}
-        >
+        <FeaturedProject project={FEATURED} />
+
+        {/* Two-up rather than five skinny columns, so descriptions get room to breathe */}
+        <div className="project-grid">
           {PROJECTS.map((project, i) => (
             <ProjectCard key={project.github} project={project} index={i} />
           ))}
