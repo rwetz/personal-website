@@ -3,8 +3,9 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { motion } from 'framer-motion'
-import profileImg from '../assets/profile.jpg'
+import { m } from 'framer-motion'
+import profile960 from '../assets/profile-960.webp'
+import profile480 from '../assets/profile-480.webp'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -22,18 +23,25 @@ export default function About() {
     >
       <div className="about-grid page-container">
         {/* Left — photo */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.97 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.55, ease: 'easeOut', delay: 0.05 }}
         >
           <img
-            src={profileImg}
+            src={profile960}
+            srcSet={`${profile480} 480w, ${profile960} 960w`}
+            sizes="(max-width: 860px) 360px, 480px"
+            width={960}
+            height={1280}
+            loading="lazy"
+            decoding="async"
             alt="Ryan Wetzstein"
             style={{
               width: '100%',
               maxWidth: 480,
+              height: 'auto',
               aspectRatio: '3 / 4',
               objectFit: 'cover',
               borderRadius: 12,
@@ -41,10 +49,10 @@ export default function About() {
               display: 'block',
             }}
           />
-        </motion.div>
+        </m.div>
 
         {/* Right — eyebrow, heading, bio */}
-        <motion.div {...fadeUp(0.1)} style={{ display: 'flex', flexDirection: 'column', gap: 28, paddingTop: 8 }}>
+        <m.div {...fadeUp(0.1)} style={{ display: 'flex', flexDirection: 'column', gap: 28, paddingTop: 8 }}>
           <div>
             <p className="section-eyebrow">
               About
@@ -84,7 +92,7 @@ export default function About() {
             Outside of development you'll find me lifting, making music, and exploring the outdoors. I've been
             golfing lots and spending time with family and friends.
           </p>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   )

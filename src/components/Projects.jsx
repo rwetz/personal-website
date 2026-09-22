@@ -3,9 +3,9 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { ExternalLink, ArrowRight, ArrowUpRight } from 'lucide-react'
-import nexisLogoSrc from '../assets/logo (1) (1).png'
+import nexisLogoSrc from '../assets/nexis-logo.webp'
 import nexisShot1600 from '../assets/nexis/welcome-1600.webp'
 import nexisShot900 from '../assets/nexis/welcome-900.webp'
 
@@ -166,13 +166,13 @@ function ProjectCard({ project, index }) {
     /* Outer node owns the scroll-in animation; inner owns hover. Splitting them  */
     /* keeps the two from fighting over `y`, and lets `hover` propagate to        */
     /* descendant motion elements as a named variant.                            */
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.45, ease: 'easeOut', delay: index * 0.08 }}
     >
-    <motion.div
+    <m.div
       initial="rest"
       whileHover="hover"
       whileTap="tap"
@@ -220,29 +220,29 @@ function ProjectCard({ project, index }) {
 
       {/* Glyph — centred above the title */}
       {Glyph && (
-        <motion.div
+        <m.div
           variants={glyphVariants}
           style={{ display: 'flex', justifyContent: 'center', padding: '4px 0' }}
         >
           <Glyph />
-        </motion.div>
+        </m.div>
       )}
 
       {/* Title — nudges right on hover, trailing arrow fades in beside it */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <motion.h3
+        <m.h3
           variants={titleVariants}
           style={{ fontSize: 18, fontWeight: 500, color: '#181d26', lineHeight: 1.3, margin: 0 }}
         >
           {project.title}
-        </motion.h3>
-        <motion.span
+        </m.h3>
+        <m.span
           variants={arrowVariants}
           aria-hidden="true"
           style={{ display: 'inline-flex', color: '#181d26', flexShrink: 0 }}
         >
           <ArrowRight size={16} strokeWidth={2} />
-        </motion.span>
+        </m.span>
       </div>
 
       {/* Provenance — only on work built for someone else */}
@@ -279,7 +279,7 @@ function ProjectCard({ project, index }) {
 
       {/* Links */}
       <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
-        <motion.a
+        <m.a
           href={project.github}
           target="_blank"
           rel="noopener noreferrer"
@@ -298,9 +298,9 @@ function ProjectCard({ project, index }) {
           }}
         >
           GitHub
-        </motion.a>
+        </m.a>
         {project.live && (
-          <motion.a
+          <m.a
             href={project.live}
             target="_blank"
             rel="noopener noreferrer"
@@ -320,11 +320,11 @@ function ProjectCard({ project, index }) {
           >
             <ExternalLink style={{ width: 13, height: 13 }} />
             Live
-          </motion.a>
+          </m.a>
         )}
       </div>
-    </motion.div>
-    </motion.div>
+    </m.div>
+    </m.div>
   )
 }
 
@@ -332,7 +332,7 @@ function ProjectCard({ project, index }) {
 
 function FeaturedProject({ project }) {
   return (
-    <motion.article
+    <m.article
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
@@ -414,7 +414,7 @@ function FeaturedProject({ project }) {
           alt="The Nexis welcome screen: a dark window with a New Terminal button and keyboard shortcut hints."
         />
       </div>
-    </motion.article>
+    </m.article>
   )
 }
 
@@ -429,7 +429,7 @@ export default function Projects() {
       <div className="page-container">
 
         {/* Heading */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
@@ -440,7 +440,7 @@ export default function Projects() {
           <h2 className="section-title">
             Selected projects.
           </h2>
-        </motion.div>
+        </m.div>
 
         <FeaturedProject project={FEATURED} />
 
@@ -452,7 +452,7 @@ export default function Projects() {
         </div>
       </div>
 
-      <motion.div
+      <m.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -479,7 +479,7 @@ export default function Projects() {
             </svg>
             View all repositories on GitHub
           </a>
-        </motion.div>
+        </m.div>
     </section>
   )
 }

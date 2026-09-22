@@ -3,7 +3,7 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 const VARIANTS = {
   coral:  { bg: '#aa2d00', text: '#ffffff', border: 'rgba(255,255,255,0.12)' },
@@ -38,7 +38,7 @@ export default function SignatureCard({ variant = 'coral', id, children }) {
         padding: '96px 0',
       }}
     >
-      <motion.div
+      <m.div
         className="page-container"
         style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 64, alignItems: 'center' }}
         initial={{ opacity: 0, y: 24 }}
@@ -47,7 +47,7 @@ export default function SignatureCard({ variant = 'coral', id, children }) {
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
         {children}
-      </motion.div>
+      </m.div>
     </section>
   )
 }

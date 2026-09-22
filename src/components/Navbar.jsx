@@ -4,10 +4,10 @@
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
 import { useState, useEffect, useRef } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import signatureImg from '../assets/signature.png'
-import nexisLogoSrc from '../assets/logo (1) (1).png'
+import nexisLogoSrc from '../assets/nexis-logo.webp'
 import PillNav from './PillNav'
 
 /** Nexis lives on its own domain; the navbar carries the only top-level pointer to it. */
@@ -36,7 +36,9 @@ export default function Navbar() {
   const menuRef                    = useRef(null)
 
   useEffect(() => {
-    const OFFSET = 80
+    // Just past the 90px navbar, where a section lands after a nav click
+    // (scroll-margin-top in index.css).
+    const OFFSET = 100
 
     const onScroll = () => {
       const y = window.scrollY
@@ -44,22 +46,34 @@ export default function Navbar() {
       setHidden(y > prevScrollY.current && y > 80)
       prevScrollY.current = y
 
+      // The active section is the *last* one whose top has scrolled past the
+      // offset. At the very bottom the final section may never reach it, so
+      // treat the bottom of the page as that section.
       const nearBottom = window.innerHeight + y >= document.documentElement.scrollHeight - 80
-      const ids = nearBottom
-        ? [...sectionIds].reverse()
-        : [...sectionIds]
-
-      let current = ''
-      for (const id of ids) {
-        const el = document.getElementById(id)
-        if (el && el.getBoundingClientRect().top <= OFFSET) { current = id; break }
+      let current = nearBottom ? sectionIds[sectionIds.length - 1] : ''
+      if (!nearBottom) {
+        for (let i = sectionIds.length - 1; i >= 0; i--) {
+          const el = document.getElementById(sectionIds[i])
+          if (el && el.getBoundingClientRect().top <= OFFSET) { current = sectionIds[i]; break }
+        }
       }
       setActive(current)
     }
 
+    // Scroll events can fire several times per frame; the section lookup reads
+    // layout, so coalesce to one pass per frame.
+    let frame = 0
+    const onScrollFrame = () => {
+      if (frame) return
+      frame = requestAnimationFrame(() => { frame = 0; onScroll() })
+    }
+
     onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScrollFrame, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScrollFrame)
+      cancelAnimationFrame(frame)
+    }
   }, [])
 
   useEffect(() => {
@@ -111,7 +125,7 @@ export default function Navbar() {
           style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}
         >
           {/* Signature is dark-on-transparent — render as-is on white */}
-          <img src={signatureImg} alt="Ryan Wetzstein" style={{ height: 48, width: 'auto' }} />
+          <img src={signatureImg} alt="Ryan Wetzstein" width={152} height={48} fetchPriority="high" />
         </a>
 
         {/* Desktop nav — PillNav */}
@@ -150,7 +164,7 @@ export default function Navbar() {
               src={nexisLogoSrc}
               alt=""
               aria-hidden="true"
-              style={{ width: 18, height: 18, borderRadius: 5, flexShrink: 0 }}
+              width={18} height={18} style={{ borderRadius: 5, flexShrink: 0 }}
             />
             Nexis
             <ArrowUpRight size={14} strokeWidth={2} />
@@ -220,7 +234,7 @@ export default function Navbar() {
       {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <m.div
             id="mobile-menu"
             ref={menuRef}
             role="dialog"
@@ -281,7 +295,7 @@ export default function Navbar() {
                     src={nexisLogoSrc}
                     alt=""
                     aria-hidden="true"
-                    style={{ width: 18, height: 18, borderRadius: 5, flexShrink: 0 }}
+                    width={18} height={18} style={{ borderRadius: 5, flexShrink: 0 }}
                   />
                   Nexis
                   <ArrowUpRight size={14} strokeWidth={2} />
@@ -330,7 +344,7 @@ export default function Navbar() {
                 Get in touch
               </a>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </nav>

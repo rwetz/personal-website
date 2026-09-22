@@ -13,7 +13,6 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
 } from '@/components/ui/command'
 import { toast } from '@/components/ui/sonner'
 
@@ -36,10 +35,14 @@ export default function CommandPalette({ open, onClose }) {
   }, [onClose])
 
   const go = (hash) => () => { window.location.hash = hash; onClose() }
-  const copyEmail = () => {
-    navigator.clipboard.writeText(EMAIL)
-    toast.success('Email copied to clipboard', { description: EMAIL })
+  const copyEmail = async () => {
     onClose()
+    try {
+      await navigator.clipboard.writeText(EMAIL)
+      toast.success('Email copied to clipboard', { description: EMAIL })
+    } catch {
+      toast.error('Couldn’t copy — the address is ' + EMAIL)
+    }
   }
   const downloadResume = () => {
     const a = document.createElement('a')
@@ -48,7 +51,7 @@ export default function CommandPalette({ open, onClose }) {
     a.click()
     onClose()
   }
-  const openExternal = (url) => () => { window.open(url, '_blank'); onClose() }
+  const openExternal = (url) => () => { window.open(url, '_blank', 'noopener,noreferrer'); onClose() }
 
   return (
     <CommandDialog open={open} onOpenChange={(v) => !v && onClose()}>
@@ -69,7 +72,6 @@ export default function CommandPalette({ open, onClose }) {
         <CommandGroup heading="Actions">
           <CommandItem onSelect={copyEmail}>
             <Copy /> <span>Copy email address</span>
-            <CommandShortcut>⌘C</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={downloadResume}>
             <Download /> <span>Download resume</span>

@@ -3,7 +3,7 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Info } from 'lucide-react'
 import {
   Tooltip,
@@ -58,10 +58,11 @@ function SkillPill({ name, icon, color, years, note }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <motion.span
-          whileHover={{ scale: 1.03 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+        <button
+          type="button"
+          className="skill-chip"
           style={{
+            '--skill-color': color,
             display: 'inline-flex',
             alignItems: 'center',
             gap: 8,
@@ -73,17 +74,12 @@ function SkillPill({ name, icon, color, years, note }) {
             fontWeight: 400,
             color: '#181d26',
             cursor: 'default',
-            userSelect: 'none',
+            fontFamily: 'inherit',
           }}
         >
-          <i
-            className={icon}
-            style={{ fontSize: 15, color: 'var(--m-subtle)' }}
-            onMouseEnter={e => { e.currentTarget.style.color = color }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'var(--m-subtle)' }}
-          />
+          <i className={icon} aria-hidden="true" style={{ fontSize: 15 }} />
           {name}
-        </motion.span>
+        </button>
       </TooltipTrigger>
       <TooltipContent side="top" style={{ maxWidth: 220 }}>
         <div style={{ marginBottom: 4 }}>
@@ -106,7 +102,7 @@ export default function Skills() {
         <div className="page-container">
 
           {/* Heading */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -116,14 +112,14 @@ export default function Skills() {
             <p className="section-eyebrow">Skills</p>
             <h2 className="section-title">What I work with.</h2>
             <p style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--m-subtle)', margin: '16px 0 0' }}>
-              <Info size={13} strokeWidth={1.8} />
-              Hover any pill for details.
+              <Info size={13} strokeWidth={1.8} aria-hidden="true" />
+              Hover or tab to a skill for details.
             </p>
-          </motion.div>
+          </m.div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
             {skillGroups.map(({ category, skills }, groupIdx) => (
-              <motion.div
+              <m.div
                 key={category}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -133,7 +129,7 @@ export default function Skills() {
                 <p className="micro-label" style={{ margin: '0 0 16px' }}>
                   {category}
                 </p>
-                <motion.div
+                <m.div
                   style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}
                   initial="hidden"
                   whileInView="visible"
@@ -144,7 +140,7 @@ export default function Skills() {
                   }}
                 >
                   {skills.map(skill => (
-                    <motion.div
+                    <m.div
                       key={skill.name}
                       variants={{
                         hidden:  { opacity: 0, y: 8 },
@@ -152,10 +148,10 @@ export default function Skills() {
                       }}
                     >
                       <SkillPill {...skill} />
-                    </motion.div>
+                    </m.div>
                   ))}
-                </motion.div>
-              </motion.div>
+                </m.div>
+              </m.div>
             ))}
           </div>
         </div>

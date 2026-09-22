@@ -3,16 +3,10 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { FolderKanban, Download } from 'lucide-react'
 import ShaderPanel from './ShaderPanel'
 import { MOIRE_CFG, CELLS_CFG, CONTOUR_CFG } from '@/lib/shaders'
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.55, ease: 'easeOut', delay },
-})
 
 /** Purely decorative — ordered coarse to fine so the stack reads top-down. */
 const SHADER_CARDS = [
@@ -33,8 +27,7 @@ export default function Hero() {
       {/* off viewport height; short screens drop the one-screen pin entirely.  */}
       <div className="hero-inner page-container">
         <div style={{ maxWidth: 480 }}>
-        <motion.h1
-          {...fadeUp(0)}
+        <h1
           style={{
             fontSize: 'clamp(40px, 6.5vw, 72px)',
             fontWeight: 400,
@@ -46,9 +39,9 @@ export default function Hero() {
           }}
         >
           Ryan Wetzstein
-        </motion.h1>
+        </h1>
 
-        <motion.div {...fadeUp(0.1)} style={{ marginBottom: 24 }}>
+        <div className="hero-rise" style={{ marginBottom: 24, animationDelay: '0.1s' }}>
           <span
             style={{
               display: 'inline-flex',
@@ -75,11 +68,12 @@ export default function Hero() {
             />
             Senior at NDSU
           </span>
-        </motion.div>
+        </div>
 
-        <motion.p
-          {...fadeUp(0.15)}
+        <p
+          className="hero-rise"
           style={{
+            animationDelay: '0.15s',
             fontSize: 15,
             fontWeight: 400,
             color: 'var(--m-body)',
@@ -90,11 +84,11 @@ export default function Hero() {
         >
           CS student at NDSU building clean, modern software. Focused on AI,
           backend development, and full-stack web.
-        </motion.p>
+        </p>
 
-        <motion.div
-          {...fadeUp(0.2)}
-          style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 40 }}
+        <div
+          className="hero-rise"
+          style={{ animationDelay: '0.2s', display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 40 }}
         >
           <a
             href="#projects"
@@ -137,11 +131,12 @@ export default function Hero() {
             <Download size={15} />
             Download Resume
           </a>
-        </motion.div>
+        </div>
 
-        <motion.div
-          {...fadeUp(0.28)}
+        <div
+          className="hero-rise"
           style={{
+            animationDelay: '0.28s',
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',
@@ -180,7 +175,7 @@ export default function Hero() {
               {label}
             </a>
           ))}
-        </motion.div>
+        </div>
         </div>
       </div>
 
@@ -189,7 +184,7 @@ export default function Hero() {
       {/* keep the stack clear of the 90px navbar on short viewports.           */}
       <div className="hidden lg:flex hero-rail">
         {SHADER_CARDS.map(({ key, cfg }, i) => (
-          <motion.div
+          <m.div
             key={key}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -197,7 +192,7 @@ export default function Hero() {
             style={{ borderRadius: 18, overflow: 'hidden' }}
           >
             <ShaderPanel {...cfg} style={{ height: 'clamp(120px, 17vh, 190px)' }} />
-          </motion.div>
+          </m.div>
         ))}
       </div>
     </section>

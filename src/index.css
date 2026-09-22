@@ -163,6 +163,158 @@
     grid-template-columns: 1fr auto 1fr;
     gap: 24px;
   }
+  /* Grid columns can squeeze below content width; never wrap "Get in touch". */
+  .nav-row a { white-space: nowrap; }
+}
+
+/* ── Pill nav ─────────────────────────────────────────────────────────────── */
+.pill-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 64px;
+  padding: 5px;
+  border-radius: 9999px;
+  background: var(--pn-base);
+}
+
+.pill-nav-item {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 24px;
+  border-radius: 9999px;
+  background: var(--pn-pill);
+  color: var(--pn-text);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Circle centred on the bottom edge; at scale(1) its radius clears the pill's
+   top corners for any label length used here. */
+.pn-circle {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 180%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--pn-base);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.pn-stack {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+}
+.pn-label,
+.pn-hover {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pn-hover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--pn-text-hover);
+  transform: translateY(40px);
+}
+
+.pill-nav-item:hover .pn-circle,
+.pill-nav-item:focus-visible .pn-circle,
+.pill-nav-item[aria-current] .pn-circle { transform: translate(-50%, -50%) scale(1); }
+
+.pill-nav-item:hover .pn-label,
+.pill-nav-item:focus-visible .pn-label,
+.pill-nav-item[aria-current] .pn-label { transform: translateY(-40px); }
+
+.pill-nav-item:hover .pn-hover,
+.pill-nav-item:focus-visible .pn-hover,
+.pill-nav-item[aria-current] .pn-hover { transform: translateY(0); }
+
+/* The capsule is already ink-coloured; ring the focused pill in white instead. */
+.pill-nav-item:focus-visible {
+  outline: 2px solid var(--m-on-dark);
+  outline-offset: -4px;
+}
+
+/* ── Skill chips ──────────────────────────────────────────────────────────── */
+/* Buttons (not spans) so keyboard users can reach the tooltip. The icon picks
+   up the language's brand colour from --skill-color on hover or focus. */
+.skill-chip {
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.skill-chip i {
+  color: var(--m-subtle);
+  transition: color 0.15s ease;
+}
+.skill-chip:hover,
+.skill-chip:focus-visible {
+  transform: scale(1.03);
+  border-color: var(--m-border-strong) !important;
+}
+.skill-chip:hover i,
+.skill-chip:focus-visible i {
+  color: var(--skill-color);
+}
+
+/* ── Contact links ────────────────────────────────────────────────────────── */
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  background: #ffffff;
+  border: 1px solid #c8ccd2;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--m-ink);
+  transition: border-color 0.15s ease;
+}
+.contact-link:hover { border-color: var(--m-border-strong); }
+
+/* Sits over the email card's right edge; 44px square for touch. */
+.contact-copy {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--m-subtle);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.contact-copy:hover {
+  background: var(--m-surface-soft);
+  color: var(--m-ink);
+}
+
+/* ── Hero entrance ────────────────────────────────────────────────────────────
+   CSS rather than framer-motion so it starts with first paint instead of
+   waiting on JS. The name itself is not animated: it's the largest element
+   above the fold and should paint immediately. */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+.hero-rise {
+  animation: hero-rise 0.55s ease-out both;
 }
 
 /* ── Hero sizing ──────────────────────────────────────────────────────────────

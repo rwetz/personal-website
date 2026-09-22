@@ -3,8 +3,8 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { m } from 'framer-motion'
 import { Copy, Send } from 'lucide-react'
 import { toast } from '@/components/ui/sonner'
 
@@ -49,26 +49,47 @@ const contactLinks = [
 export default function Contact() {
   const [form, setForm]     = useState({ name: '', email: '', message: '' })
   const [errors, setErrors] = useState({})
+  const nameRef    = useRef(null)
+  const emailRef   = useRef(null)
+  const messageRef = useRef(null)
 
   const validate = () => {
     const e = {}
     if (!form.name.trim())    e.name    = 'Required'
     if (!form.email.trim())   e.email   = 'Required'
-    else if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = 'Invalid email'
+    else if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = 'Enter an email like name@example.com'
     if (!form.message.trim()) e.message = 'Required'
-    else if (form.message.trim().length < 10)    e.message = 'At least 10 characters'
+    else if (form.message.trim().length < 10)    e.message = 'Add a little more — at least 10 characters'
     setErrors(e)
-    return Object.keys(e).length === 0
+    return e
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!validate()) { toast.error('Please fix the errors below'); return }
+    const found = validate()
+    const firstInvalid = ['name', 'email', 'message'].find(k => found[k])
+    if (firstInvalid) {
+      // Errors sit inline under each field; move focus to the first one.
+      const refs = { name: nameRef, email: emailRef, message: messageRef }
+      refs[firstInvalid].current?.focus()
+      return
+    }
     const subject = encodeURIComponent(`Message from ${form.name}`)
     const body    = encodeURIComponent(`From: ${form.name} <${form.email}>\n\n${form.message}`)
     window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`
     toast.success('Opening your email client…')
   }
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL)
+      toast.success('Email copied', { description: EMAIL })
+    } catch {
+      toast.error('Couldn’t copy — select the address and copy it manually.')
+    }
+  }
+
+  const clearError = (field) => setErrors(er => ({ ...er, [field]: undefined }))
 
   const inputStyle = (hasError) => ({
     display: 'block',
@@ -79,7 +100,6 @@ export default function Contact() {
     background: '#ffffff',
     border: `1px solid ${hasError ? '#dc2626' : '#c8ccd2'}`,
     borderRadius: 6,
-    outline: 'none',
     boxSizing: 'border-box',
     fontFamily: 'inherit',
   })
@@ -93,7 +113,7 @@ export default function Contact() {
       <div className="page-container">
 
         {/* Heading */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
@@ -105,7 +125,7 @@ export default function Contact() {
           <p className="section-lede">
             Pick whichever channel works for you — I respond to everything.
           </p>
-        </motion.div>
+        </m.div>
 
         <div
           style={{
@@ -118,60 +138,48 @@ export default function Contact() {
           {/* Left: contact links */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {contactLinks.map(({ label, href, display, isEmail, icon }, i) => (
-              <motion.a
+              <m.div
                 key={label}
-                href={href}
-                target={href.startsWith('http') ? '_blank' : undefined}
-                rel="noopener noreferrer"
-                aria-label={label}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.45, ease: 'easeOut', delay: i * 0.08 }}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 14,
-                  padding: '20px 24px',
-                  background: '#ffffff',
-                  border: '1px solid #c8ccd2',
-                  borderRadius: 10,
-                  textDecoration: 'none',
-                  color: '#181d26',
-                  transition: 'border-color 0.15s ease',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = '#9297a0' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = '#c8ccd2' }}
+                style={{ position: 'relative' }}
               >
-                <span style={{ color: 'var(--m-subtle)', flexShrink: 0 }}>{icon}</span>
-                <span style={{ flex: 1, fontSize: 13, color: '#333840', minWidth: 0 }}>
-                  <span className="micro-label" style={{ display: 'block', color: 'var(--m-subtle)', marginBottom: 3 }}>
-                    {label}
+                <a
+                  href={href}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel="noopener noreferrer"
+                  className="contact-link"
+                  style={isEmail ? { paddingRight: 64 } : undefined}
+                >
+                  <span style={{ color: 'var(--m-subtle)', flexShrink: 0, display: 'flex' }}>{icon}</span>
+                  <span style={{ flex: 1, fontSize: 13, color: '#333840', minWidth: 0 }}>
+                    <span className="micro-label" style={{ display: 'block', color: 'var(--m-subtle)', marginBottom: 3 }}>
+                      {label}
+                    </span>
+                    <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {display}
+                    </span>
                   </span>
-                  <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {display}
-                  </span>
-                </span>
+                </a>
+                {/* Sibling of the link, not a child: a button inside <a> is invalid HTML */}
                 {isEmail && (
                   <button
-                    onClick={ev => {
-                      ev.preventDefault()
-                      ev.stopPropagation()
-                      navigator.clipboard.writeText(EMAIL)
-                      toast.success('Email copied', { description: EMAIL })
-                    }}
-                    aria-label="Copy email"
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9297a0', padding: 4 }}
+                    type="button"
+                    onClick={copyEmail}
+                    aria-label="Copy email address"
+                    className="contact-copy"
                   >
-                    <Copy style={{ width: 14, height: 14 }} />
+                    <Copy style={{ width: 16, height: 16 }} aria-hidden="true" />
                   </button>
                 )}
-              </motion.a>
+              </m.div>
             ))}
           </div>
 
           {/* Right: message form */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
@@ -188,13 +196,18 @@ export default function Contact() {
                   </label>
                   <input
                     id="contact-name"
+                    ref={nameRef}
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? 'contact-name-error' : undefined}
                     type="text"
+                    name="name"
+                    autoComplete="name"
                     value={form.name}
-                    onChange={e => { setForm(f => ({ ...f, name: e.target.value })); setErrors(er => ({ ...er, name: undefined })) }}
-                    placeholder="Your name"
+                    onChange={e => { setForm(prev => ({ ...prev, name: e.target.value })); clearError('name') }}
+                    placeholder="Jane Smith…"
                     style={inputStyle(!!errors.name)}
                   />
-                  {errors.name && <p style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.name}</p>}
+                  {errors.name && <p id="contact-name-error" style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.name}</p>}
                 </div>
                 <div>
                   <label htmlFor="contact-email" className="micro-label" style={{ display: 'block', marginBottom: 6 }}>
@@ -202,13 +215,19 @@ export default function Contact() {
                   </label>
                   <input
                     id="contact-email"
+                    ref={emailRef}
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? 'contact-email-error' : undefined}
                     type="email"
+                    name="email"
+                    autoComplete="email"
+                    spellCheck={false}
                     value={form.email}
-                    onChange={e => { setForm(f => ({ ...f, email: e.target.value })); setErrors(er => ({ ...er, email: undefined })) }}
-                    placeholder="your@email.com"
+                    onChange={e => { setForm(prev => ({ ...prev, email: e.target.value })); clearError('email') }}
+                    placeholder="jane@example.com…"
                     style={inputStyle(!!errors.email)}
                   />
-                  {errors.email && <p style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.email}</p>}
+                  {errors.email && <p id="contact-email-error" style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.email}</p>}
                 </div>
               </div>
               <div>
@@ -217,13 +236,17 @@ export default function Contact() {
                 </label>
                 <textarea
                   id="contact-message"
+                    ref={messageRef}
+                    aria-invalid={!!errors.message}
+                    aria-describedby={errors.message ? 'contact-message-error' : undefined}
                   rows={5}
+                  name="message"
                   value={form.message}
-                  onChange={e => { setForm(f => ({ ...f, message: e.target.value })); setErrors(er => ({ ...er, message: undefined })) }}
-                  placeholder="What's on your mind?"
+                  onChange={e => { setForm(prev => ({ ...prev, message: e.target.value })); clearError('message') }}
+                  placeholder="What’s on your mind…"
                   style={{ ...inputStyle(!!errors.message), resize: 'vertical' }}
                 />
-                {errors.message && <p style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.message}</p>}
+                {errors.message && <p id="contact-message-error" style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.message}</p>}
               </div>
               <div>
                 <button
@@ -242,12 +265,12 @@ export default function Contact() {
                     cursor: 'pointer',
                   }}
                 >
-                  <Send style={{ width: 14, height: 14 }} />
+                  <Send style={{ width: 14, height: 14 }} aria-hidden="true" />
                   Send via email
                 </button>
               </div>
             </form>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

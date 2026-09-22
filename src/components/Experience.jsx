@@ -3,7 +3,7 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -32,16 +32,16 @@ export default function Experience() {
   return (
     <section id="experience" className="dot-grid" style={{ padding: '96px 0' }}>
       <div className="page-container">
-        <motion.div {...fadeUp(0)} style={{ marginBottom: 56 }}>
+        <m.div {...fadeUp(0)} style={{ marginBottom: 56 }}>
           <p className="section-eyebrow">Experience</p>
           <h2 className="section-title" style={{ maxWidth: 720 }}>
             Working on real products alongside the coursework.
           </h2>
-        </motion.div>
+        </m.div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
           {ROLES.map(({ org, role, period, mode, points, stack }, i) => (
-            <motion.article
+            <m.article
               key={org}
               {...fadeUp(0.08 + i * 0.07)}
               className="exp-row"
@@ -143,7 +143,7 @@ export default function Experience() {
                   ))}
                 </ul>
               </div>
-            </motion.article>
+            </m.article>
           ))}
         </div>
       </div>
