@@ -5,7 +5,7 @@
 // ╚══════════════════════════════════════╝
 import { useEffect } from 'react'
 import { LazyMotion, MotionConfig } from 'framer-motion'
-import { Terminal } from 'lucide-react'
+import { InstagramLogo, XLogo, TerminalWindow } from '@phosphor-icons/react'
 import './index.css'
 import Navbar         from './components/Navbar'
 import Hero           from './components/Hero'
@@ -14,7 +14,6 @@ import Experience     from './components/Experience'
 import Projects       from './components/Projects'
 import Skills         from './components/Skills'
 import Contact        from './components/Contact'
-import SignatureCard  from './components/SignatureCard'
 import CommandPaletteHost from './components/CommandPaletteHost'
 import { Toaster }    from '@/components/ui/sonner'
 
@@ -65,59 +64,7 @@ export default function App() {
             {/* 5. White — Skills */}
             <Skills />
 
-            {/* 6. Dark navy CTA card — contact teaser */}
-            <SignatureCard variant="dark">
-              {/* Left */}
-              <div>
-                <p className="section-eyebrow" style={{ color: 'rgba(255,255,255,0.65)', marginBottom: 20 }}>
-                  Let's connect
-                </p>
-                <h2 className="section-title" style={{ color: '#ffffff', margin: '0 0 20px', maxWidth: 520 }}>
-                  Open to internships, collaborations, and good conversations.
-                </h2>
-                <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65, maxWidth: 420, margin: '0 0 36px' }}>
-                  Remote-friendly. Reach out any time — I reply to every message.
-                </p>
-                <a
-                  href="#contact"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    padding: '14px 24px',
-                    backgroundColor: '#ffffff',
-                    color: '#181d26',
-                    borderRadius: 12,
-                    fontSize: 16,
-                    fontWeight: 500,
-                    textDecoration: 'none',
-                    minHeight: 48,
-                  }}
-                >
-                  Get in touch
-                </a>
-              </div>
-
-              {/* Right — availability details (#12: replaces ghost email button) */}
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {[
-                  { label: 'Available from', value: 'Fall 2026' },
-                  { label: 'Preferred roles', value: 'SWE Intern · ML / AI Intern' },
-                  { label: 'Location', value: 'Remote-friendly · Fargo, ND' },
-                  { label: 'Email', value: 'rwetz00@gmail.com', href: 'mailto:rwetz00@gmail.com' },
-                ].map(({ label, value, href }) => (
-                  <div key={label} style={{ borderTop: '1px solid rgba(255,255,255,0.1)', padding: '20px 0' }}>
-                    <p style={{ fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)', margin: '0 0 6px' }}>{label}</p>
-                    {href ? (
-                      <a href={href} style={{ fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', paddingBottom: 1 }}>{value}</a>
-                    ) : (
-                      <p style={{ fontSize: 15, color: '#ffffff', margin: 0 }}>{value}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </SignatureCard>
-
-            {/* 7. White — Contact form */}
+            {/* 6. White — Contact, with availability */}
             <Contact />
           </main>
 
@@ -158,7 +105,7 @@ export default function App() {
                     aria-label="Instagram"
                     style={{ color: 'var(--m-subtle)', display: 'flex' }}
                   >
-                    <svg width="18" height="18"><use href="/icons.svg#instagram-icon" /></svg>
+                    <InstagramLogo size={20} aria-hidden="true" />
                   </a>
                   <a
                     href="https://x.com/ryanawetzstein"
@@ -167,7 +114,7 @@ export default function App() {
                     aria-label="X"
                     style={{ color: 'var(--m-subtle)', display: 'flex' }}
                   >
-                    <svg width="18" height="18"><use href="/icons.svg#x-icon" /></svg>
+                    <XLogo size={20} aria-hidden="true" />
                   </a>
                   <a
                     href={NEXIS_URL}
@@ -176,7 +123,7 @@ export default function App() {
                     aria-label="Nexis"
                     style={{ color: 'var(--m-subtle)', display: 'flex' }}
                   >
-                    <Terminal size={18} strokeWidth={1.75} />
+                    <TerminalWindow size={20} aria-hidden="true" />
                   </a>
                 </div>
               </div>

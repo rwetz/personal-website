@@ -35,7 +35,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="robots" content="noindex" />
-    <title>404 — Ryan Wetzstein</title>
+    <title>404 | Ryan Wetzstein</title>
     <style>
       :root {
         --m-canvas: #ffffff;
@@ -60,8 +60,10 @@
         background-image: radial-gradient(circle, #d8dade 1px, transparent 1px);
         background-size: 28px 28px;
         color: var(--m-body);
-        font-family: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont,
-          'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+        /* This page's CSP loads no web fonts; Geist is used when installed locally,
+           otherwise the system UI face. */
+        font-family: 'Geist Variable', 'Geist', ui-sans-serif, -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
         font-weight: 400;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -104,30 +106,26 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 4px 14px;
-        border: 1px solid var(--m-hairline);
-        border-radius: 9999px;
-        background: var(--m-canvas);
         color: var(--m-muted);
-        font-size: 12px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        font-family: ui-monospace, 'SF Mono', 'Cascadia Code', monospace;
+        font-size: 13px;
       }
 
       .dot {
-        width: 8px;
-        height: 8px;
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
-        background: #aa2d00;
+        background: #a94a26;
         flex-shrink: 0;
       }
 
       h1 {
         margin: 20px 0 0;
-        font-size: clamp(40px, 6.5vw, 72px);
-        font-weight: 400;
-        line-height: 1.1;
-        letter-spacing: -0.02em;
+        font-size: clamp(44px, 7vw, 88px);
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.045em;
+        text-wrap: balance;
         color: var(--m-ink);
       }
 
@@ -193,7 +191,13 @@
         transition: border-color 0.15s ease;
       }
       .btn-secondary:hover,
-      .btn-secondary:active { border-color: var(--m-border-strong); }
+      .btn-secondary:active { border-color: var(--m-ink); }
+
+      /* Press feedback, matching the main site's buttons. */
+      .btn-primary,
+      .btn-secondary { transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease; }
+      .btn-primary:active,
+      .btn-secondary:active { transform: scale(0.98); }
 
       .jump {
         display: flex;
@@ -233,7 +237,7 @@
 
         <p class="fade">
           The link may be out of date, or the address might have a typo in it.
-          Everything on this site lives on the home page &mdash; head back and it
+          Everything on this site lives on the home page. Head back and it
           should be a scroll away.
         </p>
 
@@ -248,7 +252,7 @@
           <a href="/#about">About</a>
           <a href="/#skills">Skills</a>
           <a href="/#contact">Contact</a>
-          <a href="/resume.pdf">R&eacute;sum&eacute;</a>
+          <a href="/resume.pdf">Resume</a>
         </nav>
       </div>
     </main>

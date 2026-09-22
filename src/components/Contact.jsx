@@ -5,45 +5,22 @@
 // ╚══════════════════════════════════════╝
 import { useRef, useState } from 'react'
 import { m } from 'framer-motion'
-import { Copy, Send } from 'lucide-react'
+import { ArrowUpRight, Copy, Envelope, GithubLogo, LinkedinLogo, PaperPlaneTilt } from '@phosphor-icons/react'
 import { toast } from '@/components/ui/sonner'
 
 const EMAIL = 'rwetz00@gmail.com'
 
 const contactLinks = [
-  {
-    label:   'Email',
-    href:    `mailto:${EMAIL}`,
-    display: EMAIL,
-    isEmail: true,
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-      </svg>
-    ),
-  },
-  {
-    label:   'GitHub',
-    href:    'https://github.com/rwetz',
-    display: 'github.com/rwetz',
-    isEmail: false,
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-      </svg>
-    ),
-  },
-  {
-    label:   'LinkedIn',
-    href:    'https://linkedin.com/in/ryan-wetzstein',
-    display: 'linkedin.com/in/ryan-wetzstein',
-    isEmail: false,
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-      </svg>
-    ),
-  },
+  { label: 'Email',    href: `mailto:${EMAIL}`,                        display: EMAIL,                             Icon: Envelope,     isEmail: true  },
+  { label: 'GitHub',   href: 'https://github.com/rwetz',               display: 'github.com/rwetz',                Icon: GithubLogo,   isEmail: false },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/ryan-wetzstein', display: 'linkedin.com/in/ryan-wetzstein',  Icon: LinkedinLogo, isEmail: false },
+]
+
+/* Folded in from the old dark "Let's connect" band, which broke the page's single light tone. */
+const availability = [
+  { term: 'Available from', detail: 'Fall 2026' },
+  { term: 'Looking for',    detail: 'SWE and ML / AI internships' },
+  { term: 'Based in',       detail: 'Fargo, ND · remote-friendly' },
 ]
 
 export default function Contact() {
@@ -59,7 +36,7 @@ export default function Contact() {
     if (!form.email.trim())   e.email   = 'Required'
     else if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = 'Enter an email like name@example.com'
     if (!form.message.trim()) e.message = 'Required'
-    else if (form.message.trim().length < 10)    e.message = 'Add a little more — at least 10 characters'
+    else if (form.message.trim().length < 10)    e.message = 'Add a little more: at least 10 characters'
     setErrors(e)
     return e
   }
@@ -85,7 +62,7 @@ export default function Contact() {
       await navigator.clipboard.writeText(EMAIL)
       toast.success('Email copied', { description: EMAIL })
     } catch {
-      toast.error('Couldn’t copy — select the address and copy it manually.')
+      toast.error('Couldn’t copy. Select the address and copy it manually.')
     }
   }
 
@@ -94,12 +71,13 @@ export default function Contact() {
   const inputStyle = (hasError) => ({
     display: 'block',
     width: '100%',
-    padding: '10px 14px',
-    fontSize: 14,
+    padding: '12px 14px',
+    fontSize: 15,
     color: '#181d26',
     background: '#ffffff',
-    border: `1px solid ${hasError ? '#dc2626' : '#c8ccd2'}`,
-    borderRadius: 6,
+    border: `1px solid ${hasError ? '#b91c1c' : '#d3d6db'}`,
+    borderRadius: 10,
+    transition: 'border-color 0.2s ease',
     boxSizing: 'border-box',
     fontFamily: 'inherit',
   })
@@ -107,8 +85,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="dot-grid"
-      style={{ padding: '96px 0' }}
+      className="dot-grid section"
     >
       <div className="page-container">
 
@@ -120,11 +97,19 @@ export default function Contact() {
           transition={{ duration: 0.55, ease: 'easeOut' }}
           style={{ marginBottom: 64 }}
         >
-          <p className="section-eyebrow">Contact</p>
-          <h2 className="section-title">How to reach me.</h2>
+          <p className="section-eyebrow"><span className="section-index">05</span>Contact</p>
+          <h2 className="section-title">Let’s talk.</h2>
           <p className="section-lede">
-            Pick whichever channel works for you — I respond to everything.
+            Open to internships, collaborations, and good conversations. I reply to every message.
           </p>
+          <dl className="availability">
+            {availability.map(({ term, detail }) => (
+              <div key={term}>
+                <dt className="micro-label">{term}</dt>
+                <dd>{detail}</dd>
+              </div>
+            ))}
+          </dl>
         </m.div>
 
         <div
@@ -135,33 +120,31 @@ export default function Contact() {
             alignItems: 'start',
           }}
         >
-          {/* Left: contact links */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {contactLinks.map(({ label, href, display, isEmail, icon }, i) => (
-              <m.div
+          {/* Left: contact links as divided rows rather than boxed cards */}
+          <ul className="contact-list">
+            {contactLinks.map(({ label, href, display, Icon, isEmail }, i) => (
+              <m.li
                 key={label}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.45, ease: 'easeOut', delay: i * 0.08 }}
-                style={{ position: 'relative' }}
               >
                 <a
                   href={href}
                   target={href.startsWith('http') ? '_blank' : undefined}
                   rel="noopener noreferrer"
                   className="contact-link"
-                  style={isEmail ? { paddingRight: 64 } : undefined}
                 >
-                  <span style={{ color: 'var(--m-subtle)', flexShrink: 0, display: 'flex' }}>{icon}</span>
-                  <span style={{ flex: 1, fontSize: 13, color: '#333840', minWidth: 0 }}>
-                    <span className="micro-label" style={{ display: 'block', color: 'var(--m-subtle)', marginBottom: 3 }}>
-                      {label}
-                    </span>
-                    <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <Icon size={22} aria-hidden="true" style={{ color: 'var(--m-subtle)', flexShrink: 0 }} />
+                  {/* Email keeps its text clear of the copy button that sits beside the arrow */}
+                  <span style={{ minWidth: 0, paddingRight: isEmail ? 56 : 0 }}>
+                    <span className="micro-label" style={{ display: 'block', marginBottom: 2 }}>{label}</span>
+                    <span style={{ display: 'block', fontSize: 16, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {display}
                     </span>
                   </span>
+                  <ArrowUpRight size={18} className="contact-arrow" aria-hidden="true" />
                 </a>
                 {/* Sibling of the link, not a child: a button inside <a> is invalid HTML */}
                 {isEmail && (
@@ -171,12 +154,12 @@ export default function Contact() {
                     aria-label="Copy email address"
                     className="contact-copy"
                   >
-                    <Copy style={{ width: 16, height: 16 }} aria-hidden="true" />
+                    <Copy size={18} aria-hidden="true" />
                   </button>
                 )}
-              </m.div>
+              </m.li>
             ))}
-          </div>
+          </ul>
 
           {/* Right: message form */}
           <m.div
@@ -185,9 +168,9 @@ export default function Contact() {
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.55, ease: 'easeOut', delay: 0.15 }}
           >
-            <p style={{ fontSize: 14, fontWeight: 500, color: '#181d26', marginBottom: 24 }}>
+            <h3 style={{ fontSize: 20, fontWeight: 600, letterSpacing: '-0.02em', color: '#181d26', margin: '0 0 24px' }}>
               Send a message
-            </p>
+            </h3>
             <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
                 <div>
@@ -204,7 +187,7 @@ export default function Contact() {
                     autoComplete="name"
                     value={form.name}
                     onChange={e => { setForm(prev => ({ ...prev, name: e.target.value })); clearError('name') }}
-                    placeholder="Jane Smith…"
+                    placeholder="Mateo Alvarez…"
                     style={inputStyle(!!errors.name)}
                   />
                   {errors.name && <p id="contact-name-error" style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.name}</p>}
@@ -224,7 +207,7 @@ export default function Contact() {
                     spellCheck={false}
                     value={form.email}
                     onChange={e => { setForm(prev => ({ ...prev, email: e.target.value })); clearError('email') }}
-                    placeholder="jane@example.com…"
+                    placeholder="mateo@example.com…"
                     style={inputStyle(!!errors.email)}
                   />
                   {errors.email && <p id="contact-email-error" style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.email}</p>}
@@ -249,23 +232,8 @@ export default function Contact() {
                 {errors.message && <p id="contact-message-error" style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.message}</p>}
               </div>
               <div>
-                <button
-                  type="submit"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    padding: '12px 22px',
-                    backgroundColor: '#181d26',
-                    color: '#ffffff',
-                    borderRadius: 12,
-                    fontSize: 14,
-                    fontWeight: 500,
-                    border: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <Send style={{ width: 14, height: 14 }} aria-hidden="true" />
+                <button type="submit" className="btn-primary">
+                  <PaperPlaneTilt size={16} aria-hidden="true" />
                   Send via email
                 </button>
               </div>

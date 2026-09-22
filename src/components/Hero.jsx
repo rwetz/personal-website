@@ -4,7 +4,7 @@
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
 import { m } from 'framer-motion'
-import { FolderKanban, Download } from 'lucide-react'
+import { ArrowDown, DownloadSimple } from '@phosphor-icons/react'
 import ShaderPanel from './ShaderPanel'
 import { MOIRE_CFG, CELLS_CFG, CONTOUR_CFG } from '@/lib/shaders'
 
@@ -26,110 +26,68 @@ export default function Hero() {
       {/* Sizing lives in .hero-shell / .hero-inner (index.css) so it can key   */}
       {/* off viewport height; short screens drop the one-screen pin entirely.  */}
       <div className="hero-inner page-container">
-        <div style={{ maxWidth: 480 }}>
+        <div style={{ maxWidth: 560 }}>
         <h1
           style={{
-            fontSize: 'clamp(40px, 6.5vw, 72px)',
-            fontWeight: 400,
+            fontSize: 'clamp(52px, 8vw, 104px)',
+            fontWeight: 500,
             color: 'var(--m-ink)',
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-            margin: '0 0 20px',
-            maxWidth: 480,
+            lineHeight: 0.95,
+            letterSpacing: '-0.045em',
+            margin: '0 0 28px',
           }}
         >
           Ryan Wetzstein
         </h1>
 
-        <div className="hero-rise" style={{ marginBottom: 24, animationDelay: '0.1s' }}>
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '4px 14px',
-              border: '1px solid var(--m-hairline)',
-              borderRadius: 9999,
-              fontSize: 12,
-              fontWeight: 400,
-              color: 'var(--m-muted)',
-              backgroundColor: 'var(--m-canvas)',
-            }}
-          >
-            <span
-              style={{
-                display: 'block',
-                width: 8,
-                height: 8,
-                borderRadius: '50%',
-                backgroundColor: '#22c55e',
-                flexShrink: 0,
-              }}
-            />
-            Senior at NDSU
-          </span>
-        </div>
-
+        {/* Status as a plain line with the accent dot, not a pill badge */}
         <p
           className="hero-rise"
           style={{
+            animationDelay: '0.1s',
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 10,
+            fontFamily: 'var(--m-font-mono)',
+            fontSize: 13,
+            color: 'var(--m-muted)',
+            margin: '0 0 20px',
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{ width: 7, height: 7, marginTop: 6, borderRadius: '50%', backgroundColor: 'var(--m-accent)', flexShrink: 0 }}
+          />
+          Available from fall 2026 · SWE &amp; ML internships
+        </p>
+
+        <p
+          className="hero-rise prose-measure"
+          style={{
             animationDelay: '0.15s',
-            fontSize: 15,
+            fontSize: 18,
             fontWeight: 400,
             color: 'var(--m-body)',
-            lineHeight: 1.65,
-            maxWidth: 460,
+            lineHeight: 1.6,
             margin: '0 0 36px',
           }}
         >
-          CS student at NDSU building clean, modern software. Focused on AI,
-          backend development, and full-stack web.
+          Computer science senior at North Dakota State. I build developer tools
+          and AI systems. Most recently: Nexis, an open-source AI-native terminal,
+          and a GIS data pipeline for Lemhi Technologies.
         </p>
 
         <div
           className="hero-rise"
-          style={{ animationDelay: '0.2s', display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 40 }}
+          style={{ animationDelay: '0.2s', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px 28px', marginBottom: 44 }}
         >
-          <a
-            href="#projects"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '14px 24px',
-              backgroundColor: 'var(--m-ink)',
-              color: 'var(--m-on-dark)',
-              borderRadius: 12,
-              fontSize: 15,
-              fontWeight: 500,
-              textDecoration: 'none',
-              minHeight: 48,
-            }}
-          >
-            <FolderKanban size={16} />
-            View Projects
+          <a href="#projects" className="btn-primary">
+            View projects
+            <ArrowDown size={16} weight="bold" aria-hidden="true" />
           </a>
-
-          <a
-            href="/resume.pdf"
-            download
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '14px 24px',
-              background: 'var(--m-canvas)',
-              color: 'var(--m-ink)',
-              border: '1px solid var(--m-hairline)',
-              borderRadius: 12,
-              fontSize: 15,
-              fontWeight: 500,
-              textDecoration: 'none',
-              minHeight: 48,
-            }}
-          >
-            <Download size={15} />
-            Download Resume
+          <a href="/resume.pdf" download="Ryan_Wetzstein_Resume.pdf" className="text-link">
+            <DownloadSimple size={16} aria-hidden="true" />
+            Download resume
           </a>
         </div>
 

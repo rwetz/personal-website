@@ -5,7 +5,7 @@
 // ╚══════════════════════════════════════╝
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight } from '@phosphor-icons/react'
 import signatureImg from '../assets/signature.png'
 import nexisLogoSrc from '../assets/nexis-logo.webp'
 import PillNav from './PillNav'
@@ -148,18 +148,8 @@ export default function Navbar() {
             href={NEXIS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 7,
-              padding: '11px 18px',
-              border: '1px solid var(--m-hairline)',
-              borderRadius: 16,
-              fontSize: 16,
-              fontWeight: 500,
-              color: '#181d26',
-              textDecoration: 'none',
-            }}
+            className="btn-secondary"
+            style={{ minHeight: 44, padding: '10px 16px' }}
           >
             <img
               src={nexisLogoSrc}
@@ -170,34 +160,12 @@ export default function Navbar() {
               style={{ borderRadius: 5, flexShrink: 0 }}
             />
             Nexis
-            <ArrowUpRight size={14} strokeWidth={2} />
+            <ArrowUpRight size={14} weight="bold" aria-hidden="true" />
           </a>
-          <a
-            href="/resume.pdf"
-            download
-            style={{
-              fontSize: 16,
-              fontWeight: 400,
-              color: '#41454d',
-              textDecoration: 'none',
-            }}
-          >
+          <a href="/resume.pdf" download="Ryan_Wetzstein_Resume.pdf" className="text-link" style={{ fontWeight: 400, color: 'var(--m-muted)' }}>
             Resume
           </a>
-          <a
-            href="#contact"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              padding: '12px 28px',
-              background: '#181d26',
-              color: '#ffffff',
-              borderRadius: 16,
-              fontSize: 16,
-              fontWeight: 500,
-              textDecoration: 'none',
-            }}
-          >
+          <a href="#contact" className="btn-primary" style={{ minHeight: 44, padding: '10px 20px' }}>
             Get in touch
           </a>
         </div>
@@ -303,48 +271,25 @@ export default function Navbar() {
                     style={{ borderRadius: 5, flexShrink: 0 }}
                   />
                   Nexis
-                  <ArrowUpRight size={14} strokeWidth={2} />
+                  <ArrowUpRight size={14} weight="bold" aria-hidden="true" />
                 </a>
               </li>
             </ul>
             <div style={{ marginTop: 20, display: 'flex', gap: 12 }}>
               <a
                 href="/resume.pdf"
-                download
+                download="Ryan_Wetzstein_Resume.pdf"
                 onClick={() => setMenuOpen(false)}
-                style={{
-                  flex: 1,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '12px 16px',
-                  background: '#ffffff',
-                  color: '#181d26',
-                  border: '1px solid #dddddd',
-                  borderRadius: 12,
-                  fontSize: 14,
-                  fontWeight: 500,
-                  textDecoration: 'none',
-                }}
+                className="btn-secondary"
+                style={{ flex: 1 }}
               >
                 Resume
               </a>
               <a
                 href="#contact"
                 onClick={() => setMenuOpen(false)}
-                style={{
-                  flex: 1,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '12px 16px',
-                  background: '#181d26',
-                  color: '#ffffff',
-                  borderRadius: 12,
-                  fontSize: 14,
-                  fontWeight: 500,
-                  textDecoration: 'none',
-                }}
+                className="btn-primary"
+                style={{ flex: 1 }}
               >
                 Get in touch
               </a>

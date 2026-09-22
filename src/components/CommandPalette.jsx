@@ -4,7 +4,7 @@
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
 import { useEffect } from 'react'
-import { User, Briefcase, FolderKanban, Wrench, Mail, Copy, Download, ExternalLink } from 'lucide-react'
+import { User, Briefcase, FolderSimple, Wrench, Envelope, Copy, DownloadSimple, ArrowSquareOut } from '@phosphor-icons/react'
 import {
   CommandDialog,
   CommandEmpty,
@@ -19,11 +19,11 @@ import { toast } from '@/components/ui/sonner'
 const EMAIL = 'rwetz00@gmail.com'
 
 const navigate = [
-  { id: 'projects',   label: 'Projects',   icon: FolderKanban, hash: '#projects'   },
+  { id: 'projects',   label: 'Projects',   icon: FolderSimple, hash: '#projects'   },
   { id: 'about',      label: 'About',      icon: User,         hash: '#about'      },
   { id: 'experience', label: 'Experience', icon: Briefcase,    hash: '#experience' },
   { id: 'skills',     label: 'Skills',     icon: Wrench,       hash: '#skills'     },
-  { id: 'contact',    label: 'Contact',    icon: Mail,         hash: '#contact'    },
+  { id: 'contact',    label: 'Contact',    icon: Envelope,         hash: '#contact'    },
 ]
 
 export default function CommandPalette({ open, onClose }) {
@@ -41,13 +41,13 @@ export default function CommandPalette({ open, onClose }) {
       await navigator.clipboard.writeText(EMAIL)
       toast.success('Email copied to clipboard', { description: EMAIL })
     } catch {
-      toast.error('Couldn’t copy — the address is ' + EMAIL)
+      toast.error('Couldn’t copy. The address is ' + EMAIL)
     }
   }
   const downloadResume = () => {
     const a = document.createElement('a')
     a.href = '/resume.pdf'
-    a.download = ''
+    a.download = 'Ryan_Wetzstein_Resume.pdf'
     a.click()
     onClose()
   }
@@ -74,7 +74,7 @@ export default function CommandPalette({ open, onClose }) {
             <Copy /> <span>Copy email address</span>
           </CommandItem>
           <CommandItem onSelect={downloadResume}>
-            <Download /> <span>Download resume</span>
+            <DownloadSimple /> <span>Download resume</span>
           </CommandItem>
         </CommandGroup>
 
@@ -82,13 +82,13 @@ export default function CommandPalette({ open, onClose }) {
 
         <CommandGroup heading="External">
           <CommandItem onSelect={openExternal('https://nexisdev.org')}>
-            <ExternalLink /> <span>Nexis</span>
+            <ArrowSquareOut /> <span>Nexis</span>
           </CommandItem>
           <CommandItem onSelect={openExternal('https://github.com/rwetz')}>
-            <ExternalLink /> <span>GitHub</span>
+            <ArrowSquareOut /> <span>GitHub</span>
           </CommandItem>
           <CommandItem onSelect={openExternal('https://linkedin.com/in/ryan-wetzstein')}>
-            <ExternalLink /> <span>LinkedIn</span>
+            <ArrowSquareOut /> <span>LinkedIn</span>
           </CommandItem>
         </CommandGroup>
       </CommandList>

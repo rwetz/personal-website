@@ -4,7 +4,6 @@
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
 import { m } from 'framer-motion'
-import { Info } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -17,30 +16,31 @@ const skillGroups = [
     category: 'Languages',
     skills: [
       { name: 'Java',       icon: 'devicon-java-plain',       color: '#B07219', level: 'Intermediate', years: '3 yrs',   note: 'OOP coursework and foundational programming principles.' },
-      { name: 'Python',     icon: 'devicon-python-plain',     color: '#3572A5', level: 'Beginner',     years: '3 yrs',   note: 'Steadily improving — ML scripts, FastAPI, general tooling.' },
+      { name: 'Python',     icon: 'devicon-python-plain',     color: '#3572A5', level: 'Beginner',     years: '3 yrs',   note: 'Steadily improving: ML scripts, FastAPI, general tooling.' },
+      { name: 'SQL / PostgreSQL', icon: 'devicon-postgresql-plain',      color: '#E38C00', level: 'Beginner',     years: '2 yrs',   note: 'Postgres, queries + schema design.' },
       { name: 'TypeScript', icon: 'devicon-typescript-plain', color: '#2B7489', level: 'Beginner',     years: '2 yrs',   note: 'Favorite for web work.' },
-      { name: 'JavaScript', icon: 'devicon-javascript-plain', color: '#F1E05A', level: 'Beginner',     years: '3 yrs',   note: 'Coursework + personal projects.' },
       { name: 'C#',         icon: 'devicon-csharp-plain',     color: '#178600', level: 'Beginner',     years: '2 yrs',   note: 'Mostly .NET work.' },
-      { name: 'C',          icon: 'devicon-c-plain',          color: '#A8B9CC', level: 'Beginner',     years: '0.5 yrs', note: 'Systems courses. Love it — can\'t wait to learn C++.' },
+      { name: 'JavaScript', icon: 'devicon-javascript-plain', color: '#F1E05A', level: 'Beginner',     years: '3 yrs',   note: 'Coursework + personal projects.' },
+      { name: 'C',          icon: 'devicon-c-plain',          color: '#A8B9CC', level: 'Beginner',     years: '0.5 yrs', note: 'Systems courses. Love it, and can\'t wait to learn C++.' },
       { name: 'HTML + CSS', icon: 'devicon-html5-plain',      color: '#E34C26', level: 'Intermediate', years: '5 yrs',   note: 'Making websites since high school.' },
-      { name: 'SQL',        icon: 'devicon-mysql-plain',      color: '#E38C00', level: 'Beginner',     years: '2 yrs',   note: 'Postgres, queries + schema design.' },
     ],
   },
   {
-    category: 'AI / Machine Learning',
+    category: 'AI and machine learning',
     skills: [
       { name: 'PyTorch',     icon: 'devicon-pytorch-plain',     color: '#EE4C2C', level: 'Beginner', years: '0.5 yrs', note: 'Just scratched the surface.' },
-      { name: 'TensorFlow',  icon: 'devicon-tensorflow-original', color: '#FF6F00', level: 'Beginner', years: '0.5 yrs', note: 'Just scratched the surface.' },
+      { name: 'TensorFlow / Keras', icon: 'devicon-tensorflow-original', color: '#FF6F00', level: 'Beginner', years: '0.5 yrs', note: 'Just scratched the surface.' },
       { name: 'NumPy',       icon: 'devicon-numpy-plain',       color: '#4DABCF', level: 'Beginner', years: '1 yr',   note: 'Used in ML coursework and experiments.' },
     ],
   },
   {
-    category: 'Frameworks & Libraries',
+    category: 'Frameworks and libraries',
     skills: [
-      { name: 'React',        icon: 'devicon-react-original',     color: '#61DAFB', level: 'Beginner', years: '0.5 yrs', note: 'Hooks, Suspense, RSC — this site uses it.' },
+      { name: 'React',        icon: 'devicon-react-original',     color: '#61DAFB', level: 'Beginner', years: '0.5 yrs', note: 'Hooks, Suspense, RSC. This site uses it.' },
       { name: 'Node.js',      icon: 'devicon-nodejs-plain',       color: '#339933', level: 'Beginner', years: '2 yrs',   note: 'APIs, tooling, scripts.' },
       { name: 'Next.js',      icon: 'devicon-nextjs-plain',       color: '#000000', level: 'Beginner', years: '0.5 yrs', note: 'App Router preferred.' },
       { name: 'Tailwind CSS', icon: 'devicon-tailwindcss-plain',  color: '#38B2AC', level: 'Beginner', years: '1 yr',   note: 'v4 with @theme.' },
+      { name: 'Tauri',        note: 'Nexis is built on Tauri 2 with a Rust backend.' },
     ],
   },
   {
@@ -52,39 +52,25 @@ const skillGroups = [
       { name: 'Vite',   icon: 'devicon-vitejs-plain',  color: '#646CFF', level: 'Beginner', years: '1 yr', note: 'Fast. No complaints.' },
     ],
   },
+  {
+    // From the resume; ideas rather than tools, so they render as plain text.
+    category: 'Concepts',
+    plain: true,
+    skills: ['Agentic development', 'OOP', 'Agile / Scrum', 'Relational databases', 'Neural networks', 'Machine learning'],
+  },
 ]
 
-function SkillPill({ name, icon, color, years, note }) {
+function SkillChip({ name, icon, color, years, note }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <button
-          type="button"
-          className="skill-chip"
-          style={{
-            '--skill-color': color,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: '8px 14px',
-            background: '#ffffff',
-            border: '1px solid #c8ccd2',
-            borderRadius: 10,
-            fontSize: 13,
-            fontWeight: 400,
-            color: '#181d26',
-            cursor: 'default',
-            fontFamily: 'inherit',
-          }}
-        >
-          <i className={icon} aria-hidden="true" style={{ fontSize: 15 }} />
-          {name}
+        <button type="button" className="skill-chip" style={{ '--skill-color': color }}>
+          {icon && <i className={icon} aria-hidden="true" />}
+          <span>{name}</span>
+          {years && <span className="skill-years">{years}</span>}
         </button>
       </TooltipTrigger>
-      <TooltipContent side="top" style={{ maxWidth: 220 }}>
-        <div style={{ marginBottom: 4 }}>
-          <span style={{ fontSize: 12, fontWeight: 500, color: '#41454d', letterSpacing: '0.04em' }}>{years}</span>
-        </div>
+      <TooltipContent side="top" style={{ maxWidth: 240 }}>
         <p style={{ fontSize: 12, color: '#333840', lineHeight: 1.5, margin: 0 }}>{note}</p>
       </TooltipContent>
     </Tooltip>
@@ -94,66 +80,43 @@ function SkillPill({ name, icon, color, years, note }) {
 export default function Skills() {
   return (
     <TooltipProvider delayDuration={120}>
-      <section
-        id="skills"
-        className="dot-grid"
-        style={{ padding: '96px 0' }}
-      >
-        <div className="page-container">
-
-          {/* Heading */}
+      <section id="skills" className="dot-grid section">
+        <div className="page-container split-layout">
           <m.div
+            className="split-heading"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.55, ease: 'easeOut' }}
-            style={{ marginBottom: 64 }}
           >
-            <p className="section-eyebrow">Skills</p>
-            <h2 className="section-title">What I work with.</h2>
-            <p style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--m-subtle)', margin: '16px 0 0' }}>
-              <Info size={13} strokeWidth={1.8} aria-hidden="true" />
-              Hover or tab to a skill for details.
+            <p className="section-eyebrow"><span className="section-index">04</span>Skills</p>
+            <h2 className="section-title">Tools I reach for.</h2>
+            <p className="section-lede">
+              Languages and tools from coursework, the internship, and my own projects, with
+              roughly how long I’ve used each. Hover or focus one for a note.
             </p>
           </m.div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
-            {skillGroups.map(({ category, skills }, groupIdx) => (
+          {/* One row per group: label on the left, chips on the right */}
+          <dl className="skill-rows">
+            {skillGroups.map(({ category, skills, plain }, groupIdx) => (
               <m.div
                 key={category}
+                className="skill-row"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.45, ease: 'easeOut', delay: groupIdx * 0.07 }}
+                transition={{ duration: 0.45, ease: 'easeOut', delay: groupIdx * 0.06 }}
               >
-                <p className="micro-label" style={{ margin: '0 0 16px' }}>
-                  {category}
-                </p>
-                <m.div
-                  style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: '-30px' }}
-                  variants={{
-                    visible: { transition: { staggerChildren: 0.04, delayChildren: groupIdx * 0.06 } },
-                    hidden:  {},
-                  }}
-                >
-                  {skills.map(skill => (
-                    <m.div
-                      key={skill.name}
-                      variants={{
-                        hidden:  { opacity: 0, y: 8 },
-                        visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
-                      }}
-                    >
-                      <SkillPill {...skill} />
-                    </m.div>
-                  ))}
-                </m.div>
+                <dt className="micro-label">{category}</dt>
+                <dd>
+                  {plain
+                    ? <p className="skill-concepts">{skills.join(' · ')}</p>
+                    : skills.map(skill => <SkillChip key={skill.name} {...skill} />)}
+                </dd>
               </m.div>
             ))}
-          </div>
+          </dl>
         </div>
       </section>
     </TooltipProvider>

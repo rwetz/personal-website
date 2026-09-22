@@ -1,11 +1,11 @@
 {
   "name": "Ryan Wetzstein",
   "short_name": "Ryan",
-  "description": "Ryan Wetzstein — software developer & producer",
+  "description": "Ryan Wetzstein, software developer",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f0f13",
-  "theme_color": "#7c3aed",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "/favicon.svg",
