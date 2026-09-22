@@ -78,16 +78,16 @@ function SkillPill({ name, icon, color, years, note }) {
         >
           <i
             className={icon}
-            style={{ fontSize: 15, color: '#9297a0' }}
+            style={{ fontSize: 15, color: 'var(--m-subtle)' }}
             onMouseEnter={e => { e.currentTarget.style.color = color }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#9297a0' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--m-subtle)' }}
           />
           {name}
         </motion.span>
       </TooltipTrigger>
       <TooltipContent side="top" style={{ maxWidth: 220 }}>
         <div style={{ marginBottom: 4 }}>
-          <span style={{ fontSize: 11, fontWeight: 500, color: '#41454d', letterSpacing: '0.04em' }}>{years}</span>
+          <span style={{ fontSize: 12, fontWeight: 500, color: '#41454d', letterSpacing: '0.04em' }}>{years}</span>
         </div>
         <p style={{ fontSize: 12, color: '#333840', lineHeight: 1.5, margin: 0 }}>{note}</p>
       </TooltipContent>
@@ -101,9 +101,9 @@ export default function Skills() {
       <section
         id="skills"
         className="dot-grid"
-        style={{ padding: '96px 24px' }}
+        style={{ padding: '96px 0' }}
       >
-        <div style={{ maxWidth: 1280, margin: '0' }}>
+        <div className="page-container">
 
           {/* Heading */}
           <motion.div
@@ -113,13 +113,9 @@ export default function Skills() {
             transition={{ duration: 0.55, ease: 'easeOut' }}
             style={{ marginBottom: 64 }}
           >
-            <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#41454d', marginBottom: 12 }}>
-              Skills
-            </p>
-            <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: '0 0 12px' }}>
-              What I work with.
-            </h2>
-            <p style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#9297a0', margin: 0 }}>
+            <p className="section-eyebrow">Skills</p>
+            <h2 className="section-title">What I work with.</h2>
+            <p style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--m-subtle)', margin: '16px 0 0' }}>
               <Info size={13} strokeWidth={1.8} />
               Hover any pill for details.
             </p>
@@ -134,15 +130,7 @@ export default function Skills() {
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.45, ease: 'easeOut', delay: groupIdx * 0.07 }}
               >
-                <p style={{
-                  fontSize: 11,
-                  fontWeight: 500,
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color: '#41454d',
-                  marginBottom: 16,
-                  margin: '0 0 16px',
-                }}>
+                <p className="micro-label" style={{ margin: '0 0 16px' }}>
                   {category}
                 </p>
                 <motion.div

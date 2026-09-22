@@ -18,9 +18,9 @@ export default function About() {
     <section
       id="about"
       className="dot-grid"
-      style={{ padding: '96px 24px' }}
+      style={{ padding: '96px 0' }}
     >
-      <div className="about-grid">
+      <div className="about-grid page-container">
         {/* Left — photo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}
@@ -46,10 +46,10 @@ export default function About() {
         {/* Right — eyebrow, heading, bio */}
         <motion.div {...fadeUp(0.1)} style={{ display: 'flex', flexDirection: 'column', gap: 28, paddingTop: 8 }}>
           <div>
-            <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#41454d', marginBottom: 12, marginTop: 0 }}>
+            <p className="section-eyebrow">
               About
             </p>
-            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 40px)', fontWeight: 400, color: '#181d26', lineHeight: 1.15, margin: '0 0 36px' }}>
+            <h2 className="section-title" style={{ marginBottom: 36 }}>
               Computer Science student at NDSU, graduating 2027.
             </h2>
           </div>

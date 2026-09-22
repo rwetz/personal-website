@@ -87,9 +87,10 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="dot-grid contact-shell"
+      className="dot-grid"
+      style={{ padding: '96px 0' }}
     >
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+      <div className="page-container">
 
         {/* Heading */}
         <motion.div
@@ -99,13 +100,9 @@ export default function Contact() {
           transition={{ duration: 0.55, ease: 'easeOut' }}
           style={{ marginBottom: 64 }}
         >
-          <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#41454d', marginBottom: 12 }}>
-            Contact
-          </p>
-          <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#181d26', lineHeight: 1.2, margin: '0 0 12px' }}>
-            How to reach me.
-          </h2>
-          <p style={{ fontSize: 14, color: '#333840', margin: 0 }}>
+          <p className="section-eyebrow">Contact</p>
+          <h2 className="section-title">How to reach me.</h2>
+          <p className="section-lede">
             Pick whichever channel works for you — I respond to everything.
           </p>
         </motion.div>
@@ -146,9 +143,9 @@ export default function Contact() {
                 onMouseEnter={e => { e.currentTarget.style.borderColor = '#9297a0' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = '#c8ccd2' }}
               >
-                <span style={{ color: '#9297a0', flexShrink: 0 }}>{icon}</span>
+                <span style={{ color: 'var(--m-subtle)', flexShrink: 0 }}>{icon}</span>
                 <span style={{ flex: 1, fontSize: 13, color: '#333840', minWidth: 0 }}>
-                  <span style={{ display: 'block', fontSize: 11, fontWeight: 500, color: '#9297a0', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 3 }}>
+                  <span className="micro-label" style={{ display: 'block', color: 'var(--m-subtle)', marginBottom: 3 }}>
                     {label}
                   </span>
                   <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -186,7 +183,7 @@ export default function Contact() {
             <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
                 <div>
-                  <label htmlFor="contact-name" style={{ display: 'block', fontSize: 11, fontWeight: 500, color: '#41454d', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
+                  <label htmlFor="contact-name" className="micro-label" style={{ display: 'block', marginBottom: 6 }}>
                     Name
                   </label>
                   <input
@@ -197,10 +194,10 @@ export default function Contact() {
                     placeholder="Your name"
                     style={inputStyle(!!errors.name)}
                   />
-                  {errors.name && <p style={{ fontSize: 11, color: '#dc2626', marginTop: 4 }}>{errors.name}</p>}
+                  {errors.name && <p style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.name}</p>}
                 </div>
                 <div>
-                  <label htmlFor="contact-email" style={{ display: 'block', fontSize: 11, fontWeight: 500, color: '#41454d', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
+                  <label htmlFor="contact-email" className="micro-label" style={{ display: 'block', marginBottom: 6 }}>
                     Email
                   </label>
                   <input
@@ -211,11 +208,11 @@ export default function Contact() {
                     placeholder="your@email.com"
                     style={inputStyle(!!errors.email)}
                   />
-                  {errors.email && <p style={{ fontSize: 11, color: '#dc2626', marginTop: 4 }}>{errors.email}</p>}
+                  {errors.email && <p style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.email}</p>}
                 </div>
               </div>
               <div>
-                <label htmlFor="contact-message" style={{ display: 'block', fontSize: 11, fontWeight: 500, color: '#41454d', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
+                <label htmlFor="contact-message" className="micro-label" style={{ display: 'block', marginBottom: 6 }}>
                   Message
                 </label>
                 <textarea
@@ -226,7 +223,7 @@ export default function Contact() {
                   placeholder="What's on your mind?"
                   style={{ ...inputStyle(!!errors.message), resize: 'vertical' }}
                 />
-                {errors.message && <p style={{ fontSize: 11, color: '#dc2626', marginTop: 4 }}>{errors.message}</p>}
+                {errors.message && <p style={{ fontSize: 12, color: '#b91c1c', marginTop: 4 }}>{errors.message}</p>}
               </div>
               <div>
                 <button

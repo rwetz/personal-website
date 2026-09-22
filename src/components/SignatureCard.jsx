@@ -35,10 +35,11 @@ export default function SignatureCard({ variant = 'coral', id, children }) {
       style={{
         backgroundColor: bg,
         color: text,
-        padding: '96px 24px',
+        padding: '96px 0',
       }}
     >
       <motion.div
+        className="page-container"
         style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 64, alignItems: 'center' }}
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

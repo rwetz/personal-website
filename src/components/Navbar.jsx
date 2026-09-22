@@ -23,6 +23,10 @@ const links = [
 
 const sectionIds = ['hero', 'about', 'experience', 'projects', 'skills', 'contact']
 
+/* Logo + pill nav + right cluster need ~1140px side by side; below this the
+   hamburger takes over. Keep in step with the min-[1180px] classes below. */
+const DESKTOP_NAV_MIN = 1180
+
 export default function Navbar() {
   const [scrolled, setScrolled]    = useState(false)
   const [hidden, setHidden]        = useState(false)
@@ -59,7 +63,7 @@ export default function Navbar() {
   }, [])
 
   useEffect(() => {
-    const onResize = () => { if (window.innerWidth >= 768) setMenuOpen(false) }
+    const onResize = () => { if (window.innerWidth >= DESKTOP_NAV_MIN) setMenuOpen(false) }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
@@ -99,15 +103,7 @@ export default function Navbar() {
         transition: 'transform 0.3s ease, border-color 0.2s ease, background-color 0.2s ease',
       }}
     >
-      <div
-        style={{
-          padding: '0 32px',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
+      <div className="page-container nav-row" style={{ height: '100%' }}>
         {/* Logo */}
         <a
           href="#hero"
@@ -119,10 +115,7 @@ export default function Navbar() {
         </a>
 
         {/* Desktop nav — PillNav */}
-        <div
-          className="hidden md:block"
-          style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}
-        >
+        <div className="hidden min-[1180px]:block">
           <PillNav
             items={links}
             activeHref={activeSection ? `#${activeSection}` : ''}
@@ -134,7 +127,7 @@ export default function Navbar() {
         </div>
 
         {/* Right cluster */}
-        <div className="hidden md:flex" style={{ alignItems: 'center', gap: 12, flexShrink: 0 }}>
+        <div className="hidden min-[1180px]:flex" style={{ alignItems: 'center', gap: 12, flexShrink: 0, justifySelf: 'end' }}>
           {/* Flagship project — outlined pill so it reads as a destination, not a section */}
           <a
             href={NEXIS_URL}
@@ -194,14 +187,14 @@ export default function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden"
+          className="min-[1180px]:hidden"
           onClick={() => setMenuOpen(v => !v)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           style={{
             /* 44px minimum so the target clears the touch-accessibility floor. */
-            /* No `display` here — it would override the md:hidden class.       */
+            /* No `display` here — it would override the hidden class.           */
             width: 44,
             height: 44,
             padding: 0,

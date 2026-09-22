@@ -30,31 +30,11 @@ const ROLES = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="dot-grid" style={{ padding: '96px 24px' }}>
-      <div style={{ maxWidth: 1280, margin: '0' }}>
+    <section id="experience" className="dot-grid" style={{ padding: '96px 0' }}>
+      <div className="page-container">
         <motion.div {...fadeUp(0)} style={{ marginBottom: 56 }}>
-          <p
-            style={{
-              fontSize: 13,
-              fontWeight: 500,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              color: '#41454d',
-              margin: '0 0 12px',
-            }}
-          >
-            Experience
-          </p>
-          <h2
-            style={{
-              fontSize: 'clamp(28px, 3.5vw, 40px)',
-              fontWeight: 400,
-              color: '#181d26',
-              lineHeight: 1.15,
-              margin: 0,
-              maxWidth: 720,
-            }}
-          >
+          <p className="section-eyebrow">Experience</p>
+          <h2 className="section-title" style={{ maxWidth: 720 }}>
             Working on real products alongside the coursework.
           </h2>
         </motion.div>
@@ -80,7 +60,7 @@ export default function Experience() {
                 >
                   {period}
                 </p>
-                <p style={{ fontSize: 12, color: '#9297a0', margin: 0 }}>{mode}</p>
+                <p style={{ fontSize: 12, color: 'var(--m-subtle)', margin: 0 }}>{mode}</p>
               </div>
 
               {/* Right — role, org, detail */}

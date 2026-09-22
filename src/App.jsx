@@ -91,13 +91,13 @@ export default function App() {
               <SignatureCard variant="dark">
                 {/* Left */}
                 <div>
-                  <p style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.45, marginBottom: 20 }}>
+                  <p className="section-eyebrow" style={{ color: 'rgba(255,255,255,0.65)', marginBottom: 20 }}>
                     Let's connect
                   </p>
-                  <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 400, color: '#ffffff', lineHeight: 1.25, margin: '0 0 20px', maxWidth: 520 }}>
+                  <h2 className="section-title" style={{ color: '#ffffff', margin: '0 0 20px', maxWidth: 520 }}>
                     Open to internships, collaborations, and good conversations.
                   </h2>
-                  <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.65, maxWidth: 420, margin: '0 0 36px' }}>
+                  <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65, maxWidth: 420, margin: '0 0 36px' }}>
                     Remote-friendly. Reach out any time — I reply to every message.
                   </p>
                   <a
@@ -128,7 +128,7 @@ export default function App() {
                     { label: 'Email', value: 'rwetz00@gmail.com', href: 'mailto:rwetz00@gmail.com' },
                   ].map(({ label, value, href }) => (
                     <div key={label} style={{ borderTop: '1px solid rgba(255,255,255,0.1)', padding: '20px 0' }}>
-                      <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', margin: '0 0 6px' }}>{label}</p>
+                      <p style={{ fontSize: 12, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)', margin: '0 0 6px' }}>{label}</p>
                       {href ? (
                         <a href={href} style={{ fontSize: 15, color: 'rgba(255,255,255,0.75)', margin: 0, textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', paddingBottom: 1 }}>{value}</a>
                       ) : (
@@ -145,13 +145,12 @@ export default function App() {
 
             {/* Footer */}
             <footer
-              className="dot-grid footer-shell"
-              style={{ borderTop: '1px solid #dddddd' }}
+              className="dot-grid"
+              style={{ borderTop: '1px solid #dddddd', padding: '40px 0' }}
             >
               <div
+                className="page-container"
                 style={{
-                  maxWidth: 1280,
-                  margin: '0 auto',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: 16,
@@ -160,7 +159,7 @@ export default function App() {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap', gap: 12 }}>
-                  <span style={{ fontSize: 13, color: '#9297a0' }}>
+                  <span style={{ fontSize: 13, color: 'var(--m-subtle)' }}>
                     © 2026 Ryan Wetzstein
                     {' · '}
                     <a
@@ -179,7 +178,7 @@ export default function App() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="Instagram"
-                      style={{ color: '#9297a0', display: 'flex' }}
+                      style={{ color: 'var(--m-subtle)', display: 'flex' }}
                     >
                       <svg width="18" height="18"><use href="/icons.svg#instagram-icon" /></svg>
                     </a>
@@ -188,7 +187,7 @@ export default function App() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="X"
-                      style={{ color: '#9297a0', display: 'flex' }}
+                      style={{ color: 'var(--m-subtle)', display: 'flex' }}
                     >
                       <svg width="18" height="18"><use href="/icons.svg#x-icon" /></svg>
                     </a>
@@ -197,7 +196,7 @@ export default function App() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="Nexis"
-                      style={{ color: '#9297a0', display: 'flex' }}
+                      style={{ color: 'var(--m-subtle)', display: 'flex' }}
                     >
                       <Terminal size={18} strokeWidth={1.75} />
                     </a>

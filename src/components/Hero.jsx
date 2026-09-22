@@ -31,7 +31,7 @@ export default function Hero() {
       {/* ── Text content — pushed to lower-left ──────────────────────────── */}
       {/* Sizing lives in .hero-shell / .hero-inner (index.css) so it can key   */}
       {/* off viewport height; short screens drop the one-screen pin entirely.  */}
-      <div className="hero-inner" style={{ width: '100%' }}>
+      <div className="hero-inner page-container">
         <div style={{ maxWidth: 480 }}>
         <motion.h1
           {...fadeUp(0)}
@@ -150,10 +150,10 @@ export default function Hero() {
             borderTop: '1px solid var(--m-hairline)',
           }}
         >
-          <span style={{ fontSize: 12, color: 'var(--m-border-strong)' }}>
+          <span style={{ fontSize: 12, color: 'var(--m-subtle)' }}>
             North Dakota State University · Computer Science · Class of 2027
           </span>
-          <span style={{ color: 'var(--m-hairline)', fontSize: 12 }}>|</span>
+          <span aria-hidden="true" style={{ color: 'var(--m-hairline)', fontSize: 12 }}>|</span>
           {[
             { label: 'GitHub',   href: 'https://github.com/rwetz' },
             { label: 'LinkedIn', href: 'https://linkedin.com/in/ryan-wetzstein' },
@@ -187,17 +187,7 @@ export default function Hero() {
       {/* ── Right rail — three decorative shader cards (lg+ only) ────────── */}
       {/* Bottom-anchored so the column grows upward; heights are clamped to    */}
       {/* keep the stack clear of the 90px navbar on short viewports.           */}
-      <div
-        className="hidden lg:flex"
-        style={{
-          position: 'absolute',
-          bottom: 96,
-          right: 56,
-          width: 520,
-          flexDirection: 'column',
-          gap: 24,
-        }}
-      >
+      <div className="hidden lg:flex hero-rail">
         {SHADER_CARDS.map(({ key, cfg }, i) => (
           <motion.div
             key={key}
