@@ -4,12 +4,12 @@ Single-page portfolio for Ryan Wetzstein, built with React 19 and Vite, deployed
 
 ## Sections (top to bottom)
 
-1. **Hero** — name, availability line, primary action, and three decorative WebGL shader panels (desktop only)
-2. **Projects** — Nexis as a full-width featured card with a screenshot, then four supporting projects in a 2×2 grid
-3. **About** — photo and bio
-4. **Experience** — work history, kept in step with the résumé
-5. **Skills** — grouped chips; hover or keyboard focus opens a tooltip with years and a note
-6. **Contact** — availability, email / GitHub / LinkedIn rows, and a validated form that opens the visitor's mail client
+1. **Hero:** name, availability line, primary action, and three decorative WebGL shader panels (desktop only)
+2. **Projects:** Nexis as a full-width featured card with a screenshot, then four supporting projects in a 2×2 grid
+3. **About:** bio beside a photo that stays in view (sticky) on wide screens
+4. **Experience:** sticky heading beside a timeline of education, internship, and capstone, kept in step with the resume
+5. **Skills:** one row per group with years on each chip; hover or keyboard focus shows a short note
+6. **Contact:** availability, email / GitHub / LinkedIn rows, and a validated form that opens the visitor's mail client
 
 `#nexis` redirects to [nexisdev.org](https://nexisdev.org), where Nexis now lives.
 
@@ -61,7 +61,7 @@ Single-page portfolio for Ryan Wetzstein, built with React 19 and Vite, deployed
 - **Layout:** every section's content sits in `.page-container` (1200px, centred, 24px gutters). Sections own vertical padding only.
 - **Rhythm:** sections use `.section` (fluid padding, slightly more below than above).
 - **Type:** Geist for text, Geist Mono for labels. Section headers use `.section-eyebrow` (with a numbered `.section-index`), `.section-title`, `.section-lede`; small labels use `.micro-label`. Sentence case throughout, no all-caps. Long prose uses `.prose-measure` (65ch). Nothing renders below 12px.
-- **Colour:** one accent, `--m-accent` (`#a94a26`, rust), used sparingly — section numbers, the status dot, link hovers, and the hero shader ramp. Text greys must pass WCAG AA: `--m-subtle` (`#6b7079`) is the lightest text colour; `--m-border-strong` is for borders only. The page stays in one light tone — no dark bands.
+- **Colour:** one accent, `--m-accent` (`#a94a26`, rust), used sparingly: section numbers, the status dot, link hovers, and the hero shader ramp. Text greys must pass WCAG AA: `--m-subtle` (`#6b7079`) is the lightest text colour; `--m-border-strong` is for borders only. The page stays in one light tone, with no dark bands.
 - **Actions:** `.btn-primary` for the main action in a group, `.text-link` for the rest; avoid filled + ghost button pairs. Buttons lift on hover and scale to 0.98 on press.
 - **Surfaces:** cards use tinted elevation (`--m-shadow-sm` / `--m-shadow-lg`) rather than borders. Keep z-index on the `--z-*` scale.
 - **Motion:** use `m.*` components, not `motion.*` (`LazyMotion` runs in strict mode and will throw). `MotionConfig reducedMotion="user"` and a global `prefers-reduced-motion` rule cover everything else.
@@ -69,9 +69,9 @@ Single-page portfolio for Ryan Wetzstein, built with React 19 and Vite, deployed
 
 ## Features
 
-- **⌘K / Ctrl+K command palette** — jump to sections, copy email, download résumé, open external links. Loaded on first use.
-- **Accessible by default** — skip link, visible focus rings, keyboard-reachable tooltips, labelled form fields with inline errors and focus-on-first-error, 44px touch targets.
-- **Security** — Content-Security-Policy via `<meta>`, pinned CDN stylesheet with Subresource Integrity, no inline scripts.
+- **⌘K / Ctrl+K command palette:** jump to sections, copy email, download the resume, open external links. Loaded on first use.
+- **Accessible by default:** skip link, visible focus rings, keyboard-reachable tooltips, labelled form fields with inline errors and focus-on-first-error, 44px touch targets.
+- **Security:** Content-Security-Policy via `<meta>`, pinned CDN stylesheet with Subresource Integrity, no inline scripts.
 
 ## Dev
 
@@ -79,5 +79,18 @@ Single-page portfolio for Ryan Wetzstein, built with React 19 and Vite, deployed
 npm run dev      # dev server on http://localhost:5173
 npm run build    # production build to dist/
 npm run lint     # eslint
-npm run deploy   # build and publish dist/ to the gh-pages branch
 ```
+
+## Deploying
+
+Push to `main`. The [Deploy to GitHub Pages](.github/workflows/deploy.yml) workflow installs with
+`npm ci --ignore-scripts`, runs `npm audit --audit-level=high`, builds, and publishes `dist/` to
+GitHub Pages. There is no manual deploy step.
+
+If a deploy fails at the audit step, it's usually a new advisory in a dev-only dependency:
+run `npm audit fix`, confirm the build still passes, and push the updated lockfile.
+
+## Content
+
+- **Resume:** replace `public/resume.pdf`. It downloads as `Ryan_Wetzstein_Resume.pdf`.
+- **Copy style:** write "resume" without accents, and avoid em dashes in anything visitors see.
