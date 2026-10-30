@@ -1,6 +1,18 @@
-# Personal Website
+<p align="center">
+  <img src="assets/logo.png" width="220" alt="Ryan Wetzstein signature">
+</p>
 
-Single-page portfolio for Ryan Wetzstein, built with React 19 and Vite, deployed to GitHub Pages at [ryanwetzstein.com](https://ryanwetzstein.com).
+<h1 align="center">Personal Website</h1>
+
+<p align="center">
+  Single-page portfolio for Ryan Wetzstein, built with React 19 and Vite.
+</p>
+
+<p align="center">
+  <a href="https://github.com/rwetz/personal-website/actions/workflows/deploy.yml"><img src="https://github.com/rwetz/personal-website/actions/workflows/deploy.yml/badge.svg" alt="CI"></a>
+</p>
+
+![Personal website hero](docs/main.png)
 
 ## Sections (top to bottom)
 
