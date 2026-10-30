@@ -94,3 +94,12 @@ run `npm audit fix`, confirm the build still passes, and push the updated lockfi
 
 - **Resume:** replace `public/resume.pdf`. It downloads as `Ryan_Wetzstein_Resume.pdf`.
 - **Copy style:** write "resume" without accents, and avoid em dashes in anything visitors see.
+
+---
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/heptagram-white.svg">
+    <img src="docs/brand/heptagram-black.svg" alt="heptagram" width="48">
+  </picture>
+</p>
