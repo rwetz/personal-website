@@ -5,6 +5,7 @@
 // ╚══════════════════════════════════════╝
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
+import { emblems, outline } from '../src/brand/emblems.js'
 const ids = ['nexis', 'ateru', 'biblelm', 'halcyra', 'logscope']
 
 for (const [width, height] of [[360, 640], [768, 1024], [1440, 900], [844, 390]]) {
@@ -163,6 +164,18 @@ test('desktop hover previews and logo morph work with motion enabled', async ({ 
   await object.click()
   await expect(page.locator('h1')).toHaveText('Nexis')
   await expect.poll(() => page.locator('.showcase-wordmark svg path:last-child').evaluate(element => getComputedStyle(element).opacity)).toBe('1')
+  // Sample the transition, including its endpoint: home must never flash a solid star.
+  const frames = await page.locator('.showcase-wordmark svg path:last-child').evaluate(async element => {
+    const paths = []
+    const end = performance.now() + 850
+    while (performance.now() < end) {
+      paths.push(element.getAttribute('d'))
+      await new Promise(requestAnimationFrame)
+    }
+    return paths
+  })
+  expect(frames).not.toContain(outline)
+  await expect(page.locator('.showcase-wordmark svg path:last-child')).toHaveAttribute('d', emblems.nexis)
   const emblem = await page.locator('.showcase-wordmark svg path:last-child').getAttribute('d')
   await page.keyboard.press('2')
   await expect(page.locator('h1')).toHaveText('Ateru')

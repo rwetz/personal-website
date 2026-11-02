@@ -27,8 +27,11 @@ export default function Heptagram({ activeId, className = '' }) {
     if (!activeId && !previous.current) return
     let cancelled = false
     let timeline
-    const target = emblems[activeId] ?? outline
-    const from = emblems[previous.current] ?? outline
+    // Home must morph from the visible mark, never pop to a filled surrogate star.
+    const target = emblems[activeId] ?? detailedMark
+    const from = Number(morph.current.style.opacity) > 0
+      ? morph.current.getAttribute('d')
+      : emblems[previous.current] ?? detailedMark
     previous.current = activeId
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       morph.current.setAttribute('d', activeId ? target : outline)
@@ -44,7 +47,7 @@ export default function Heptagram({ activeId, className = '' }) {
       const full = detail.current
       timeline = gsap.timeline()
         .set(path, { attr: { d: from }, opacity: 1 })
-        .to(full, { opacity: 0, duration: 0.1 })
+        .set(full, { opacity: 0 })
         .to(path, { morphSVG: { shape: target, shapeIndex: 'auto' }, duration: 0.7, ease: 'power2.inOut' }, 0)
         .to(solid.current, { opacity: dithered ? 0 : 1, duration: .7, ease: 'power2.inOut' }, 0)
       if (!activeId) timeline.to(path, { opacity: 0, duration: 0.15 }).to(full, { opacity: 1, duration: 0.15 }, '<')
