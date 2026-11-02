@@ -3,16 +3,8 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { m } from 'framer-motion'
 import profile960 from '../assets/profile-960.webp'
 import profile480 from '../assets/profile-480.webp'
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.55, ease: 'easeOut', delay },
-})
 
 export default function About() {
   return (
@@ -23,12 +15,8 @@ export default function About() {
       <div className="about-grid page-container">
         {/* Left — photo. Sticky on wide screens so it travels with the bio
             instead of stopping halfway and leaving an empty column. */}
-        <m.figure
+        <figure
           className="about-photo"
-          initial={{ opacity: 0, scale: 0.97 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.55, ease: 'easeOut', delay: 0.05 }}
         >
           <img
             src={profile960}
@@ -52,10 +40,10 @@ export default function About() {
           <figcaption className="micro-label" style={{ marginTop: 16 }}>
             NDSU ’27 · CS with an AI minor · Fargo, ND
           </figcaption>
-        </m.figure>
+        </figure>
 
         {/* Right — eyebrow, heading, bio */}
-        <m.div {...fadeUp(0.1)}>
+        <div>
           <p className="section-eyebrow"><span className="section-index">02</span>About</p>
           <h2 className="section-title">
             Computer Science student at NDSU, graduating 2027.
@@ -92,7 +80,7 @@ export default function About() {
               I've been golfing lots and spending time with family and friends.
             </p>
           </div>
-        </m.div>
+        </div>
       </div>
     </section>
   )

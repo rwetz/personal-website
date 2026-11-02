@@ -4,7 +4,6 @@
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
 import { useRef, useState } from 'react'
-import { m } from 'framer-motion'
 import { ArrowUpRight, Copy, Envelope, GithubLogo, LinkedinLogo, PaperPlaneTilt } from '@phosphor-icons/react'
 import { toast } from '@/components/ui/sonner'
 
@@ -90,11 +89,7 @@ export default function Contact() {
       <div className="page-container">
 
         {/* Heading */}
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.55, ease: 'easeOut' }}
+        <div
           style={{ marginBottom: 64 }}
         >
           <p className="section-eyebrow"><span className="section-index">05</span>Contact</p>
@@ -110,7 +105,7 @@ export default function Contact() {
               </div>
             ))}
           </dl>
-        </m.div>
+        </div>
 
         <div
           style={{
@@ -122,13 +117,9 @@ export default function Contact() {
         >
           {/* Left: contact links as divided rows rather than boxed cards */}
           <ul className="contact-list">
-            {contactLinks.map(({ label, href, display, Icon, isEmail }, i) => (
-              <m.li
+            {contactLinks.map(({ label, href, display, Icon, isEmail }) => (
+              <li
                 key={label}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.45, ease: 'easeOut', delay: i * 0.08 }}
               >
                 <a
                   href={href}
@@ -157,16 +148,12 @@ export default function Contact() {
                     <Copy size={18} aria-hidden="true" />
                   </button>
                 )}
-              </m.li>
+              </li>
             ))}
           </ul>
 
           {/* Right: message form */}
-          <m.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.55, ease: 'easeOut', delay: 0.15 }}
+          <div
           >
             <h3 style={{ fontSize: 20, fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--m-ink)', margin: '0 0 24px' }}>
               Send a message
@@ -238,7 +225,7 @@ export default function Contact() {
                 </button>
               </div>
             </form>
-          </m.div>
+          </div>
         </div>
       </div>
     </section>

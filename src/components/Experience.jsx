@@ -3,15 +3,7 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { m } from 'framer-motion'
 import { ArrowUpRight } from '@phosphor-icons/react'
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.55, ease: 'easeOut', delay },
-})
 
 /*
  * Newest first. Copy is taken from the resume (public/resume.pdf); keep the
@@ -65,7 +57,7 @@ export default function Experience() {
     <section id="experience" className="dot-grid section">
       <div className="page-container split-layout">
         {/* Heading rides alongside the timeline on wide screens */}
-        <m.div {...fadeUp(0)} className="split-heading">
+        <div className="split-heading">
           <p className="section-eyebrow"><span className="section-index">03</span>Experience</p>
           <h2 className="section-title">
             Working on real products alongside the coursework.
@@ -74,13 +66,12 @@ export default function Experience() {
             A startup internship, a client capstone that shipped, and a CS degree with an
             AI focus, most recent first.
           </p>
-        </m.div>
+        </div>
 
         <ol className="timeline">
-          {ENTRIES.map(({ kind, org, role, period, mode, current, points, stack, link, highlight }, i) => (
-            <m.li
+          {ENTRIES.map(({ kind, org, role, period, mode, current, points, stack, link, highlight }) => (
+            <li
               key={org}
-              {...fadeUp(0.08 + i * 0.08)}
               className={current ? 'timeline-item is-current' : 'timeline-item'}
             >
               <p className="micro-label timeline-meta">
@@ -122,7 +113,7 @@ export default function Experience() {
                   </a>
                 )}
               </div>
-            </m.li>
+            </li>
           ))}
         </ol>
       </div>

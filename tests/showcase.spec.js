@@ -180,8 +180,11 @@ test('WCAG AA scans on every stage, modal and command palette', async ({ page })
   }
   await page.getByRole('button', { name: 'About & contact' }).click()
   await expect(page.getByRole('dialog')).toBeVisible()
-  const about = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
-  expect(about.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) }))).toEqual([])
+  for (const section of ['about', 'experience', 'skills', 'contact']) {
+    await page.locator(`#${section}`).scrollIntoViewIfNeeded()
+    const about = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
+    expect(about.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })), section).toEqual([])
+  }
   await page.keyboard.press('Escape')
   await page.keyboard.press('Control+k')
   await expect(page.getByRole('dialog')).toBeVisible()

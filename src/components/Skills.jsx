@@ -3,7 +3,6 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { m } from 'framer-motion'
 import {
   Tooltip,
   TooltipContent,
@@ -82,12 +81,8 @@ export default function Skills() {
     <TooltipProvider delayDuration={120}>
       <section id="skills" className="dot-grid section">
         <div className="page-container split-layout">
-          <m.div
+          <div
             className="split-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.55, ease: 'easeOut' }}
           >
             <p className="section-eyebrow"><span className="section-index">04</span>Skills</p>
             <h2 className="section-title">Tools I reach for.</h2>
@@ -95,18 +90,14 @@ export default function Skills() {
               Languages and tools from coursework, the internship, and my own projects, with
               roughly how long I’ve used each. Hover or focus one for a note.
             </p>
-          </m.div>
+          </div>
 
           {/* One row per group: label on the left, chips on the right */}
           <dl className="skill-rows">
-            {skillGroups.map(({ category, skills, plain }, groupIdx) => (
-              <m.div
+            {skillGroups.map(({ category, skills, plain }) => (
+              <div
                 key={category}
                 className="skill-row"
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.45, ease: 'easeOut', delay: groupIdx * 0.06 }}
               >
                 <dt className="micro-label">{category}</dt>
                 <dd>
@@ -114,7 +105,7 @@ export default function Skills() {
                     ? <p className="skill-concepts">{skills.join(' · ')}</p>
                     : skills.map(skill => <SkillChip key={skill.name} {...skill} />)}
                 </dd>
-              </m.div>
+              </div>
             ))}
           </dl>
         </div>

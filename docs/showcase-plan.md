@@ -18,7 +18,8 @@ the user subsequently authorized pushing after double-checking the work.
   shared image transitions and a static mobile arrangement. The optional old
   WebGL shader was removed; CSS gradients and orbit lines provide the atmosphere.
 - About: original biography, experience, skills and validated contact form reused
-  in a lazy, focus-trapped modal. Resume and experience data were preserved.
+  in a lazy, focus-trapped modal. Content appears fully readable immediately,
+  without the old scrolling-section fades. Resume and experience data were preserved.
 - Gates: production build, lint, high/critical dependency audit gate, automated
   keyboard/media/layout/axe checks, visual review and local mobile Lighthouse.
 
