@@ -21,8 +21,11 @@ deployment under `public/font-licenses/`.
 
 The shape morph remains GSAP MorphSVG. Nexis's terminal frame, prompt and cursor
 use the app's spectrum colors, with a slow hue cycle in ordinary motion mode.
-BibleLM's book resolves through an SVG ordered-dot mask; the solid portion of
-that mask animates with the morph, so leaving the book resolves out of dither.
+BibleLM's open-book mark has curved leaves, a distinct spine, engraved text
+lines and a cross. An 8×8 ordered-print mask adds grain toward the lower page
+edges while keeping the upper outline solid and readable at the actual 40px
+size. The solid portion of that mask animates with the morph, so leaving the
+book resolves out of dither.
 The detailed heptagram returns at home. A Ferrite rhombus silhouette remains
 reserved in the emblem data for a future actual Ferrite app; it is not a sixth
 project or a restored design-family slot.
