@@ -168,7 +168,7 @@ export default function Contact() {
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.55, ease: 'easeOut', delay: 0.15 }}
           >
-            <h3 style={{ fontSize: 20, fontWeight: 600, letterSpacing: '-0.02em', color: '#181d26', margin: '0 0 24px' }}>
+            <h3 style={{ fontSize: 20, fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--m-ink)', margin: '0 0 24px' }}>
               Send a message
             </h3>
             <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

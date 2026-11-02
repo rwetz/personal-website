@@ -8,6 +8,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
   workflow_dispatch:
 
 permissions:
@@ -50,6 +53,15 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Install test browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser and accessibility checks
+        run: npm run test:e2e
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5

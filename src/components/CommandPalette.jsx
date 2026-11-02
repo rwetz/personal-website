@@ -4,7 +4,8 @@
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
 import { useEffect } from 'react'
-import { User, Briefcase, FolderSimple, Wrench, Envelope, Copy, DownloadSimple, ArrowSquareOut } from '@phosphor-icons/react'
+import { User, FolderSimple, Copy, DownloadSimple, ArrowSquareOut } from '@phosphor-icons/react'
+import { projects } from '../stage/projects'
 import {
   CommandDialog,
   CommandEmpty,
@@ -19,15 +20,12 @@ import { toast } from '@/components/ui/sonner'
 const EMAIL = 'rwetz00@gmail.com'
 
 const navigate = [
-  { id: 'projects',   label: 'Projects',   icon: FolderSimple, hash: '#projects'   },
-  { id: 'about',      label: 'About',      icon: User,         hash: '#about'      },
-  { id: 'experience', label: 'Experience', icon: Briefcase,    hash: '#experience' },
-  { id: 'skills',     label: 'Skills',     icon: Wrench,       hash: '#skills'     },
-  { id: 'contact',    label: 'Contact',    icon: Envelope,         hash: '#contact'    },
+  { id: 'home', label: 'Home / Constellation', icon: FolderSimple, hash: '#/' },
+  ...projects.map(project => ({ id: project.id, label: project.name, icon: FolderSimple, hash: `#/${project.id}` })),
 ]
 
-export default function CommandPalette({ open, onClose }) {
-  // Cmd+K toggle handled in App.jsx; here just close on hash change
+export default function CommandPalette({ open, onClose, onAbout }) {
+  // The host handles Cmd+K; here close on hash change.
   useEffect(() => {
     const onHash = () => onClose()
     window.addEventListener('hashchange', onHash)
@@ -60,6 +58,7 @@ export default function CommandPalette({ open, onClose }) {
         <CommandEmpty>No results found.</CommandEmpty>
 
         <CommandGroup heading="Navigate">
+          <CommandItem onSelect={() => { onClose(); onAbout() }}><User /><span>About, experience, skills & contact</span></CommandItem>
           {navigate.map(({ id, label, icon: Icon, hash }) => (
             <CommandItem key={id} onSelect={go(hash)}>
               <Icon /> <span>{label}</span>

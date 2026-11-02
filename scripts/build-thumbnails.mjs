@@ -1,0 +1,10 @@
+// ╔══════════════════════════════════════╗
+// ║  Ryan Wetzstein                      ║
+// ║  Personal Website                    ║
+// ║  2026                                ║
+// ╚══════════════════════════════════════╝
+import sharp from 'sharp'
+for (const [id, path] of Object.entries({ nexis: 'src/assets/nexis/welcome-1600.webp', biblelm: 'src/assets/showcase/biblelm.webp', logscope: 'src/assets/showcase/logscope.webp' })) {
+  await sharp(path).resize({ width: 460, withoutEnlargement: true }).webp({ quality: 76 }).toFile(`src/assets/showcase/${id}-thumb.webp`)
+}
+console.log('Generated small Constellation thumbnails from real app posters.')

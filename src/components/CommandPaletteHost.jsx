@@ -14,7 +14,7 @@ const CommandPalette = lazy(() => import('./CommandPalette'))
  * here (not in App) means toggling the palette re-renders only this component,
  * not the whole page.
  */
-export default function CommandPaletteHost() {
+export default function CommandPaletteHost({ onAbout }) {
   const [open, setOpen]     = useState(false)
   const [loaded, setLoaded] = useState(false)
 
@@ -35,7 +35,7 @@ export default function CommandPaletteHost() {
   if (!loaded) return null
   return (
     <Suspense fallback={null}>
-      <CommandPalette open={open} onClose={close} />
+      <CommandPalette open={open} onClose={close} onAbout={onAbout} />
     </Suspense>
   )
 }

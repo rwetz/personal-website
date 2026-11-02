@@ -16,10 +16,8 @@
          'unsafe-inline' on style-src is required by the inline-style patterns this app
          uses; script-src stays strict (no inline, no eval) - verified: the built
          bundles contain no eval/Function constructor.
-         NOTE: per CSP spec, frame-ancestors is IGNORED when delivered via <meta>. It is
-         kept here so the policy is correct if this ever moves behind a host/proxy that
-         can send real headers, but clickjacking is NOT actually blocked on Pages today.
-         Same caveat applies to report-uri and sandbox. -->
+         GitHub Pages cannot set frame-ancestors response headers; that directive
+         is deliberately omitted because a meta policy cannot enforce it. -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self';
@@ -34,17 +32,17 @@
                object-src 'none';
                base-uri 'none';
                form-action 'none';
-               frame-ancestors 'none';
                upgrade-insecure-requests"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="theme-color" content="#ffffff" />
-    <title>Ryan Wetzstein</title>
+    <meta name="theme-color" content="#090b10" />
+    <title>Ryan Wetzstein | Selected work</title>
     <meta name="description" content="Ryan Wetzstein, computer science senior at NDSU building developer tools and AI systems, including Nexis, an open-source AI-native terminal." />
     <meta property="og:title" content="Ryan Wetzstein" />
     <meta property="og:description" content="Computer science senior at NDSU building developer tools and AI systems." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ryanwetzstein.com" />
+    <link rel="canonical" href="https://ryanwetzstein.com/" />
     <!-- Crawlers don't resolve relative URLs, so the image must be absolute. -->
     <meta property="og:image" content="https://ryanwetzstein.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
@@ -54,37 +52,8 @@
     <meta name="twitter:title" content="Ryan Wetzstein" />
     <meta name="twitter:description" content="Computer science senior at NDSU building developer tools and AI systems." />
     <meta name="twitter:image" content="https://ryanwetzstein.com/og-image.png" />
-    <!-- Pinned + Subresource Integrity: a tampered CDN response is rejected by the browser.
-         Never use @latest here — it lets upstream change what executes on this origin. -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.17.0/devicon.min.css"
-      integrity="sha384-6iv3tXABd3c9DYulXujJl8n22ahn/12f45MomxoPv6jBX4LBE4gNJjfkx5mAKIqR"
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <!-- Skip navigation for keyboard users -->
-    <style>
-      .skip-nav {
-        position: absolute;
-        top: -100%;
-        left: 1rem;
-        z-index: var(--z-skip, 100);
-        padding: 0.5rem 1rem;
-        background: #181d26;
-        color: #fff;
-        border-radius: 0 0 0.5rem 0.5rem;
-        font-size: 0.875rem;
-        text-decoration: none;
-        transition: top 0.2s;
-      }
-      .skip-nav:focus-visible {
-        top: 0;
-      }
-    </style>
   </head>
   <body>
-    <a href="#main-content" class="skip-nav">Skip to main content</a>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

@@ -71,7 +71,7 @@ function SkillChip({ name, icon, color, years, note }) {
         </button>
       </TooltipTrigger>
       <TooltipContent side="top" style={{ maxWidth: 240 }}>
-        <p style={{ fontSize: 12, color: '#333840', lineHeight: 1.5, margin: 0 }}>{note}</p>
+        <p style={{ fontSize: 12, color: 'var(--color-text)', lineHeight: 1.5, margin: 0 }}>{note}</p>
       </TooltipContent>
     </Tooltip>
   )

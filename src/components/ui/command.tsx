@@ -2,7 +2,7 @@ import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
 import { MagnifyingGlass as Search } from "@phosphor-icons/react"
 import { cn } from "@/lib/utils"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -22,6 +22,8 @@ Command.displayName = "Command"
 const CommandDialog = ({ children, ...props }: React.ComponentProps<typeof Dialog>) => (
   <Dialog {...props}>
     <DialogContent className="overflow-hidden p-0 shadow-2xl max-w-xl" hideClose>
+      <DialogTitle className="sr-only">Command palette</DialogTitle>
+      <DialogDescription className="sr-only">Find a project, open About, or choose an action.</DialogDescription>
       <Command className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:tracking-wider [&_[cmdk-group-heading]]:text-[var(--color-muted)] [&_[cmdk-input-wrapper]_svg]:h-4 [&_[cmdk-input-wrapper]_svg]:w-4 [&_[cmdk-item]]:px-3 [&_[cmdk-item]]:py-2.5 [&_[cmdk-item]_svg]:h-4 [&_[cmdk-item]_svg]:w-4">
         {children}
       </Command>
@@ -84,7 +86,7 @@ const CommandSeparator = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Separator>
 >(({ className, ...props }, ref) => (
-  <CommandPrimitive.Separator ref={ref} className={cn("h-px bg-white/10", className)} {...props} />
+  <CommandPrimitive.Separator ref={ref} aria-hidden="true" className={cn("h-px bg-white/10", className)} {...props} />
 ))
 CommandSeparator.displayName = "CommandSeparator"
 
