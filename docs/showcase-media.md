@@ -31,6 +31,10 @@ preserved on return.
 BibleLM includes public-domain artwork with credits in the recorded UI and its
 own art/data provenance documents. Its supplied media includes unreleased polish,
 so it represents the current working tree rather than the v2.1.0 installer.
+The BibleLM video was re-recorded on 2 November 2026 at native 3840 × 2160.
+Both encodes are 30 seconds with 48 actual browser captures retained at their
+capture times in a 30 fps stream; transitions are sampled at about 1.6 fps.
+The poster and supplemental screenshots remain at 1280 × 720.
 
 Logscope has no public repository link. Its write-up stays unpublished until
 separately authorized; do not link the private source from this public site.
@@ -42,3 +46,33 @@ Ateru captures in `docs/screenshots/` and `docs/ui-comparison/` were deliberatel
 excluded. The gallery displays the current Chronicle, studio and appearance UI
 and can open each capture at full size. Halcyra shows the real Synth page rather
 than a simulated instrument or invented audio performance.
+
+
+BibleLM’s decorative background uses [React Bits Dither](https://reactbits.dev/backgrounds/dither),
+vendored from DavidHDev/react-bits commit `4dc7b5b7772e1217c8fb8d2a7aa074302180e5b4`.
+Source and the upstream MIT + Commons Clause license are retained under
+`src/components/backgrounds/`. Local changes keep settings updates in effects
+respond to live reduced-motion changes, and preserve the canvas context across StrictMode effect remounts. The waves use the project palette’s
+accent directly, render a still frame under reduced motion, stop while hidden,
+and release GPU resources when leaving the page. No Three.js dependency is added.
+
+
+The remaining backgrounds and micro interactions come from the same pinned React
+Bits commit and retain the upstream license beside the source:
+
+| Page / UI | React Bits component | Treatment |
+|---|---|---|
+| Home | Letter Glitch | Classic hex charset, `#61dca3` / `#61b3dc`, `#2b4539` base, spacing 0.1, density/base opacity 1, glitch amount 0.85, flow 0 |
+| Nexis | Grainient | Cool project palette, restrained animated grain |
+| Ateru | Threads | Coral threads behind real phone captures |
+| Halcyra | Ghost Fibers | Blue fibers, with the existing SVG instrument diagrams retained |
+| Logscope | Faulty Terminal | Silver glyphs and restrained flicker behind the real recording |
+| First visit | Call Chip | Actual poster decode, local font readiness and current background-module warmup; no video preload or simulated timer-based completion |
+| Project dock | Rubber Segment | Stretch/squash thumb adapted to the existing accessible tabs and routing |
+
+All effects are lazy-loaded, only the active page mounts a canvas, and GPU programs,
+buffers, textures, observers and animation callbacks are cleaned up on unmount.
+Local adaptations also handle live motion-preference changes and StrictMode effect
+remounts. The first-visit chip is nonblocking, bounds failed warmup attempts, and
+remembers successful warmup in session storage. Icons and motion reuse the site's
+existing Phosphor and Framer Motion dependencies.

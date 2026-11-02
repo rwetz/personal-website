@@ -32,7 +32,7 @@ export function useStage() {
       window.dispatchEvent(new HashChangeEvent('hashchange'))
     }
     applyTheme(project?.palette)
-    document.title = project ? `${project.name} | Ryan Wetzstein` : 'Ryan Wetzstein | Selected work'
+    document.title = project ? `${project.name} | Ryan Wetzstein` : 'Ryan Wetzstein'
     if (!document.activeElement?.closest('.showcase-rail')) {
       document.querySelector('.showcase-shell h1')?.focus({ preventScroll: true })
     }

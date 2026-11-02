@@ -1,15 +1,19 @@
 # BibleLM showcase media
 
 Captured from BibleLM on 1 November 2026 after its polish sweep. These assets
-show the current working tree, including unreleased work, at 1280 × 720.
+show the current working tree, including unreleased work. Screenshots and
+the poster are 1280 × 720. The walkthrough was re-recorded 2 November 2026
+at native 3840 × 2160, with Auto interface scale at 150%. Its 48 captured
+browser frames retain their capture times in a 30 fps encode, so transitions
+are sampled at approximately 1.6 fps. It is not an upscale.
 
 All files are in `src/assets/showcase/`:
 
 | Asset | Use |
 |---|---|
 | `biblelm.webp` | Home poster for the stage or video fallback |
-| `biblelm.mp4` | 30-second silent H.264 walkthrough, fast-start |
-| `biblelm.webm` | VP9 version of the same walkthrough |
+| `biblelm.mp4` | 4K, 30-second silent H.264 walkthrough, fast-start |
+| `biblelm.webm` | 4K VP9 version of the same walkthrough |
 | `biblelm-home.webp` | Home in Nocturne |
 | `biblelm-reader.webp` | Genesis 1 with Doré's engraving |
 | `biblelm-word-study.webp` | Hebrew word study beside the reader |

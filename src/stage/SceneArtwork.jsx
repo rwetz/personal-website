@@ -19,10 +19,7 @@ export default function SceneArtwork({ project }) {
         <circle r="108" strokeDasharray="1 9" strokeWidth="9" /><circle r="83" strokeWidth="1" /><path d="M-59 59A83 83 0 1 1 59 59" strokeWidth="4" /><path d="M0-68V-42M-132 0H-116M132 0H116M0 132V116" strokeWidth="2" />
       </g>
       <path className="signal-route" d="M0 150H160V245H330V150H590M1050 0V220H1200M0 735H330" fill="none" stroke="currentColor" strokeWidth="1" />
-      <g fill="currentColor"><circle cx="160" cy="150" r="4" /><circle cx="330" cy="245" r="4" /><circle cx="1050" cy="220" r="4" /></g>
     </svg>
-    <div className="scene-overline"><span>HALCYRA / SIGNAL PATH</span><span>OSC → FILTER → FX</span></div>
-    <div className="scene-bottomline"><span>Wavetable synthesis</span><span>Sound, shaped from the source.</span></div>
   </div>
 
   if (project === 'logscope') return <div className="log-artwork">
@@ -37,8 +34,6 @@ export default function SceneArtwork({ project }) {
       <g className="log-waterfall" fill="currentColor">{Array.from({ length: 48 }, (_, i) => <rect key={i} x={i * 26} y={750 - ((i * 37) % 100)} width="9" height={25 + ((i * 37) % 100)} opacity={.25 + (i % 4) * .18} />)}</g>
       <g className="index-brackets" fill="none" stroke="currentColor" strokeWidth="2"><path d="M60 580H30V660H60M1140 100H1170V180H1140" /></g>
     </svg>
-    <div className="scene-overline"><span>LOGSCOPE / SEARCH THE STREAM</span><span>INGEST → INDEX → QUERY</span></div>
-    <div className="scene-bottomline"><span>Many sources. One searchable stream.</span><span>Built in Rust</span></div>
   </div>
   return null
 }

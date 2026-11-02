@@ -11,6 +11,7 @@ import { useStage } from './stage/useStage'
 import Stage from './stage/Stage'
 import Intro from './stage/Intro'
 import Rail from './stage/Rail'
+import AssetWarmup from './stage/AssetWarmup'
 import Heptagram from './brand/Heptagram'
 import './stage/stage.css'
 import './stage/identities.css'
@@ -41,11 +42,12 @@ export default function App() {
             {stage.project ? <Stage project={stage.project} /> : <Intro />}
           </main>
           <footer className="showcase-footer">
-            <div className="showcase-footer-meta"><span>Selected work <span className="footer-count">Five projects</span></span><span>← → to explore <span className="footer-divider">/</span> Esc for home</span></div>
+            <div className="showcase-footer-meta"><span>← → to explore <span className="footer-divider">/</span> Esc for home</span></div>
             <Rail activeId={stage.project?.id} navigate={stage.navigate} />
           </footer>
           <span className="sr-only" role="status" aria-live="polite">{stage.project?.name ?? 'Home, selected work'}</span>
         </div>
+        <AssetWarmup />
         <CommandPaletteHost onAbout={() => setAboutOpen(true)} />
         {aboutOpen && <Suspense fallback={<div className="showcase-loading" role="status">Loading about…</div>}><AboutModal onClose={() => setAboutOpen(false)} /></Suspense>}
         <Toaster />

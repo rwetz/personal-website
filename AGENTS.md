@@ -45,8 +45,11 @@ Neither Ferrite nor Nexis. RAW Titanium palette (`brand/heptagram/palettes/`).
 - Typography belongs to its context: Geist Sans for portfolio chrome, Space Grotesk for Nexis display type, blackletter/Garamond for BibleLM, rounded system type with Nunito fallback for Ateru, and a monospace title only for the Logscope terminal tool. Do not put monospace labels back into home, About or the footer.
 - No shared gradient behind project screens. Use the app's flat surfaces, framing and restrained ornaments. Keep logo morphing: Nexis has a rainbow terminal mark; BibleLM resolves into a dithered book.
 - Hash routes (`#/nexis` etc.) work on GitHub Pages without rewrites. Legacy `#nexis` normalizes locally; it must never redirect off-site.
-- Home uses a structured five-project image gallery, with intentional desktop hover previews and compact rows on small screens. Do not restore the tiny orbiting cards. No WebGL or Three.js is loaded.
+- Home uses a structured five-project image gallery, with intentional desktop hover previews and compact rows on small screens. Do not restore the tiny orbiting cards. Each page lazy-loads its own React Bits WebGL2 background; no Three.js is loaded. Home uses Letter Glitch; Nexis Grainient; Ateru Threads; BibleLM Dither; Halcyra Ghost Fibers; Logscope Faulty Terminal. Keep effects behind translucent previews, matched to project colors, static under reduced motion, and paused on hidden tabs.
 - Real app media only; posters under reduced motion, pause videos on hidden tabs. Record provenance in `docs/showcase-media.md`.
 - Keep the detailed heptagram in sync with `docs/brand/` and the workspace brand source. `npm run brand` regenerates the favicon, PNG icons and OG image.
 - About contains only current school progress and direct email/social links. Keep resume content, experience and skills out of the modal. Retain the Experience source data without altering it.
 - Ateru's morph uses the actual default AppIcon SVG geometry. Halcyra and Logscope have decorative SVG signal/index diagrams, never fabricated live metrics.
+
+- The bottom project dock adapts React Bits Rubber Segment while retaining tab semantics and arrow/number/Escape navigation. Keep the rubber thumb decorative and obey reduced motion.
+- A nonblocking Call Chip shows real poster/font/current-background warmup on the first visit of a browser session, briefly confirms readiness, then disappears. Never download videos or initialize inactive GPU effects as part of warmup.

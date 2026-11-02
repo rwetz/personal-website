@@ -6,6 +6,7 @@
 import { projects } from './projects'
 import Heptagram from '../brand/Heptagram'
 import { emblems } from '../brand/emblems'
+import RubberSegment from '../components/micro/RubberSegment'
 export default function Rail({ activeId, navigate }) {
   const onKeyDown = event => {
     const index = projects.findIndex(project => project.id === activeId)
@@ -23,15 +24,10 @@ export default function Rail({ activeId, navigate }) {
   return (
     <nav className="showcase-rail" aria-label="Selected work">
       <a id="rail-home" href="#/" aria-label="Home" aria-current={!activeId ? 'page' : undefined}><Heptagram /></a>
-      <div role="tablist" aria-label="Projects" onKeyDown={onKeyDown}>
-        {projects.map((project, index) => (
-          <button key={project.id} id={`tab-${project.id}`} role="tab" type="button"
-            aria-selected={activeId === project.id} aria-controls={activeId === project.id ? `panel-${project.id}` : undefined}
-            tabIndex={activeId === project.id || (!activeId && index === 0) ? 0 : -1} onClick={() => navigate(project.id)}>
-            <span className="rail-number">0{index + 1}</span><svg className="rail-emblem" viewBox="0 0 1024 1024" aria-hidden="true"><path d={emblems[project.id]} fill="currentColor" fillRule="evenodd" /></svg><span className="rail-name">{project.name}</span><span className="rail-state" aria-hidden="true" />
-          </button>
-        ))}
-      </div>
+      <RubberSegment value={activeId ?? null} onChange={navigate} onKeyDown={onKeyDown} aria-label="Projects"
+        size="lg" inset={5} radius={12} stretch={80} squash={3} draggable={false}
+        trackColor="transparent" thumbColor="var(--stage-surface)" textColor="var(--chrome-muted)" activeTextColor="var(--stage-fg)"
+        items={projects.map((project, index) => ({ value: project.id, label: <><span className="rail-number">0{index + 1}</span><svg className="rail-emblem" viewBox="0 0 1024 1024" aria-hidden="true"><path d={emblems[project.id]} fill="currentColor" fillRule="evenodd" /></svg><span className="rail-name">{project.name}</span></> }))} />
     </nav>
   )
 }

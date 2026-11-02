@@ -6,7 +6,7 @@
 import { useState } from 'react'
 import { Dialog } from 'radix-ui'
 
-export default function CaptureScene({ project, captures, portrait = false }) {
+export default function CaptureScene({ project, captures, portrait = false, onReady }) {
   const [selected, setSelected] = useState(0)
   const capture = captures[selected]
   const companion = captures[(selected + 1) % captures.length]
@@ -16,7 +16,11 @@ export default function CaptureScene({ project, captures, portrait = false }) {
         {portrait && <img className="capture-companion" src={companion.src} alt="" aria-hidden="true" />}
         <Dialog.Trigger asChild>
           <button className="capture-open" aria-label={`Enlarge ${project.name} ${capture.label} capture`}>
-            <img className="capture-image" src={capture.src} alt={capture.alt} />
+            <img className="capture-image" src={capture.src} alt={capture.alt} width={capture.width} height={capture.height}
+              onLoad={event => {
+                const image = event.currentTarget
+                image.decode().then(() => onReady?.()).catch(() => {})
+              }} />
             <span className="capture-zoom" aria-hidden="true">↗</span>
           </button>
         </Dialog.Trigger>
@@ -25,7 +29,6 @@ export default function CaptureScene({ project, captures, portrait = false }) {
         <div role="group" aria-label={`${project.name} captures`}>
           {captures.map((item, index) => <button key={item.label} type="button" aria-pressed={selected === index} onClick={() => setSelected(index)}>{item.label}</button>)}
         </div>
-        <span>{portrait ? 'iPhone · In development' : 'Standalone + VST3'}</span>
       </div>}
       <Dialog.Portal>
         <Dialog.Overlay className="capture-overlay" />

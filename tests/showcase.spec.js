@@ -20,7 +20,7 @@ for (const [width, height] of [[360, 640], [768, 1024], [1440, 900], [2048, 1152
       if (id && !['ateru', 'halcyra'].includes(id)) await expect(page.locator('video')).toHaveAttribute('preload', 'none')
       const clipped = await page.evaluate(() => {
         const main = document.querySelector('main').getBoundingClientRect()
-        const elements = [...document.querySelectorAll('main h1, .project-tagline, .project-tags, .project-links, .project-media, .project-media figcaption, .capture-controls, .constellation-object, .intro-enter')]
+        const elements = [...document.querySelectorAll('main h1, .project-tagline, .project-tags, .project-links, .project-media, .capture-controls, .constellation-object, .intro-enter')]
         return elements.filter(element => {
           if (!element.getClientRects().length) return false
           const r = element.getBoundingClientRect()
@@ -30,10 +30,9 @@ for (const [width, height] of [[360, 640], [768, 1024], [1440, 900], [2048, 1152
       expect(clipped, id || 'home').toEqual([])
       if (id) expect(await page.locator('.project-media').evaluate(figure => {
         const outer = figure.getBoundingClientRect()
-        const caption = figure.querySelector('figcaption').getBoundingClientRect()
         const media = figure.querySelector('.capture-image, video, :scope > img')?.getBoundingClientRect()
-        return caption.bottom <= outer.bottom + 1 && caption.top >= outer.top && (!media || media.bottom <= caption.top + 1)
-      }), `${id} caption must fit inside its figure`).toBeTruthy()
+        return !media || (media.top >= outer.top - 1 && media.bottom <= outer.bottom + 1)
+      }), `${id} media must fit inside its figure`).toBeTruthy()
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth && document.documentElement.scrollHeight <= innerHeight)).toBeTruthy()
     }
     expect(errors).toEqual([])
@@ -243,4 +242,150 @@ test('Ateru gallery changes real captures and its full-size dialog protects navi
   await page.keyboard.press('4')
   await expect(page.locator('h1')).toHaveText('Halcyra')
   await expect(page.locator('.capture-image')).toHaveAttribute('alt', /real synthesizer/)
+})
+
+
+test('Halcyra keeps a stable capture frame and reveals artwork after the image decodes', async ({ page }) => {
+  let releaseCapture
+  const captureReady = new Promise(resolve => { releaseCapture = resolve })
+  await page.route(/\/assets\/halcyra-(?!thumb-)[^/]+\.webp$/, async route => {
+    await captureReady
+    await route.continue()
+  })
+  await page.goto('/#/halcyra', { waitUntil: 'domcontentloaded' })
+  const stage = page.locator('.scene-halcyra')
+  await expect(stage).toHaveAttribute('data-media-ready', 'false')
+  await expect(page.locator('.project-backdrop')).toHaveCSS('opacity', '0')
+  const before = await page.locator('.capture-image').boundingBox()
+  expect(before.width).toBeGreaterThan(100)
+  expect(before.height).toBeGreaterThan(100)
+  releaseCapture()
+  await expect(stage).toHaveAttribute('data-media-ready', 'true')
+  await expect(page.locator('.project-backdrop')).toHaveCSS('opacity', '1')
+  const after = await page.locator('.capture-image').boundingBox()
+  expect(after).toEqual(before)
+  expect(await page.locator('.capture-image').evaluate(image => image.complete && image.naturalWidth === 1420)).toBeTruthy()
+})
+
+
+test('BibleLM dither respects motion preferences, hidden tabs and route cleanup', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.ditherDraws = 0
+    const draw = WebGL2RenderingContext.prototype.drawArrays
+    WebGL2RenderingContext.prototype.drawArrays = function (...args) {
+      if (this.canvas.classList.contains('dither-canvas')) window.ditherDraws++
+      return draw.apply(this, args)
+    }
+  })
+  await page.goto('/#/biblelm')
+  await expect(page.locator('.dither-canvas')).toBeVisible()
+  await expect.poll(() => page.evaluate(() => window.ditherDraws)).toBeGreaterThan(0)
+  await page.waitForTimeout(150)
+  const still = await page.evaluate(() => window.ditherDraws)
+  await page.waitForTimeout(150)
+  expect(await page.evaluate(() => window.ditherDraws)).toBe(still)
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await expect.poll(() => page.evaluate(() => window.ditherDraws)).toBeGreaterThan(still + 4)
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true })
+    document.dispatchEvent(new Event('visibilitychange'))
+  })
+  await page.waitForTimeout(100)
+  const hidden = await page.evaluate(() => window.ditherDraws)
+  await page.waitForTimeout(150)
+  expect(await page.evaluate(() => window.ditherDraws)).toBe(hidden)
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: false })
+    document.dispatchEvent(new Event('visibilitychange'))
+  })
+  await expect.poll(() => page.evaluate(() => window.ditherDraws)).toBeGreaterThan(hidden + 4)
+  await page.getByRole('tab', { name: '01 Nexis', exact: true }).click()
+  await expect(page.locator('.dither-canvas')).toHaveCount(0)
+  const departed = await page.evaluate(() => window.ditherDraws)
+  await page.waitForTimeout(150)
+  expect(await page.evaluate(() => window.ditherDraws)).toBe(departed)
+})
+
+test('BibleLM remains usable without WebGL', async ({ page }) => {
+  const errors = []
+  page.on('pageerror', error => errors.push(error.message))
+  await page.addInitScript(() => {
+    const getContext = HTMLCanvasElement.prototype.getContext
+    HTMLCanvasElement.prototype.getContext = function (type, ...args) {
+      return type === 'webgl2' ? null : getContext.call(this, type, ...args)
+    }
+  })
+  await page.goto('/#/biblelm')
+  await expect(page.locator('h1')).toHaveText('BibleLM')
+  await expect(page.locator('video')).toBeVisible()
+  await expect(page.locator('.scriptorium-cross')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Play BibleLM demo' })).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+
+test('first-visit warmup stays nonblocking and remembers successful preparation', async ({ page }) => {
+  let release
+  const blocked = new Promise(resolve => { release = resolve })
+  const videos = []
+  page.on('request', request => { if (/\.(mp4|webm)(\?|$)/.test(request.url())) videos.push(request.url()) })
+  await page.route(/\/assets\/halcyra-(?!thumb-)[^/]+\.webp$/, async route => {
+    await blocked
+    await route.continue()
+  })
+  await page.goto('/#/', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('[data-warmup=running]')).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+  expect(videos).toEqual([])
+  await page.getByRole('tab', { name: '01 Nexis', exact: true }).click()
+  await expect(page.locator('h1')).toHaveText('Nexis')
+  release()
+  await expect(page.locator('[data-warmup=done]')).toBeVisible()
+  await expect(page.locator('.asset-warmup')).toHaveCount(0)
+  await page.reload()
+  await expect(page.locator('h1')).toHaveText('Nexis')
+  await expect(page.locator('.asset-warmup')).toHaveCount(0)
+})
+
+test('each page renders only its assigned effect and stops it under reduced motion', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.effectDraws = {}
+    const draw = WebGL2RenderingContext.prototype.drawArrays
+    WebGL2RenderingContext.prototype.drawArrays = function (...args) {
+      const name = this.canvas.className
+      window.effectDraws[name] = (window.effectDraws[name] || 0) + 1
+      return draw.apply(this, args)
+    }
+  })
+  const effects = { home: 'letter-glitch', nexis: 'grainient', ateru: 'threads', biblelm: 'dither', halcyra: 'ghost-fibers', logscope: 'faulty-terminal' }
+  await page.goto('/#/')
+  for (const [id, effect] of Object.entries(effects)) {
+    await page.evaluate(id => { location.hash = id === 'home' ? '#/' : `#/${id}` }, id)
+    const canvas = page.locator('.stage-effect canvas')
+    await expect(canvas).toHaveCount(1)
+    await expect(canvas).toHaveClass(`${effect}-canvas`)
+    await expect.poll(() => page.evaluate(name => window.effectDraws[`${name}-canvas`] || 0, effect)).toBeGreaterThan(0)
+    await page.waitForTimeout(200)
+    const still = await page.evaluate(name => window.effectDraws[`${name}-canvas`], effect)
+    await page.waitForTimeout(150)
+    expect(await page.evaluate(name => window.effectDraws[`${name}-canvas`], effect), id).toBe(still)
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
+    await expect.poll(() => page.evaluate(name => window.effectDraws[`${name}-canvas`], effect)).toBeGreaterThan(still + 4)
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+  }
+})
+
+test('rubber dock animates the thumb while preserving keyboard and assistive selection', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await page.goto('/#/nexis')
+  const thumb = page.locator('.rubber-segment__thumb')
+  const start = await thumb.evaluate(element => getComputedStyle(element).clipPath)
+  await page.getByRole('tab', { name: '05 Logscope', exact: true }).click()
+  await expect(page.getByRole('tab', { name: '05 Logscope', exact: true })).toHaveAttribute('aria-selected', 'true')
+  await expect.poll(() => thumb.evaluate(element => getComputedStyle(element).clipPath)).not.toBe(start)
+  await page.keyboard.press('1')
+  await expect(page.getByRole('tab', { name: '01 Nexis', exact: true })).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('link', { name: 'Home', exact: true })).toBeFocused()
+  await expect(page.locator('.rubber-segment')).toHaveAttribute('data-empty', '')
 })
