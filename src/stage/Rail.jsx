@@ -7,7 +7,7 @@ import { projects } from './projects'
 import Heptagram from '../brand/Heptagram'
 import { emblems } from '../brand/emblems'
 import RubberSegment from '../components/micro/RubberSegment'
-export default function Rail({ activeId, navigate }) {
+export default function Rail({ activeId, navigate, pageId }) {
   const onKeyDown = event => {
     const index = projects.findIndex(project => project.id === activeId)
     let next
@@ -23,7 +23,7 @@ export default function Rail({ activeId, navigate }) {
   }
   return (
     <nav className="showcase-rail" aria-label="Selected work">
-      <a id="rail-home" href="#/" aria-label="Home" aria-current={!activeId ? 'page' : undefined}><Heptagram /></a>
+      <a id="rail-home" href="#/" aria-label="Home" aria-current={pageId === 'home' ? 'page' : undefined}><Heptagram /></a>
       <RubberSegment value={activeId ?? null} onChange={navigate} onKeyDown={onKeyDown} aria-label="Projects"
         size="lg" inset={5} radius={12} stretch={80} squash={3} draggable={false}
         trackColor="transparent" thumbColor="color-mix(in srgb, var(--stage-surface) 65%, transparent)" textColor="var(--chrome-muted)" activeTextColor="var(--stage-fg)"

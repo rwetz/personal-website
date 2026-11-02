@@ -1,0 +1,9 @@
+<!-- Ryan Wetzstein | Personal Website | 2026 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="760" viewBox="0 0 600 760">
+  <rect width="600" height="760" fill="#121923"/>
+  <circle cx="205" cy="280" r="135" fill="#a8b8c9" opacity=".07"/>
+  <path d="M0 425L600 260V760H0Z" fill="#a8b8c9" opacity=".05"/>
+  <text x="48" y="105" fill="#a8b8c9" font-family="sans-serif" font-size="18" letter-spacing="3">PERSONAL PHOTO</text>
+  <text x="42" y="640" fill="#a8b8c9" font-family="sans-serif" font-size="160" font-weight="300">01</text>
+  <text x="48" y="703" fill="#a8b8c9" font-family="sans-serif" font-size="18">Placeholder</text>
+</svg>

@@ -17,6 +17,7 @@ const isBlocked = target => Boolean(document.querySelector('[role="dialog"], dia
 export function useStage() {
   const hash = useSyncExternalStore(subscribe, snapshot)
   const project = projectFromHash(hash)
+  const pageId = /^#\/?about\/?$/.test(hash) ? 'about' : project?.id ?? 'home'
   const pointer = useRef(null)
   const wheel = useRef({ amount: 0, last: 0, lockedUntil: 0 })
   const navigate = useCallback(id => { window.location.hash = id ? `#/${id}` : '#/' }, [])
@@ -26,28 +27,29 @@ export function useStage() {
     navigate(next < 0 || next >= projects.length ? null : projects[next].id)
   }, [project, navigate])
   useEffect(() => {
-    const canonical = project ? `#/${project.id}` : '#/'
+    const canonical = pageId === 'home' ? '#/' : `#/${pageId}`
     if (hash !== canonical) {
       window.history.replaceState(null, '', canonical)
       window.dispatchEvent(new HashChangeEvent('hashchange'))
     }
     applyTheme(project?.palette)
-    document.title = project ? `${project.name} | Ryan Wetzstein` : 'Ryan Wetzstein'
+    document.title = pageId === 'about' ? 'About | Ryan Wetzstein' : project ? `${project.name} | Ryan Wetzstein` : 'Ryan Wetzstein'
     if (!document.activeElement?.closest('.showcase-rail')) {
       document.querySelector('.showcase-shell h1')?.focus({ preventScroll: true })
     }
-  }, [hash, project])
+  }, [hash, project, pageId])
   useEffect(() => {
     const onKey = event => {
       if (event.defaultPrevented || event.repeat || event.metaKey || event.ctrlKey || event.altKey || isBlocked(event.target) || event.target.closest('[role="tablist"]')) return
       if (event.key === 'Escape') { event.preventDefault(); navigate(null) }
+      if (pageId === 'about') return
       if (/^[0-4]$/.test(event.key)) { event.preventDefault(); navigate(projects[Number(event.key)].id) }
       if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp'].includes(event.key)) {
         event.preventDefault(); step(['ArrowRight', 'ArrowDown'].includes(event.key) ? 1 : -1)
       }
     }
     const onWheel = event => {
-      if (event.ctrlKey || isBlocked(event.target)) return
+      if (pageId === 'about' || event.ctrlKey || isBlocked(event.target)) return
       const main = document.getElementById('main-content')
       if (main.scrollHeight > main.clientHeight + 1) return
       event.preventDefault()
@@ -63,9 +65,9 @@ export function useStage() {
     const main = document.getElementById('main-content')
     main.addEventListener('wheel', onWheel, { passive: false })
     return () => { window.removeEventListener('keydown', onKey); main.removeEventListener('wheel', onWheel) }
-  }, [navigate, step])
+  }, [navigate, step, pageId])
   return {
-    project, navigate,
+    project, pageId, navigate,
     gestures: {
       onPointerDown: event => {
         if (!event.isPrimary || event.button !== 0 || isBlocked(event.target) || event.target.closest('a, button')) return

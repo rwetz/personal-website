@@ -18,17 +18,21 @@ import './stage/stage.css'
 import './stage/identities.css'
 import './stage/refinements.css'
 
-const AboutModal = lazy(() => import('./stage/AboutModal'))
+const AboutPage = lazy(() => import('./stage/AboutPage'))
 const loadMotionFeatures = () => import('./lib/motion-features').then(mod => mod.default)
 
 export default function App() {
-  const [aboutOpen, setAboutOpen] = useState(false)
   const stage = useStage()
+  const [returnProject, setReturnProject] = useState(null)
+  const openAbout = () => {
+    if (stage.pageId !== 'about') setReturnProject(stage.project?.id ?? null)
+    stage.navigate('about')
+  }
   return (
     <LazyMotion features={loadMotionFeatures} strict>
       <MotionConfig reducedMotion="user">
-        <div className="showcase-shell" data-project={stage.project?.id ?? 'home'}>
-          <ProjectBackground key={stage.project?.id ?? 'home'} project={stage.project} />
+        <div className="showcase-shell" data-project={stage.pageId}>
+          {stage.pageId !== 'about' && <ProjectBackground key={stage.pageId} project={stage.project} />}
           <a className="showcase-skip" href="#main-content" onClick={event => {
             event.preventDefault()
             document.getElementById('main-content')?.focus()
@@ -37,21 +41,20 @@ export default function App() {
             <a href="#/" className="showcase-wordmark" aria-label="Ryan Wetzstein, home"><Heptagram activeId={stage.project?.id} /><span>Ryan Wetzstein</span></a>
             <div className="showcase-header-actions">
               <a href="/resume.pdf" download>Resume ↗</a>
-              <button id="about-trigger" onClick={() => setAboutOpen(true)}>About & contact</button>
+              <button id="about-trigger" onClick={openAbout} aria-current={stage.pageId === 'about' ? 'page' : undefined}>About & contact</button>
             </div>
           </header>
-          <main id="main-content" tabIndex={-1} {...stage.gestures}>
-            {stage.project ? <Stage project={stage.project} /> : <Intro />}
+          <main id="main-content" tabIndex={-1} {...(stage.pageId === 'about' ? {} : stage.gestures)}>
+            {stage.pageId === 'about' ? <Suspense fallback={<p role="status">Loading about…</p>}><AboutPage returnProject={returnProject} /></Suspense> : stage.project ? <Stage project={stage.project} /> : <Intro />}
           </main>
           <footer className="showcase-footer">
             <div className="showcase-footer-meta"><span>← → to explore <span className="footer-divider">/</span> Esc for home</span></div>
-            <Rail activeId={stage.project?.id} navigate={stage.navigate} />
+            <Rail activeId={stage.project?.id} navigate={stage.navigate} pageId={stage.pageId} />
           </footer>
-          <span className="sr-only" role="status" aria-live="polite">{stage.project?.name ?? 'Home, selected work'}</span>
+          <span className="sr-only" role="status" aria-live="polite">{stage.pageId === 'about' ? 'About Ryan' : stage.project?.name ?? 'Home, selected work'}</span>
         </div>
         <AssetWarmup />
-        <CommandPaletteHost onAbout={() => setAboutOpen(true)} />
-        {aboutOpen && <Suspense fallback={<div className="showcase-loading" role="status">Loading about…</div>}><AboutModal onClose={() => setAboutOpen(false)} /></Suspense>}
+        <CommandPaletteHost onAbout={openAbout} />
         <Toaster />
       </MotionConfig>
     </LazyMotion>

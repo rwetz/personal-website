@@ -43,11 +43,11 @@
 .constellation-object[href="#/ateru"] img { object-position: center 20%; }
 .constellation-mark { color: #8494a920; }
 .constellation-orbit { opacity: .55; }
-.project-backdrop { border: 1px solid transparent; }
+.project-backdrop { border: 0; }
 
 /* Nexis: the display face, panel edges and soft movement of its actual shell. */
-.scene-nexis .project-backdrop { inset: 24px; border-color: var(--chrome-border); border-radius: 20px; }
-.scene-nexis .project-media { padding: 12px; background: var(--stage-surface); border: 1px solid var(--chrome-border); border-radius: 22px; }
+
+.scene-nexis .project-media { padding: 12px; }
 .scene-nexis .project-media img, .scene-nexis video { box-shadow: none; border-radius: 12px; }
 .scene-nexis .project-links a:first-child { border: 1px solid var(--chrome-border); border-radius: 9px; padding: 0 16px; background: var(--stage-surface); }
 
@@ -63,18 +63,18 @@
 }
 
 /* BibleLM: Nocturne paper, blackletter display and a dithered cross in the margin. */
-.scene-biblelm .project-copy { border-left: 1px solid var(--chrome-border); padding-left: 28px; }
+.scene-biblelm .project-copy { padding-left: 28px; }
 .scene-biblelm .project-copy h1 { font-weight: 400; letter-spacing: -.015em; font-size: clamp(60px, 7.5vw, 116px); }
 .scene-biblelm .project-tagline { font-size: clamp(20px, 1.8vw, 26px); line-height: 1.5; }
 .scene-biblelm .project-tags li { border-width: 0 0 1px; border-radius: 0; padding-inline: 0; margin-right: 12px; }
-.scene-biblelm .project-media { padding: 12px; border: 1px solid var(--chrome-border); outline: 1px solid var(--chrome-border); outline-offset: 5px; }
+.scene-biblelm .project-media { padding: 12px; }
 .scene-biblelm video { border: 0; box-shadow: none; border-radius: 0; }
 .scriptorium-cross { position: absolute; height: 90%; width: 42%; left: -12%; top: 5%; color: var(--stage-fg); opacity: .055; }
 .scriptorium-ornament { position: absolute; bottom: 24px; left: 5%; color: var(--stage-accent); opacity: .35; font-size: 18px; letter-spacing: 16px; }
 
 /* Halcyra: flat instrument panels and an oscillator trace, using Theme.h colors. */
 .scene-halcyra .project-copy h1 { text-transform: uppercase; font-size: clamp(42px, 5vw, 76px); font-weight: 750; letter-spacing: -.02em; }
-.scene-halcyra .project-media { border: 1px solid #2c2f37; border-radius: 8px; padding: 10px; background: var(--stage-surface); }
+.scene-halcyra .project-media { padding: 10px; }
 .oscillator-lines { position: absolute; inset: auto 4% 0 35%; height: 80px; display: flex; gap: 18px; align-items: center; opacity: .08; }
 .oscillator-lines i { width: 2px; height: var(--bar); background: var(--stage-accent); animation: oscillator-pulse 4s ease-in-out infinite alternate; }
 .oscillator-lines i:nth-child(3n) { animation-delay: -1.5s; }
@@ -82,7 +82,7 @@
 
 /* Logscope: a terminal instrument with plain rules and an honest monospace title. */
 .scene-logscope .project-copy h1 { font-size: clamp(36px, 4.5vw, 66px); letter-spacing: -.05em; }
-.scene-logscope .project-media { border: 1px solid var(--chrome-border); padding: 10px; }
+.scene-logscope .project-media { padding: 10px; }
 .scene-logscope video { border: 0; box-shadow: none; border-radius: 0; }
 .terminal-rules { position: absolute; inset: 28px; border: 1px solid var(--chrome-border); opacity: .5; }
 .terminal-rules::before, .terminal-rules::after { content: ''; position: absolute; height: 8px; width: 8px; background: var(--stage-fg); opacity: .6; }

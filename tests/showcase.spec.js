@@ -92,25 +92,31 @@ test('app identities replace the generic gradient and keep home in Geist Sans', 
   await expect.poll(() => page.locator('.mark-biblelm mask rect:last-child').first().evaluate(element => getComputedStyle(element).opacity)).toBe('0')
 })
 
-test('short About shows school progress and direct contact links, traps and restores focus', async ({ page }) => {
+test('About has a full route, school progress, photo placeholders and direct contact links', async ({ page }) => {
   await page.goto('/#/nexis')
   await page.getByRole('button', { name: 'About & contact' }).click()
-  const dialog = page.getByRole('dialog')
-  await expect(dialog).toBeVisible()
-  await expect(dialog.getByText(/senior year at North Dakota State University/)).toBeVisible()
-  await expect(dialog.getByText(/graduation in May 2027/)).toBeVisible()
-  await expect(dialog.locator('#experience, #skills, form')).toHaveCount(0)
-  await expect(dialog.getByRole('link', { name: 'GitHub', exact: true })).toHaveAttribute('href', 'https://github.com/rwetz')
-  await expect(dialog.getByRole('link', { name: 'LinkedIn', exact: true })).toHaveAttribute('href', 'https://linkedin.com/in/ryan-wetzstein')
-  await expect(dialog.getByRole('link', { name: 'Email', exact: true })).toHaveAttribute('href', 'mailto:rwetz00@gmail.com')
-  await dialog.getByRole('link', { name: 'LinkedIn', exact: true }).focus()
-  await page.keyboard.press('Tab')
-  await expect(dialog.getByRole('button', { name: 'Close about' })).toBeFocused()
-  await page.keyboard.press('ArrowRight')
-  await expect(page).toHaveURL(/#\/nexis$/)
+  await expect(page).toHaveURL(/#\/about$/)
+  const about = page.locator('.about-page')
+  await expect(page.locator('h1')).toHaveText('Hi, I’m Ryan.')
+  await expect(page.locator('h1')).toBeFocused()
+  await expect(page).toHaveTitle('About | Ryan Wetzstein')
+  await expect(about.getByText(/senior year at North Dakota State University/)).toBeVisible()
+  await expect(about.getByText(/graduation in May 2027/)).toBeVisible()
+  await expect(about.locator('#experience, #skills, form')).toHaveCount(0)
+  await expect(page.getByRole('dialog')).toHaveCount(0)
+  await expect(about.locator('.photo-fallback img')).toHaveCount(4)
+  await expect(about.locator('canvas')).toHaveCount(0)
+  await expect(about.getByRole('link', { name: 'GitHub', exact: true })).toHaveAttribute('href', 'https://github.com/rwetz')
+  await expect(about.getByRole('link', { name: 'LinkedIn', exact: true })).toHaveAttribute('href', 'https://linkedin.com/in/ryan-wetzstein')
+  await expect(about.getByRole('link', { name: 'Email', exact: true })).toHaveAttribute('href', 'mailto:rwetz00@gmail.com')
+  await about.getByRole('link', { name: 'Back to selected work' }).click()
+  await expect(page.locator('h1')).toHaveText('Nexis')
+  await page.goBack()
+  await expect(page.locator('h1')).toHaveText('Hi, I’m Ryan.')
+  await page.reload()
+  await expect(page.locator('h1')).toHaveText('Hi, I’m Ryan.')
   await page.keyboard.press('Escape')
-  await expect(dialog).not.toBeVisible()
-  await expect(page.getByRole('button', { name: 'About & contact' })).toBeFocused()
+  await expect(page).toHaveURL(/#\/$/)
 })
 
 test('command palette navigates projects and opens About', async ({ page }) => {
@@ -123,7 +129,8 @@ test('command palette navigates projects and opens About', async ({ page }) => {
   await page.keyboard.press('Control+k')
   await page.getByPlaceholder('Type a command or search…').fill('About')
   await page.getByRole('option', { name: 'About & contact', exact: true }).click()
-  await expect(page.getByRole('dialog', { name: 'About Ryan' })).toBeVisible()
+  await expect(page).toHaveURL(/#\/about$/)
+  await expect(page.locator('h1')).toHaveText('Hi, I’m Ryan.')
 })
 
 test('swipe and wheel move once per gesture', async ({ page }) => {
@@ -207,7 +214,7 @@ test('desktop hover previews and logo morph work with motion enabled', async ({ 
   await expect.poll(() => page.locator('.showcase-wordmark svg path:first-child').evaluate(element => getComputedStyle(element).opacity)).toBe('1')
 })
 
-test('WCAG AA scans on every stage, modal and command palette', async ({ page }) => {
+test('WCAG AA scans on every stage, About page and command palette', async ({ page }) => {
   for (const id of ['', ...ids]) {
     await page.goto(`/#/${id}`)
     if (['ateru', 'halcyra'].includes(id)) await expect(page.locator('.capture-scene')).toBeVisible()
@@ -215,7 +222,7 @@ test('WCAG AA scans on every stage, modal and command palette', async ({ page })
     expect(result.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })), id || 'home').toEqual([])
   }
   await page.getByRole('button', { name: 'About & contact' }).click()
-  await expect(page.getByRole('dialog')).toBeVisible()
+  await expect(page.locator('.about-page')).toBeVisible()
   for (const section of ['about', 'contact']) {
     await page.locator(`#${section}`).scrollIntoViewIfNeeded()
     const about = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
@@ -248,7 +255,7 @@ test('Ateru gallery changes real captures and its full-size dialog protects navi
 })
 
 
-test('Halcyra keeps a stable capture frame and reveals artwork after the image decodes', async ({ page }) => {
+test('Halcyra keeps a stable capture frame without decorative background SVGs', async ({ page }) => {
   let releaseCapture
   const captureReady = new Promise(resolve => { releaseCapture = resolve })
   await page.route(/\/assets\/halcyra-(?!thumb-)[^/]+\.webp$/, async route => {
@@ -256,15 +263,13 @@ test('Halcyra keeps a stable capture frame and reveals artwork after the image d
     await route.continue()
   })
   await page.goto('/#/halcyra', { waitUntil: 'domcontentloaded' })
-  const stage = page.locator('.scene-halcyra')
-  await expect(stage).toHaveAttribute('data-media-ready', 'false')
-  await expect(page.locator('.project-backdrop')).toHaveCSS('opacity', '0')
+  await expect(page.locator('.scene-halcyra')).toBeVisible()
+  await expect(page.locator('.project-backdrop svg')).toHaveCount(0)
   const before = await page.locator('.capture-image').boundingBox()
   expect(before.width).toBeGreaterThan(100)
   expect(before.height).toBeGreaterThan(100)
   releaseCapture()
-  await expect(stage).toHaveAttribute('data-media-ready', 'true')
-  await expect(page.locator('.project-backdrop')).toHaveCSS('opacity', '1')
+  await expect.poll(() => page.locator('.capture-image').evaluate(image => image.complete && image.naturalWidth === 1420)).toBeTruthy()
   const after = await page.locator('.capture-image').boundingBox()
   expect(after).toEqual(before)
   expect(await page.locator('.capture-image').evaluate(image => image.complete && image.naturalWidth === 1420)).toBeTruthy()
@@ -395,4 +400,44 @@ test('rubber dock animates the thumb while preserving keyboard and assistive sel
   await page.keyboard.press('Escape')
   await expect(page.getByRole('link', { name: 'Home', exact: true })).toBeFocused()
   await expect(page.locator('.rubber-segment')).toHaveAttribute('data-empty', '')
+})
+
+
+test('About Flex Carousel keeps keyboard navigation local and adapts to reduced motion', async ({ page }) => {
+  const errors = []
+  page.on('pageerror', error => errors.push(error.message))
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await page.goto('/#/about')
+  const gallery = page.getByRole('region', { name: 'Image carousel' })
+  await expect(gallery.locator('canvas')).toBeVisible()
+  await expect(gallery.locator('.flex-carousel__live')).toHaveText(/Frame 01, 1 of 4/)
+  await gallery.focus()
+  await page.keyboard.press('ArrowRight')
+  await expect(gallery.locator('.flex-carousel__live')).toHaveText(/Frame 02, 2 of 4/)
+  await expect(page).toHaveURL(/#\/about$/)
+  const audit = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
+  expect(audit.violations.map(v => v.id)).toEqual([])
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await expect(page.locator('.about-photos canvas')).toHaveCount(0)
+  await expect(page.locator('.photo-fallback')).toBeVisible()
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await expect(page.locator('.about-photos canvas')).toHaveCount(1)
+  expect(errors).toEqual([])
+})
+
+test('About retains its photo strip when WebGL is unavailable', async ({ page }) => {
+  const errors = []
+  page.on('pageerror', error => errors.push(error.message))
+  await page.addInitScript(() => {
+    const getContext = HTMLCanvasElement.prototype.getContext
+    HTMLCanvasElement.prototype.getContext = function (type, ...args) {
+      return type === 'webgl2' || type === 'webgl' ? null : getContext.call(this, type, ...args)
+    }
+  })
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await page.goto('/#/about')
+  await expect(page.locator('.about-page')).toBeVisible()
+  await expect(page.locator('.photo-fallback')).toBeVisible()
+  await expect(page.locator('.photo-fallback img')).toHaveCount(4)
+  expect(errors).toEqual([])
 })

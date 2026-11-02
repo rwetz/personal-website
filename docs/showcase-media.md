@@ -65,8 +65,8 @@ Bits commit and retain the upstream license beside the source:
 | Home | Letter Glitch | Classic hex charset, `#61dca3` / `#61b3dc`, `#2b4539` base, spacing 0.1, density/base opacity 1, glitch amount 0.85, flow 0 |
 | Nexis | Grainient | Cool project palette, restrained animated grain |
 | Ateru | Threads | Coral threads behind real phone captures |
-| Halcyra | Ghost Fibers | Blue fibers, with the existing SVG instrument diagrams retained |
-| Logscope | Faulty Terminal | Silver glyphs and restrained flicker behind the real recording |
+| Halcyra | Ghost Fibers | Blue fibers only; decorative SVG instrument diagrams removed |
+| Logscope | Faulty Terminal | Amber `#ffb347` dots, matching the supplied customization screenshot |
 | First visit | Call Chip | Actual poster decode, local font readiness and current background-module warmup; no video preload or simulated timer-based completion |
 | Project dock | Rubber Segment | Stretch/squash thumb adapted to the existing accessible tabs and routing |
 
@@ -76,3 +76,29 @@ Local adaptations also handle live motion-preference changes and StrictMode effe
 remounts. The first-visit chip is nonblocking, bounds failed warmup attempts, and
 remembers successful warmup in session storage. Icons and motion reuse the site's
 existing Phosphor and Framer Motion dependencies.
+
+## Borderless pages and About (2026-11-02)
+
+Project captures now float over the animated backgrounds without enclosing media
+panels, backdrop outlines, or dock outlines. Ateru's phone sizes are unchanged.
+BibleLM's mouse radius is `0.22`, down from the component default of `1`.
+
+Logscope uses the supplied Faulty Terminal settings: scale 1.6, digit size 1.25,
+speed 0.85, brightness 0.8, glow 0.6, persistence 0.5, mouse strength 0.5, mouse
+glow 0.55, scramble 0.5, scanlines 0.5, glitch/flicker/noise 1, chromatic
+aberration 0, curvature 0.07, vignette 0.25, mouse reaction and load animation on,
+pause and light mode off. The viewport layer uses 40% opacity to keep copy readable.
+
+About is a full page at `#/about`. Its [Flex Carousel](https://reactbits.dev/components/flex-carousel)
+is vendored from the official `https://reactbits.dev/r/FlexCarousel-JS-CSS.json`
+registry fetched on 2026-11-02. Source and upstream license live under
+`src/components/gallery/`. OGL is loaded with the About chunk; no Three.js is added.
+Local changes remove upstream demo photos, pause drawing while the document is
+hidden, and retain an HTML gallery if WebGL cannot initialize. Reduced motion
+uses that static gallery and responds to preference changes immediately.
+
+The four SVGs in `src/assets/about/` are deliberately labeled placeholders,
+authorized by Ryan until he supplies personal photos. They do not represent real
+events or photographs. Replace their imports, alt text and carousel captions in
+`src/stage/AboutPage.jsx` together when the photos arrive. No stock photos or
+project screenshots are presented as personal photos.
