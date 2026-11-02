@@ -41,13 +41,15 @@ export function useStage() {
     const onKey = event => {
       if (event.defaultPrevented || event.repeat || event.metaKey || event.ctrlKey || event.altKey || isBlocked(event.target) || event.target.closest('[role="tablist"]')) return
       if (event.key === 'Escape') { event.preventDefault(); navigate(null) }
-      if (/^[1-5]$/.test(event.key)) { event.preventDefault(); navigate(projects[Number(event.key) - 1].id) }
+      if (/^[0-4]$/.test(event.key)) { event.preventDefault(); navigate(projects[Number(event.key)].id) }
       if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp'].includes(event.key)) {
         event.preventDefault(); step(['ArrowRight', 'ArrowDown'].includes(event.key) ? 1 : -1)
       }
     }
     const onWheel = event => {
       if (event.ctrlKey || isBlocked(event.target)) return
+      const main = document.getElementById('main-content')
+      if (main.scrollHeight > main.clientHeight + 1) return
       event.preventDefault()
       const now = performance.now()
       const state = wheel.current

@@ -7,7 +7,6 @@ import { useState } from 'react'
 import { m } from 'framer-motion'
 import { projects } from './projects'
 import ProjectPreview from './ProjectPreview'
-import ProjectBackground from './ProjectBackground'
 import ateruStudio from '../assets/showcase/ateru-studio.webp'
 import ateruAppearance from '../assets/showcase/ateru-appearance.webp'
 export default function Intro() {
@@ -16,7 +15,6 @@ export default function Intro() {
     if (window.matchMedia('(min-width: 960px) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) setHovered(id)
   }
   return <section className="showcase-intro" aria-labelledby="intro-title">
-    <ProjectBackground />
     <div className="intro-copy">
       <div><p className="showcase-eyebrow">Independent software & personal experiments</p>
       <h1 id="intro-title" tabIndex={-1}>Built with intent.<br /><span>Down to the details.</span></h1></div>
@@ -30,7 +28,7 @@ export default function Intro() {
         {project.id === 'ateru' && <><img src={ateruStudio} alt="" width="393" height="852" /><img src={ateruAppearance} alt="" width="393" height="852" /></>}
         {hovered === project.id && project.media.animated && <ProjectPreview id={project.id} />}
         </div>
-        <span><small>0{index + 1}</small><strong>{project.name}</strong><small>{project.kind}</small><b aria-hidden="true">↗</b></span>
+        <span><small>{String(index).padStart(2, '0')}</small><strong>{project.name}</strong><small>{project.kind}</small><b aria-hidden="true">↗</b></span>
         </div>
       </m.a>)}
     </div>

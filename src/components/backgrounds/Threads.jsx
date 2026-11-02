@@ -381,7 +381,7 @@ const Threads = ({
       const across = Math.abs(w * sin) + Math.abs(h * cos);
       const scale = w / state.width;
       const mouse = s.enableMouseInteraction ? state.mouse : [0.5, 0.5];
-      const strength = s.parting * state.presence * 2;
+      const strength = s.parting * state.presence * (2 + (state.clickPulse || 0) * 4);
       const px = state.pointer[0] * scale;
       const py = state.pointer[1] * scale;
       const local = [px * cos + py * sin, -px * sin + py * cos];
@@ -446,6 +446,7 @@ const Threads = ({
       state.pointer[0] += (state.targetPointer[0] - state.pointer[0]) * glide;
       state.pointer[1] += (state.targetPointer[1] - state.pointer[1]) * glide;
       state.presence += ((state.inside && s.parting > 0 ? 1 : 0) - state.presence) * (1 - Math.exp(-dt * 4));
+      state.clickPulse = (state.clickPulse || 0) * Math.exp(-dt * 2.5);
       render();
       const settling =
         Math.abs(state.targetMouse[0] - state.mouse[0]) > 0.0005 ||
@@ -480,6 +481,12 @@ const Threads = ({
       wake();
     };
 
+    const onPointerDown = event => {
+      if (!settingsRef.current.enableMouseInteraction || reduce || event.button !== 0) return;
+      onPointerMove(event);
+      if (state.inside) { state.clickPulse = 1; wake(); }
+    };
+
     const onPointerLeave = () => {
       state.inside = false;
       state.targetMouse = [0.5, 0.5];
@@ -507,6 +514,7 @@ const Threads = ({
     });
     intersection.observe(container);
     window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('pointerdown', onPointerDown, { passive: true });
     document.documentElement.addEventListener('pointerleave', onPointerLeave);
     document.addEventListener('visibilitychange', onVisibility);
     resize();
@@ -524,6 +532,7 @@ const Threads = ({
       resizeObserver.disconnect();
       intersection.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerdown', onPointerDown);
       document.documentElement.removeEventListener('pointerleave', onPointerLeave);
       document.removeEventListener('visibilitychange', onVisibility);
       gl.deleteFramebuffer(framebuffer);

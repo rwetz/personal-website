@@ -8,7 +8,6 @@ import { m } from 'framer-motion'
 import { projects } from './projects'
 import SceneArtwork from './SceneArtwork'
 import HalcyraScene from './scenes/HalcyraScene'
-import ProjectBackground from './ProjectBackground'
 const loaders = {
   nexis: () => import('./scenes/NexisScene'),
   biblelm: () => import('./scenes/BibleLmScene'),
@@ -33,12 +32,11 @@ export default function Stage({ project }) {
   return (
     <section className={`project-stage scene-${project.id}`} data-media-ready={project.id !== 'halcyra' || readyMedia === project.id} role="tabpanel" id={`panel-${project.id}`} aria-labelledby={`tab-${project.id}`}>
       <div className="project-backdrop" key={`bg-${project.id}`} aria-hidden="true">
-        <ProjectBackground project={project} />
         {project.id === 'biblelm' && <><svg className="scriptorium-cross" viewBox="0 0 1024 1024"><defs><pattern id="cross-dither" patternUnits="userSpaceOnUse" width="12" height="12"><rect width="6" height="6" fill="currentColor" /></pattern></defs><path d="M440 80H584V336H814V480H584V910H440V480H210V336H440Z" fill="url(#cross-dither)" /></svg><span className="scriptorium-ornament">✦ · ✦</span></>}
         <SceneArtwork project={project.id} />
       </div>
       <div className="project-copy" key={`copy-${project.id}`}>
-        <p className="showcase-eyebrow"><span>0{index + 1} / 05</span><span>{project.kind}</span></p>
+        <p className="showcase-eyebrow"><span>{String(index).padStart(2, '0')} / 04</span><span>{project.kind}</span></p>
         <h1 tabIndex={-1}>{project.name}</h1>
         <p className="project-tagline">{project.tagline}</p>
         <ul className="project-tags" aria-label="Project tags">{project.tags.map(tag => <li key={tag}>{tag}</li>)}</ul>

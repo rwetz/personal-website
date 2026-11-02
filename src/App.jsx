@@ -9,6 +9,7 @@ import CommandPaletteHost from './components/CommandPaletteHost'
 import { Toaster } from '@/components/ui/sonner'
 import { useStage } from './stage/useStage'
 import Stage from './stage/Stage'
+import ProjectBackground from './stage/ProjectBackground'
 import Intro from './stage/Intro'
 import Rail from './stage/Rail'
 import AssetWarmup from './stage/AssetWarmup'
@@ -27,6 +28,7 @@ export default function App() {
     <LazyMotion features={loadMotionFeatures} strict>
       <MotionConfig reducedMotion="user">
         <div className="showcase-shell" data-project={stage.project?.id ?? 'home'}>
+          <ProjectBackground key={stage.project?.id ?? 'home'} project={stage.project} />
           <a className="showcase-skip" href="#main-content" onClick={event => {
             event.preventDefault()
             document.getElementById('main-content')?.focus()

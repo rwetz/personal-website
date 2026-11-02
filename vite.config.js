@@ -19,6 +19,13 @@ export default defineConfig({
     },
   },
   plugins: [
+    // The production policy upgrades HTTP requests, but Safari applies it to
+    // localhost too, where Vite serves plain HTTP. Keep it in built HTML.
+    {
+      name: 'local-preview-csp',
+      apply: 'serve',
+      transformIndexHtml: html => html.replace(/;\s*upgrade-insecure-requests/, ''),
+    },
     tailwindcss(),
     react(),
   ],

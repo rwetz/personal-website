@@ -271,3 +271,37 @@
 }
 
 .scene-nexis .project-backdrop { overflow: hidden; }
+
+/* The effect belongs to the viewport; navigation floats above it. */
+.showcase-shell { position: relative; isolation: isolate; }
+.showcase-shell > .stage-effect { position: absolute; inset: 0; z-index: -1; mask-image: none; }
+.showcase-intro { background: transparent; }
+.showcase-header, .showcase-footer { background: transparent; border: 0; }
+.showcase-wordmark, .showcase-header-actions a, .showcase-header-actions button,
+.showcase-rail > a, .showcase-rail [role=tablist] {
+  background: color-mix(in srgb, var(--t-void) 68%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, var(--t-silver) 18%, transparent);
+  border-radius: 10px;
+}
+.showcase-wordmark { padding: 6px 10px; }
+.showcase-header-actions a { padding: 10px 14px; }
+.showcase-footer-meta span { text-shadow: 0 1px 6px #000; }
+.showcase-rail .rubber-segment__thumb { backdrop-filter: blur(8px); }
+
+/* Allow the layout to breathe and remain reachable in unusually short windows. */
+@media (max-height: 760px) {
+  #main-content { overflow-y: auto; overscroll-behavior: contain; }
+  .showcase-intro { min-height: 520px; }
+  .project-stage { min-height: 440px; }
+}
+@media (max-width: 959px) and (max-height: 760px) {
+  .showcase-intro { min-height: 600px; }
+  .project-stage { min-height: 620px; }
+}
+@media (max-width: 540px) {
+  .showcase-intro { min-height: 600px; }
+  .project-stage { min-height: 560px; }
+  #main-content { overflow-y: auto; overscroll-behavior: contain; }
+}
