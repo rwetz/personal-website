@@ -365,10 +365,14 @@ test('each page renders only its assigned effect and stops it under reduced moti
     await expect(canvas).toHaveCount(1)
     await expect(canvas).toHaveClass(`${effect}-canvas`)
     await expect.poll(() => page.evaluate(name => window.effectDraws[`${name}-canvas`] || 0, effect)).toBeGreaterThan(0)
-    await page.waitForTimeout(200)
+    // Font/resize redraws can finish later on software-rendered CI browsers.
+    // Require a quiet interval instead of assuming initialization takes 200ms.
+    await expect.poll(async () => {
+      const before = await page.evaluate(name => window.effectDraws[`${name}-canvas`], effect)
+      await page.waitForTimeout(400)
+      return await page.evaluate(name => window.effectDraws[`${name}-canvas`], effect) === before
+    }, { message: `${id} stops drawing under reduced motion`, timeout: 10000 }).toBe(true)
     const still = await page.evaluate(name => window.effectDraws[`${name}-canvas`], effect)
-    await page.waitForTimeout(150)
-    expect(await page.evaluate(name => window.effectDraws[`${name}-canvas`], effect), id).toBe(still)
     await page.emulateMedia({ reducedMotion: 'no-preference' })
     await expect.poll(() => page.evaluate(name => window.effectDraws[`${name}-canvas`], effect)).toBeGreaterThan(still + 4)
     await page.emulateMedia({ reducedMotion: 'reduce' })
