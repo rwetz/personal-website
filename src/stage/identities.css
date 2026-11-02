@@ -1,0 +1,181 @@
+/* ╔══════════════════════════════════════╗
+ * ║  Ryan Wetzstein                      ║
+ * ║  Personal Website                    ║
+ * ║  2026                                ║
+ * ╚══════════════════════════════════════╝ */
+:root {
+  --stage-display: 'Geist Variable', sans-serif;
+  --stage-ui: 'Geist Variable', sans-serif;
+}
+.showcase-shell {
+  --chrome-border: color-mix(in srgb, var(--stage-fg) 16%, var(--stage-bg));
+  --chrome-muted: color-mix(in srgb, var(--stage-fg) 70%, var(--stage-bg));
+  font-family: var(--stage-ui);
+}
+.showcase-header, .showcase-footer { background: var(--stage-bg); color: var(--stage-fg); border-color: var(--chrome-border); transition: background-color 600ms, color 600ms, border-color 600ms; }
+.showcase-wordmark { font-size: 15px; font-weight: 500; }
+.showcase-wordmark .heptagram { width: 40px; height: 40px; }
+.mark-nexis .emblem-ink { animation: emblem-spectrum 12s linear infinite; }
+@keyframes emblem-spectrum { to { filter: hue-rotate(360deg); } }
+.showcase-header-actions { font-size: 14px; }
+.showcase-header-actions a { color: var(--chrome-muted); }
+.showcase-header-actions button { color: var(--stage-fg); border-color: var(--chrome-border); }
+.showcase-eyebrow { font: 500 13px/1.5 var(--stage-ui); text-transform: none; letter-spacing: .01em; }
+.project-copy h1 { font-family: var(--stage-display); font-size: clamp(48px, 6.2vw, 96px); font-weight: 500; letter-spacing: -.05em; }
+.project-tagline { font-family: var(--stage-font); font-size: clamp(16px, 1.4vw, 21px); }
+.project-tags { font: 500 12px/1.5 var(--stage-ui); gap: 8px; margin: 24px 0 20px; color: var(--chrome-muted); }
+.project-tags li { padding: 5px 10px; border: 1px solid var(--chrome-border); border-radius: var(--stage-radius); }
+.project-links a { font-size: 14px; font-weight: 500; }
+.project-media figcaption { font: 400 12px/1.5 var(--stage-ui); color: var(--chrome-muted); }
+.showcase-footer-meta { font: 400 12px/1.5 var(--stage-ui); color: var(--chrome-muted); }
+.showcase-rail { max-width: 1100px; }
+.showcase-rail > a, .showcase-rail button { color: var(--chrome-muted); }
+.showcase-rail button { border-color: var(--chrome-border); font-size: 14px; gap: 12px; }
+.showcase-rail button[aria-selected=true] { border-color: var(--stage-accent); color: var(--stage-fg); background: var(--stage-surface); }
+.showcase-rail > a[aria-current] { color: var(--stage-fg); }
+.rail-number { font: 400 12px var(--stage-ui); color: var(--chrome-muted); }
+.intro-copy h1 { font-size: clamp(48px, 5.8vw, 92px); font-weight: 450; }
+.showcase-intro { background: var(--t-void); }
+.constellation-object strong { font-size: 14px; font-weight: 550; }
+.constellation-object small { font: 400 11px/1.4 var(--stage-ui); }
+.constellation-object-inner > span { gap: 3px 10px; padding: 12px; }
+.constellation-object img { opacity: .9; }
+.constellation-object[href="#/ateru"] img { object-position: center 20%; }
+.constellation-mark { color: #8494a920; }
+.constellation-orbit { opacity: .55; }
+.project-backdrop { border: 1px solid transparent; }
+
+/* Nexis: the display face, panel edges and soft movement of its actual shell. */
+.scene-nexis .project-backdrop { inset: 24px; border-color: var(--chrome-border); border-radius: 20px; }
+.scene-nexis .project-media { padding: 12px; background: var(--stage-surface); border: 1px solid var(--chrome-border); border-radius: 22px; }
+.scene-nexis .project-media img, .scene-nexis video { box-shadow: none; border-radius: 12px; }
+.scene-nexis .project-links a:first-child { border: 1px solid var(--chrome-border); border-radius: 9px; padding: 0 16px; background: var(--stage-surface); }
+
+/* Ateru: source tokens use neutral black tiers, coral and rounded system type. */
+.scene-ateru .project-copy h1 { font-weight: 850; letter-spacing: -.055em; }
+.scene-ateru .project-tagline { font-weight: 550; }
+.showcase-shell[data-project=ateru] .showcase-header-actions button { border-radius: 999px; background: var(--stage-surface); }
+.showcase-shell[data-project=ateru] .showcase-rail button { border: 0; border-radius: 999px; justify-content: center; padding-inline: 12px; }
+.showcase-shell[data-project=ateru] .showcase-rail button[aria-selected=true] { color: var(--stage-accent-ink); background: var(--stage-surface); }
+.scene-ateru .project-links a { background: var(--stage-accent); color: #2a0706; border: 0; border-radius: 999px; padding: 0 20px; }
+@supports (font: -apple-system-body) {
+  .showcase-shell[data-project=ateru] { --stage-font: ui-rounded, system-ui, sans-serif; --stage-display: ui-rounded, system-ui, sans-serif; --stage-ui: ui-rounded, system-ui, sans-serif; }
+}
+
+/* BibleLM: Nocturne paper, blackletter display and a dithered cross in the margin. */
+.scene-biblelm .project-copy { border-left: 1px solid var(--chrome-border); padding-left: 28px; }
+.scene-biblelm .project-copy h1 { font-weight: 400; letter-spacing: -.015em; font-size: clamp(60px, 7.5vw, 116px); }
+.scene-biblelm .project-tagline { font-size: clamp(20px, 1.8vw, 26px); line-height: 1.5; }
+.scene-biblelm .project-tags li { border-width: 0 0 1px; border-radius: 0; padding-inline: 0; margin-right: 12px; }
+.scene-biblelm .project-media { padding: 12px; border: 1px solid var(--chrome-border); outline: 1px solid var(--chrome-border); outline-offset: 5px; }
+.scene-biblelm video { border: 0; box-shadow: none; border-radius: 0; }
+.scriptorium-cross { position: absolute; height: 90%; width: 42%; left: -12%; top: 5%; color: var(--stage-fg); opacity: .055; }
+.scriptorium-ornament { position: absolute; bottom: 24px; left: 5%; color: var(--stage-accent); opacity: .35; font-size: 18px; letter-spacing: 16px; }
+
+/* Halcyra: flat instrument panels and an oscillator trace, using Theme.h colors. */
+.scene-halcyra .project-copy h1 { text-transform: uppercase; font-size: clamp(42px, 5vw, 76px); font-weight: 750; letter-spacing: -.02em; }
+.scene-halcyra .project-media { border: 1px solid #2c2f37; border-radius: 8px; padding: 10px; background: var(--stage-surface); }
+.oscillator-lines { position: absolute; inset: auto 4% 0 35%; height: 80px; display: flex; gap: 18px; align-items: center; opacity: .08; }
+.oscillator-lines i { width: 2px; height: var(--bar); background: var(--stage-accent); animation: oscillator-pulse 4s ease-in-out infinite alternate; }
+.oscillator-lines i:nth-child(3n) { animation-delay: -1.5s; }
+@keyframes oscillator-pulse { to { scale: 1 .55; } }
+
+/* Logscope: a terminal instrument with plain rules and an honest monospace title. */
+.scene-logscope .project-copy h1 { font-size: clamp(36px, 4.5vw, 66px); letter-spacing: -.05em; }
+.scene-logscope .project-media { border: 1px solid var(--chrome-border); padding: 10px; }
+.scene-logscope video { border: 0; box-shadow: none; border-radius: 0; }
+.terminal-rules { position: absolute; inset: 28px; border: 1px solid var(--chrome-border); opacity: .5; }
+.terminal-rules::before, .terminal-rules::after { content: ''; position: absolute; height: 8px; width: 8px; background: var(--stage-fg); opacity: .6; }
+.terminal-rules::before { left: -4px; top: -4px; }
+.terminal-rules::after { right: -4px; bottom: -4px; }
+
+/* Real app captures, with a full-size inspection dialog rather than invented UI. */
+.capture-body { position: relative; display: flex; justify-content: center; align-items: center; gap: 20px; }
+.capture-open { position: relative; padding: 0; border: 0; background: transparent; display: block; min-width: 0; border-radius: var(--stage-radius); cursor: zoom-in !important; }
+.capture-landscape .capture-open { width: 100%; }
+.capture-zoom { position: absolute; right: 10px; bottom: 10px; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: #090b10e6; color: #f3f5f7; font-size: 18px; }
+.capture-portrait .capture-image { max-height: 52dvh; width: auto; max-width: 100%; border: 6px solid #242427; border-radius: 28px; box-shadow: 0 25px 50px #0005; }
+.capture-portrait .capture-companion { height: 43dvh; width: auto; max-width: 43%; border: 5px solid #242427; border-radius: 24px; opacity: .7; rotate: -5deg; }
+.capture-controls { margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.capture-controls > div { display: flex; flex-wrap: wrap; gap: 4px; }
+.capture-controls button { min-height: 40px; padding: 8px 12px; color: var(--chrome-muted); border: 1px solid transparent; background: transparent; font-size: 12px; border-radius: 999px; }
+.capture-controls button[aria-pressed=true] { color: var(--stage-fg); background: var(--stage-surface); border-color: var(--chrome-border); }
+.capture-controls > span { font-size: 11px; color: var(--chrome-muted); }
+.capture-overlay { position: fixed; inset: 0; z-index: 60; background: #000d; }
+.capture-lightbox { position: fixed; inset: 3dvh 3vw; z-index: 61; background: var(--stage-bg); border: 1px solid var(--stage-accent); border-radius: var(--stage-radius); color: var(--stage-fg); padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 16px; font-family: var(--stage-ui); }
+.capture-lightbox-header { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 12px; }
+.capture-lightbox h2 { font-size: 16px; margin: 0; }
+.capture-lightbox button { padding: 8px 16px; min-height: 44px; color: inherit; background: transparent; border: 1px solid currentColor; border-radius: 6px; cursor: pointer; }
+.capture-lightbox > img { min-height: 0; max-height: 100%; max-width: 100%; object-fit: contain; flex: 1; }
+@media (max-width: 959px) {
+  .project-copy h1 { font-size: 54px; }
+  .project-tagline { font-size: 17px; }
+  .project-tags { margin: 14px 0 8px; }
+  .project-media figcaption { font-size: 11px; }
+  .showcase-rail button { font-size: 13px; }
+  .scene-biblelm .project-copy h1 { font-size: 66px; }
+  .scene-biblelm .project-tagline { font-size: 21px; }
+  .capture-portrait .capture-image { max-height: 32dvh; }
+  .capture-portrait .capture-companion { height: 26dvh; }
+  .capture-controls { margin-top: 10px; }
+  .constellation-object strong { font-size: 12px; }
+  .constellation-object small { font-size: 10px; }
+}
+@media (max-width: 540px) {
+  .showcase-wordmark { font-size: 12px; }
+  .showcase-header-actions { font-size: 12px; }
+  .intro-copy h1 { font-size: 44px; }
+  .intro-copy .showcase-eyebrow { font-size: 12px; }
+  .showcase-footer-meta { font-size: 11px; }
+  .showcase-rail button { font-size: 11px; padding: 9px 4px; }
+  .rail-number { font-size: 10px; }
+  .project-copy h1 { font-size: 42px; margin-bottom: 12px; }
+  .project-tagline { font-size: 14px; }
+  .project-copy .showcase-eyebrow { font-size: 12px; margin-bottom: 10px; }
+  .project-tags { font-size: 11px; margin: 12px 0 6px; }
+  .project-tags li { padding: 3px 7px; }
+  .project-links a { font-size: 13px; }
+  .project-media figcaption { font-size: 10px; }
+  .project-media { height: 100%; min-height: 0; max-height: none; container-type: size; display: flex; flex-direction: column; justify-content: center; }
+  .project-media figcaption { flex: none; padding-top: 8px; }
+  .project-media > .media-scene, .project-media > .capture-scene { min-height: 0; }
+  .project-media .media-scene video, .project-media .capture-landscape .capture-image { max-height: max(60px, calc(100cqh - 30px)); }
+  .scene-nexis .project-backdrop { inset: 12px; border-radius: 14px; }
+  .scene-nexis .project-media { padding: 6px; border-radius: 14px; }
+  .scene-biblelm .project-copy { padding-left: 16px; }
+  .scene-biblelm .project-copy h1 { font-size: 56px; }
+  .scene-biblelm .project-tagline { font-size: 18px; }
+  .scene-biblelm .project-media { padding: 5px; outline-offset: 3px; }
+  .scene-halcyra .project-copy h1 { font-size: 40px; }
+  .scene-logscope .project-copy h1 { font-size: 36px; }
+  .terminal-rules { inset: 12px; }
+  .capture-portrait .capture-image { max-height: max(70px, calc(100cqh - 80px)); border-width: 3px; border-radius: 16px; }
+  .capture-portrait .capture-companion { height: auto; max-height: max(60px, calc(100cqh - 100px)); border-width: 3px; border-radius: 14px; }
+  .capture-controls { gap: 4px; margin-top: 8px; }
+  .capture-controls button { min-height: 36px; padding: 5px 8px; font-size: 11px; }
+  .capture-controls > span { display: none; }
+  .constellation-object-inner > span { padding: 8px; gap: 2px 5px; }
+  .constellation-object strong { font-size: 11px; }
+  .constellation-object small { font-size: 9px; }
+  .showcase-shell[data-project=ateru] .showcase-rail button { padding-inline: 4px; }
+}
+@media (max-height: 540px) and (orientation: landscape) {
+  .showcase-rail button { font-size: 12px; min-height: 36px; }
+  .project-copy h1 { font-size: 36px; }
+  .project-tagline { font-size: 13px; }
+  .project-tags { font-size: 10px; margin: 8px 0; }
+  .project-tags li { padding: 2px 6px; }
+  .project-links a { min-height: 32px; }
+  .showcase-eyebrow { font-size: 11px; margin-bottom: 10px; }
+  .intro-copy h1 { font-size: 34px; }
+  .scene-biblelm .project-copy h1 { font-size: 48px; }
+  .scene-biblelm .project-tagline { font-size: 17px; }
+  .scene-halcyra .project-copy h1 { font-size: 34px; }
+  .scene-logscope .project-copy h1 { font-size: 30px; }
+  .capture-portrait .capture-image { max-height: 56dvh; }
+  .capture-portrait .capture-companion { height: 46dvh; }
+  .capture-controls button { min-height: 30px; padding: 4px 7px; font-size: 10px; }
+  .capture-controls > span { display: none; }
+  .constellation-object small:last-child { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .oscillator-lines i, .mark-nexis .emblem-ink { animation: none; } }

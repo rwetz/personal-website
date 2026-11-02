@@ -1,5 +1,41 @@
 # Showcase redesign plan: The Stage with a Constellation intro
 
+## Current direction
+
+The selected five projects are **Nexis, Ateru, BibleLM, Halcyra and Logscope**.
+Ateru and Halcyra replace the two design-family specimens. The user explicitly
+kept five projects when asked about adding an actual Ferrite app.
+
+Home and About use Geist Sans on RAW Titanium. Each project page adopts its
+app's own type, flat surfaces, framing and motion, including the header and
+rail. The generic radial-gradient backdrops are removed. Nexis uses Space
+Grotesk and workspace panels; Ateru uses rounded type and coral-on-black;
+BibleLM uses blackletter, Garamond, Nocturne colors and dithered crosses;
+Halcyra uses its synth panels; Logscope uses terminal framing.
+
+The logo morph stays. Nexis resolves to a rainbow terminal mark. BibleLM
+resolves to a dithered book, with the ordered-dot mask transitioning along
+with the shape. The detailed heptagram returns at home. A Ferrite rhombus
+is reserved in the emblem data for later use and is not a visible sixth slot.
+
+The three existing recordings remain. Ateru and Halcyra have real UI capture
+galleries with full-size inspection; Ateru's dated browser captures use sample
+data and do not represent native acceptance or an App Store release. Neither
+private source repository is linked publicly.
+
+Design sources, typography choices and visual references are recorded in
+[showcase-identities.md](showcase-identities.md); capture provenance is in
+[showcase-media.md](showcase-media.md). The browser suite now includes the
+new identities, capture dialogs, real font loading, dither state, and fit
+checks for captions as well as the surrounding figures.
+
+## Original foundation plan and validation
+
+The plan below records the original design-family version. The current
+direction above supersedes its project selection, typography and specimen
+sections; the routing, input, capture and reduced-motion foundations remain.
+
+
 Goal: the home page fits in one viewport (100dvh). Five projects, each one click, hover or keypress away. Drama comes from motion and depth, not page length. Site chrome stays RAW Titanium; each project's stage borrows its own language.
 
 ## As built: 1 November 2026

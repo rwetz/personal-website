@@ -14,21 +14,25 @@
 
 ![The live Constellation intro with five project objects around the heptagram](docs/main.png)
 
-Explore [ryanwetzstein.com](https://ryanwetzstein.com). The Stage alternates apps
-and design families: Nexis, Ferrite, BibleLM, Nexis design, and Logscope. Each
-project supplies its own palette and type; the header, rail and About modal stay
-RAW Titanium.
+Explore [ryanwetzstein.com](https://ryanwetzstein.com). The five projects are
+Nexis, Ateru, BibleLM, Halcyra, and Logscope. Each page adopts its app's actual
+typography, surfaces, framing and motion. Home and About use RAW Titanium and
+Geist Sans.
 
 ## Features
 
 - A Constellation intro with CSS depth, desktop pointer tilt, drift and real UI
   previews on intentional hover. Mobile gets a static tap-to-enter arrangement.
 - Hash navigation and browser history that work on GitHub Pages without rewrites.
-- A heptagram that morphs into project emblems, shared image transitions, and
-  palette changes. Reduced motion disables the drift, tilt and morph.
+- A heptagram that morphs into project emblems, including a rainbow terminal for
+  Nexis and a dithered book for BibleLM. Reduced motion disables animated effects.
 - Real, silent app recordings with posters and pause controls. Videos pause in
   hidden tabs; reduced motion starts with a poster.
-- Interactive Ferrite and Nexis design specimens with selectable accent swatches.
+- Inspectable real UI galleries for Ateru and Halcyra. Ateru's current browser
+  captures use sample data; both projects remain closed source.
+- Distinct app identities: Space Grotesk and workspace panels for Nexis;
+  rounded coral-on-black Ateru; blackletter, Garamond and dithered crosses for
+  BibleLM; instrument panels for Halcyra; terminal rules for Logscope.
 - About, experience, skills, resume and validated mailto contact in a focus-trapped
   modal. Experience data remains aligned with the existing resume.
 - Lazy project scenes, a command palette, accessible tabs and screen-reader
@@ -55,7 +59,9 @@ npm run dev
 ```
 
 Use Node.js 24 or newer. The site is React 19, Vite, Tailwind 4, Framer Motion,
-GSAP and Radix UI. Fonts are bundled locally. The skill-logo stylesheet is
+GSAP and Radix UI. Fonts are bundled locally and project fonts load with their
+scene. Ateru uses the native rounded system face on Apple browsers and Nunito
+Sans as its bundled cross-platform fallback. The skill-logo stylesheet is
 requested only when About opens, with its version and integrity pinned.
 
 ## Configuration
@@ -63,7 +69,8 @@ requested only when About opens, with its version and integrity pinned.
 | Path | Purpose |
 |---|---|
 | `src/stage/projects.js` | Project order, copy, tags, palettes, links and posters |
-| `src/stage/scenes/` | Lazy app recordings and design specimens |
+| `src/stage/scenes/` | Lazy app recordings and real UI galleries |
+| `src/stage/identities.css` | App-specific type, surfaces, marks and framing |
 | `src/stage/stage.css` | One-viewport layout, RAW Titanium chrome and responsive rules |
 | `src/brand/` | Detailed heptagram and simple morph silhouettes |
 | `src/components/Experience.jsx` | Resume-aligned experience data |
@@ -71,7 +78,7 @@ requested only when About opens, with its version and integrity pinned.
 | `docs/showcase-media.md` | Capture sources and playback behavior |
 | `public/CNAME` | Production domain; do not change |
 
-Project URLs use `#/nexis`, `#/ferrite`, `#/biblelm`, `#/nexis-design`, and
+Project URLs use `#/nexis`, `#/ateru`, `#/biblelm`, `#/halcyra`, and
 `#/logscope`. `#/` is home. Old `#nexis` bookmarks normalize to the local Stage.
 
 ## Development

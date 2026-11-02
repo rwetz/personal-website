@@ -3,6 +3,7 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import Specimen from '../Specimen'
-const colors = [{ name: 'Phosphor', hex: '#e5a64b' }, { name: 'Bone', hex: '#e6d9bc' }, { name: 'Copper', hex: '#a96b38' }]
-export default function FerriteScene({ project }) { return <Specimen project={project} colors={colors} /> }
+import CaptureScene from '../CaptureScene'
+import synth from '../../assets/showcase/halcyra.webp'
+const captures = [{ label: 'Synth', src: synth, alt: 'Halcyra’s wavetable oscillator, filter and sound controls in the real synthesizer' }]
+export default function HalcyraScene({ project }) { return <CaptureScene project={project} captures={captures} /> }

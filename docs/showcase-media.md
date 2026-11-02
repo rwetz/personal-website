@@ -8,7 +8,8 @@ credentials or benchmark corpora are included.
 | Nexis | Existing `nexis-suite/nexis-showcase-video/assets/clips/terminal.mp4`; welcome poster already in this repository | `nexis.mp4`, `nexis.webm`, `nexis-thumb.webp` |
 | BibleLM | Supplied 30-second recording and seven screenshots from the concurrent BibleLM polish work. Provenance: `apps/biblelm/docs/media/README.md`, also summarized in `docs/biblelm-media.md` | `biblelm.mp4`, `biblelm.webm`, `biblelm.webp`, `biblelm-thumb.webp`; supplemental screenshots retained |
 | Logscope | Existing Windows release binary, running through ConPTY and xterm on 1 November 2026. Synthetic stream at 15 lines/second; no private logs | `logscope.mp4`, `logscope.webm`, `logscope.webp`, `logscope-thumb.webp` |
-| Ferrite / Nexis design | Canonical palette sheets from `brand/heptagram/palettes/` | `ferrite.svg`, `nexis-design.svg` |
+| Ateru | Current dated browser captures under `apps/ateru/docs/audits/2026-10-28/yearly-scenes/`: Chronicle Wrapped, studio breakdown and appearance. These are the actual app UI with a sample library and local artwork stand-ins | `ateru.webp`, `ateru-studio.webp`, `ateru-appearance.webp`, `ateru-thumb.webp` |
+| Halcyra | Real synthesizer screenshot from `audio/halcyra/docs/main.png` | `halcyra.webp`, `halcyra-thumb.webp` |
 
 All listed assets live under `src/assets/showcase/`, except the Nexis welcome
 poster in `src/assets/nexis/`. `npm run thumbnails` regenerates the small intro
@@ -33,3 +34,11 @@ so it represents the current working tree rather than the v2.1.0 installer.
 
 Logscope has no public repository link. Its write-up stays unpublished until
 separately authorized; do not link the private source from this public site.
+
+Ateru and Halcyra also have no private-source links. Ateru is identified as in
+development, with no App Store/download claim. Its captures are browser previews
+with sample data, not a claim of native device acceptance. The retired four-tab
+Ateru captures in `docs/screenshots/` and `docs/ui-comparison/` were deliberately
+excluded. The gallery displays the current Chronicle, studio and appearance UI
+and can open each capture at full size. Halcyra shows the real Synth page rather
+than a simulated instrument or invented audio performance.

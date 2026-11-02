@@ -40,7 +40,10 @@ Neither Ferrite nor Nexis. RAW Titanium palette (`brand/heptagram/palettes/`).
 
 ## Why it is built this way
 
-- Site chrome, intro and About use RAW Titanium. Project stages own `--stage-*` guest palettes. Keep project colors out of site chrome.
+- Home and About use RAW Titanium with Geist Sans. The user authorized project identities to theme the complete project page, including header and rail, via `--stage-*` guest tokens.
+- The five slots are Nexis, Ateru, BibleLM, Halcyra and Logscope. Design families are not projects in the showcase. Ateru and Halcyra are private; do not expose private repository links or imply an App Store release.
+- Typography belongs to its context: Geist Sans for portfolio chrome, Space Grotesk for Nexis display type, blackletter/Garamond for BibleLM, rounded system type with Nunito Sans fallback for Ateru, and a monospace title only for the Logscope terminal tool. Do not put monospace labels back into home, About or the footer.
+- No shared gradient behind project screens. Use the app's flat surfaces, framing and restrained ornaments. Keep logo morphing: Nexis has a rainbow terminal mark; BibleLM resolves into a dithered book.
 - Hash routes (`#/nexis` etc.) work on GitHub Pages without rewrites. Legacy `#nexis` normalizes locally; it must never redirect off-site.
 - The Constellation uses CSS depth and desktop pointer tilt. No WebGL or Three.js is loaded.
 - Real app media only; posters under reduced motion, pause videos on hidden tabs. Record provenance in `docs/showcase-media.md`.

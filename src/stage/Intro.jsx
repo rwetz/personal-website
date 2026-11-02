@@ -32,7 +32,7 @@ export default function Intro() {
   }, [])
   return <section className="showcase-intro" aria-labelledby="intro-title">
     <div className="intro-copy">
-      <p className="showcase-eyebrow">Independent software & design</p>
+      <p className="showcase-eyebrow">Independent software. A personal point of view.</p>
       <h1 id="intro-title" tabIndex={-1}>Small details.<br /><span>Entire worlds.</span></h1>
       <p className="showcase-intro-description">I’m Ryan. I build tools and the visual languages they live in.</p>
       <a className="intro-enter" href="#/nexis">Explore the work <span aria-hidden="true">↗</span></a>
@@ -43,7 +43,7 @@ export default function Intro() {
       {projects.map((project, index) => <m.a layoutId={`project-preview-${project.id}`} transition={{ duration: .6, ease: [.22, 1, .36, 1] }} key={project.id} className={`constellation-object object-${index}`} href={`#/${project.id}`} style={{ '--object-accent': project.palette.accent, '--delay': `${index * -1.7}s` }} onMouseEnter={() => preview(project.id)} onMouseLeave={() => setHovered(null)} onFocus={() => preview(project.id)} onBlur={() => setHovered(null)}>
         <div className="constellation-object-inner">
         <img src={project.media.thumb ?? project.media.src} alt="" loading="lazy" width="460" height="192" />
-        {hovered === project.id && project.kind === 'App' && <ProjectPreview id={project.id} />}
+        {hovered === project.id && project.media.animated && <ProjectPreview id={project.id} />}
         <span><small>0{index + 1}</small><strong>{project.name}</strong><small>{project.kind}</small></span>
         </div>
       </m.a>)}

@@ -48,8 +48,7 @@
   /* Type */
   --m-font-sans: 'Geist Variable', 'Geist', ui-sans-serif, -apple-system, BlinkMacSystemFont,
     'Segoe UI', sans-serif;
-  --m-font-mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, 'SF Mono', 'Cascadia Code',
-    monospace;
+  --m-font-mono: var(--m-font-sans);
 
   /* Layering — keep every z-index on this scale. */
   --z-nav: 50;

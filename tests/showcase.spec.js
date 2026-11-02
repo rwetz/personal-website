@@ -5,7 +5,7 @@
 // ╚══════════════════════════════════════╝
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
-const ids = ['nexis', 'ferrite', 'biblelm', 'nexis-design', 'logscope']
+const ids = ['nexis', 'ateru', 'biblelm', 'halcyra', 'logscope']
 
 for (const [width, height] of [[360, 640], [768, 1024], [1440, 900], [844, 390]]) {
   test(`all stages fit ${width}×${height}`, async ({ page }) => {
@@ -15,11 +15,11 @@ for (const [width, height] of [[360, 640], [768, 1024], [1440, 900], [844, 390]]
     for (const id of ['', ...ids]) {
       await page.goto(`/#/${id}`)
       await expect(page.locator('h1')).toBeVisible()
-      if (['ferrite', 'nexis-design'].includes(id)) await expect(page.locator('.specimen')).toBeVisible()
-      if (id && !['ferrite', 'nexis-design'].includes(id)) await expect(page.locator('video')).toHaveAttribute('preload', 'none')
+      if (['ateru', 'halcyra'].includes(id)) await expect(page.locator('.capture-scene')).toBeVisible()
+      if (id && !['ateru', 'halcyra'].includes(id)) await expect(page.locator('video')).toHaveAttribute('preload', 'none')
       const clipped = await page.evaluate(() => {
         const main = document.querySelector('main').getBoundingClientRect()
-        const elements = [...document.querySelectorAll('main h1, .project-tagline, .project-tags, .project-links, .project-media, .specimen-note, .constellation-object, .intro-enter')]
+        const elements = [...document.querySelectorAll('main h1, .project-tagline, .project-tags, .project-links, .project-media, .project-media figcaption, .capture-controls, .constellation-object, .intro-enter')]
         return elements.filter(element => {
           if (!element.getClientRects().length) return false
           const r = element.getBoundingClientRect()
@@ -38,11 +38,11 @@ test('deep links, legacy Nexis, invalid hashes, keyboard and history', async ({ 
   await expect(page).toHaveURL(/#\/nexis$/)
   await expect(page.locator('h1')).toHaveText('Nexis')
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('h1')).toHaveText('Ferrite')
+  await expect(page.locator('h1')).toHaveText('Ateru')
   await page.keyboard.press('3')
   await expect(page.locator('h1')).toHaveText('BibleLM')
   await page.goBack()
-  await expect(page.locator('h1')).toHaveText('Ferrite')
+  await expect(page.locator('h1')).toHaveText('Ateru')
   await page.goForward()
   await expect(page.locator('h1')).toHaveText('BibleLM')
   await page.keyboard.press('Escape')
@@ -55,23 +55,30 @@ test('rail roves focus and selects its labelled panel', async ({ page }) => {
   await page.goto('/#/nexis')
   await page.getByRole('tab', { name: '01 Nexis', exact: true }).focus()
   await page.keyboard.press('ArrowRight')
-  await expect(page.getByRole('tab', { name: '02 Ferrite', exact: true })).toBeFocused()
-  await expect(page.getByRole('tabpanel')).toHaveAccessibleName('02 Ferrite')
+  await expect(page.getByRole('tab', { name: '02 Ateru', exact: true })).toBeFocused()
+  await expect(page.getByRole('tabpanel')).toHaveAccessibleName('02 Ateru')
   await page.keyboard.press('End')
   await expect(page.getByRole('tab', { name: '05 Logscope', exact: true })).toBeFocused()
   await page.keyboard.press('Escape')
   await expect(page.locator('#rail-home')).toBeFocused()
 })
 
-test('swatches change stage accent while chrome stays Titanium', async ({ page }) => {
-  await page.goto('/#/ferrite')
-  const chrome = await page.locator('header').evaluate(element => getComputedStyle(element).backgroundColor)
-  await page.getByRole('button', { name: 'Use Copper accent' }).click()
-  await expect(page.getByRole('button', { name: 'Use Copper accent' })).toHaveAttribute('aria-pressed', 'true')
-  expect(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--stage-accent').trim())).toBe('#a96b38')
-  expect(await page.locator('header').evaluate(element => getComputedStyle(element).backgroundColor)).toBe(chrome)
-  await page.keyboard.press('ArrowRight')
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--stage-accent').trim())).toBe('#d9603f')
+test('app identities replace the generic gradient and keep home in Geist Sans', async ({ page }) => {
+  await page.goto('/#/')
+  expect(await page.locator('footer').evaluate(element => getComputedStyle(element).fontFamily)).toContain('Geist Variable')
+  expect(await page.locator('.showcase-intro').evaluate(element => getComputedStyle(element).backgroundImage)).toBe('none')
+  await page.keyboard.press('2')
+  await expect(page.locator('h1')).toHaveText('Ateru')
+  await expect(page.locator('.capture-scene')).toBeVisible()
+  expect(await page.locator('header').evaluate(element => getComputedStyle(element).backgroundColor)).toBe('rgb(11, 11, 12)')
+  expect(await page.locator('h1').evaluate(element => getComputedStyle(element).fontFamily)).toContain('Nunito Sans')
+  await page.keyboard.press('3')
+  await expect(page.locator('h1')).toHaveText('BibleLM')
+  await expect(page.locator('video')).toBeVisible()
+  await page.evaluate(() => document.fonts.ready)
+  expect(await page.evaluate(() => document.fonts.check('48px "UnifrakturMaguntia"'))).toBeTruthy()
+  expect(await page.locator('.project-backdrop').evaluate(element => getComputedStyle(element).backgroundImage)).toBe('none')
+  await expect.poll(() => page.locator('.mark-biblelm mask rect:last-child').first().evaluate(element => getComputedStyle(element).opacity)).toBe('0')
 })
 
 test('modal traps focus, protects typing, validates contact and restores focus', async ({ page }) => {
@@ -110,7 +117,7 @@ test('swipe and wheel move once per gesture', async ({ page }) => {
   await page.mouse.down()
   await page.mouse.move(350, 300)
   await page.mouse.up()
-  await expect(page).toHaveURL(/#\/ferrite$/)
+  await expect(page).toHaveURL(/#\/ateru$/)
   await page.locator('main').dispatchEvent('wheel', { deltaY: 100 })
   await expect(page).toHaveURL(/#\/biblelm$/)
   await page.locator('main').dispatchEvent('wheel', { deltaY: 100 })
@@ -158,7 +165,7 @@ test('desktop hover previews and logo morph work with motion enabled', async ({ 
   await expect.poll(() => page.locator('.showcase-wordmark svg path:last-child').evaluate(element => getComputedStyle(element).opacity)).toBe('1')
   const emblem = await page.locator('.showcase-wordmark svg path:last-child').getAttribute('d')
   await page.keyboard.press('2')
-  await expect(page.locator('h1')).toHaveText('Ferrite')
+  await expect(page.locator('h1')).toHaveText('Ateru')
   await expect.poll(() => page.locator('.showcase-wordmark svg path:last-child').getAttribute('d')).not.toBe(emblem)
   await page.keyboard.press('Escape')
   await expect.poll(() => page.locator('.showcase-wordmark svg path:first-child').evaluate(element => getComputedStyle(element).opacity)).toBe('1')
@@ -167,16 +174,9 @@ test('desktop hover previews and logo morph work with motion enabled', async ({ 
 test('WCAG AA scans on every stage, modal and command palette', async ({ page }) => {
   for (const id of ['', ...ids]) {
     await page.goto(`/#/${id}`)
-    if (['ferrite', 'nexis-design'].includes(id)) await expect(page.locator('.specimen-note')).toBeVisible()
+    if (['ateru', 'halcyra'].includes(id)) await expect(page.locator('.capture-scene')).toBeVisible()
     const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
     expect(result.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })), id || 'home').toEqual([])
-    if (['ferrite', 'nexis-design'].includes(id)) {
-      for (const button of await page.locator('.specimen-controls button').all()) {
-        await button.click()
-        const swatch = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
-        expect(swatch.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) }))).toEqual([])
-      }
-    }
   }
   await page.getByRole('button', { name: 'About & contact' }).click()
   await expect(page.getByRole('dialog')).toBeVisible()
@@ -190,4 +190,23 @@ test('WCAG AA scans on every stage, modal and command palette', async ({ page })
   await expect(page.getByRole('dialog')).toBeVisible()
   const palette = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
   expect(palette.violations.map(v => v.id)).toEqual([])
+})
+
+test('Ateru gallery changes real captures and its full-size dialog protects navigation', async ({ page }) => {
+  await page.goto('/#/ateru')
+  await page.getByRole('button', { name: 'Studio', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Studio', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.locator('.capture-image')).toHaveAttribute('alt', /studio breakdown/)
+  await page.getByRole('button', { name: 'Enlarge Ateru Studio capture' }).click()
+  await expect(page.getByRole('dialog', { name: 'Ateru / Studio' })).toBeVisible()
+  const captureAudit = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
+  expect(captureAudit.violations.map(violation => violation.id)).toEqual([])
+  await page.keyboard.press('ArrowRight')
+  await expect(page).toHaveURL(/#\/ateru$/)
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog')).not.toBeVisible()
+  await expect(page.getByRole('button', { name: 'Enlarge Ateru Studio capture' })).toBeFocused()
+  await page.keyboard.press('4')
+  await expect(page.locator('h1')).toHaveText('Halcyra')
+  await expect(page.locator('.capture-image')).toHaveAttribute('alt', /real synthesizer/)
 })

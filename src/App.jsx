@@ -13,6 +13,7 @@ import Intro from './stage/Intro'
 import Rail from './stage/Rail'
 import Heptagram from './brand/Heptagram'
 import './stage/stage.css'
+import './stage/identities.css'
 
 const AboutModal = lazy(() => import('./stage/AboutModal'))
 const loadMotionFeatures = () => import('./lib/motion-features').then(mod => mod.default)
@@ -23,7 +24,7 @@ export default function App() {
   return (
     <LazyMotion features={loadMotionFeatures} strict>
       <MotionConfig reducedMotion="user">
-        <div className="showcase-shell">
+        <div className="showcase-shell" data-project={stage.project?.id ?? 'home'}>
           <a className="showcase-skip" href="#main-content" onClick={event => {
             event.preventDefault()
             document.getElementById('main-content')?.focus()
@@ -39,7 +40,7 @@ export default function App() {
             {stage.project ? <Stage project={stage.project} /> : <Intro />}
           </main>
           <footer className="showcase-footer">
-            <div className="showcase-footer-meta"><span>Selected work / 2026</span><span>Arrows to explore · 1–5 to jump · Esc for home</span></div>
+            <div className="showcase-footer-meta"><span>Selected projects</span><span>Use ← → to explore · Esc for home</span></div>
             <Rail activeId={stage.project?.id} navigate={stage.navigate} />
           </footer>
           <span className="sr-only" role="status" aria-live="polite">{stage.project?.name ?? 'Home, selected work'}</span>
