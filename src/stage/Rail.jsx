@@ -5,6 +5,7 @@
 // ╚══════════════════════════════════════╝
 import { projects } from './projects'
 import Heptagram from '../brand/Heptagram'
+import { emblems } from '../brand/emblems'
 export default function Rail({ activeId, navigate }) {
   const onKeyDown = event => {
     const index = projects.findIndex(project => project.id === activeId)
@@ -27,7 +28,7 @@ export default function Rail({ activeId, navigate }) {
           <button key={project.id} id={`tab-${project.id}`} role="tab" type="button"
             aria-selected={activeId === project.id} aria-controls={activeId === project.id ? `panel-${project.id}` : undefined}
             tabIndex={activeId === project.id || (!activeId && index === 0) ? 0 : -1} onClick={() => navigate(project.id)}>
-            <span className="rail-number">0{index + 1}</span><span>{project.name}</span>
+            <span className="rail-number">0{index + 1}</span><svg className="rail-emblem" viewBox="0 0 1024 1024" aria-hidden="true"><path d={emblems[project.id]} fill="currentColor" fillRule="evenodd" /></svg><span className="rail-name">{project.name}</span><span className="rail-state" aria-hidden="true" />
           </button>
         ))}
       </div>

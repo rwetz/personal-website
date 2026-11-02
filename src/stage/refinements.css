@@ -1,0 +1,225 @@
+/* ╔══════════════════════════════════════╗
+ * ║  Ryan Wetzstein                      ║
+ * ║  Personal Website                    ║
+ * ║  2026                                ║
+ * ╚══════════════════════════════════════╝ */
+
+/* An editorial gallery gives every project a deliberate place and a readable image. */
+.showcase-intro { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); gap: clamp(20px, 3dvh, 40px); padding: clamp(20px, 4dvh, 48px) clamp(24px, 5vw, 88px); max-width: 1920px; margin: auto; width: 100%; }
+.intro-copy { display: grid; grid-template-columns: 1.4fr 1fr; align-items: end; gap: 40px; }
+.intro-copy .showcase-eyebrow { margin-bottom: 16px; color: var(--t-silver); }
+.intro-copy h1 { font-size: clamp(48px, 4.6vw, 82px); line-height: 1.02; margin: 0; letter-spacing: -.055em; }
+.intro-note { max-width: 360px; justify-self: end; padding-bottom: 4px; }
+.showcase-intro-description { font-size: 15px; line-height: 1.65; max-width: 35ch; }
+.intro-enter { margin-top: 18px; font-size: 13px; }
+.constellation { width: 100%; height: 100%; min-height: 0; max-height: none; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 14px; transform: none; perspective: none; }
+.constellation-object { position: relative; inset: auto; width: auto; max-width: none; min-height: 0; padding: 0; display: block; grid-column: span 2; }
+.constellation-object:nth-child(-n+2) { grid-column: span 3; }
+.constellation-object-inner { height: 100%; display: grid; grid-template-rows: minmax(0, 1fr) auto; border: 1px solid #343d4b; border-radius: 10px; background: #10151e; animation: none; box-shadow: none; transition: border-color 220ms, background-color 220ms; }
+.project-tile-image { position: relative; min-height: 0; overflow: hidden; background: #0c1017; }
+.constellation-object .project-tile-image img { display: block; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; object-position: center 35%; opacity: .85; transition: opacity 250ms, transform 500ms; }
+.constellation-preview { height: 100%; aspect-ratio: auto; }
+.constellation-object-inner > span { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; padding: 12px 16px; gap: 12px; }
+.constellation-object strong { font-size: 18px; letter-spacing: -.025em; }
+.constellation-object small, .constellation-object small:last-of-type { font: 400 12px/1.3 var(--stage-ui); grid-column: auto; color: var(--t-silver); }
+.constellation-object b { font-size: 20px; font-weight: 400; color: var(--object-accent); margin-left: 8px; }
+.constellation-object:hover .constellation-object-inner { scale: 1; box-shadow: none; background: #171e29; }
+.constellation-object:hover .project-tile-image img { opacity: 1; transform: scale(1.035); }
+.constellation-object:focus-visible { outline-offset: 3px; border-radius: 10px; }
+.object-1 .project-tile-image { display: flex; justify-content: center; gap: 18px; padding: 16px 12px 0; background: #1c1315; }
+.constellation-object.object-1 .project-tile-image img { width: auto; height: calc(100% + 110px); max-width: 30%; object-fit: cover; object-position: top; border: 3px solid #343033; border-radius: 14px 14px 0 0; }
+.object-1 .project-tile-image img:nth-child(2) { margin-top: 12px; }
+
+/* A compact project dock, with icons and a restrained, unmistakable active marker. */
+.showcase-footer { padding-top: 12px; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+.showcase-footer-meta { max-width: 1180px; margin: 0 auto 9px; font-size: 11px; }
+.footer-count { margin-left: 12px; color: var(--chrome-muted); opacity: .8; }
+.footer-divider { margin: 0 10px; opacity: .5; }
+.showcase-rail { max-width: 1180px; gap: 12px; }
+.showcase-rail > a { width: 50px; border: 1px solid var(--chrome-border); border-radius: 10px; background: var(--stage-bg); }
+.showcase-rail > a:hover { background: var(--stage-surface); }
+.showcase-rail [role=tablist] { gap: 6px; padding: 5px; background: color-mix(in srgb, var(--stage-surface) 35%, var(--stage-bg)); border: 1px solid var(--chrome-border); border-radius: 12px; min-width: 0; }
+.showcase-rail button, .showcase-shell[data-project=ateru] .showcase-rail button { position: relative; border: 1px solid transparent; border-radius: 7px; padding: 10px 12px; gap: 10px; flex-direction: row; align-items: center; justify-content: flex-start; min-height: 46px; font-size: 13px; background: transparent; }
+.showcase-rail button[aria-selected=true], .showcase-shell[data-project=ateru] .showcase-rail button[aria-selected=true] { border-color: color-mix(in srgb, var(--stage-accent) 36%, var(--stage-bg)); background: var(--stage-surface); color: var(--stage-fg); box-shadow: inset 0 1px 0 #ffffff08; }
+.showcase-rail button:hover { background: var(--stage-surface); }
+.showcase-rail .rail-number { font-size: 10px; color: var(--chrome-muted); }
+.rail-emblem { width: 24px; height: 24px; flex: none; color: var(--chrome-muted); }
+.showcase-rail button[aria-selected=true] .rail-emblem { color: var(--stage-accent); }
+.rail-state { margin-left: auto; width: 5px; height: 5px; border-radius: 50%; background: transparent; }
+[aria-selected=true] .rail-state { background: var(--stage-accent); box-shadow: 0 0 9px color-mix(in srgb, var(--stage-accent) 40%, transparent); }
+.showcase-rail button:focus-visible { outline: 2px solid var(--stage-accent); outline-offset: 1px; }
+
+/* A short introduction, one school update, and direct ways to reach Ryan. */
+.showcase-about { inset: 50% auto auto 50%; transform: translate(-50%, -50%); width: min(640px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); border-radius: 18px; font-family: 'Geist Variable', sans-serif; }
+.showcase-about-header { padding: 14px 24px; }
+.about-summary, .about-contact { padding: 30px 32px; }
+.about-kicker { color: var(--t-steel); font-size: 12px; margin: 0 0 18px; }
+.about-summary h2 { color: var(--t-white); font-size: 44px; line-height: 1.1; letter-spacing: -.045em; margin: 0 0 20px; }
+.about-summary > p:not(.about-kicker) { font-size: 16px; line-height: 1.8; margin: 0; }
+.school-progress { display: flex; align-items: center; gap: 10px; margin-top: 24px; font-size: 12px; color: var(--t-silver); }
+.school-progress > span:first-child { width: 7px; height: 7px; border-radius: 50%; background: var(--t-silver); }
+.school-progress > span:last-child { margin-left: auto; color: var(--t-steel); }
+.about-contact { border-top: 1px solid var(--t-gunmetal); background: #10151e; }
+.about-email { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--t-white); font-size: clamp(20px, 4vw, 30px); letter-spacing: -.035em; text-decoration: none; min-height: 44px; }
+.about-email svg { width: 26px; height: 26px; }
+.about-socials { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.about-socials a { min-height: 44px; display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid var(--t-gunmetal); border-radius: 8px; text-decoration: none; color: var(--t-silver); font-size: 13px; }
+.about-socials a:hover { color: var(--t-white); background: #1b2432; }
+.about-socials svg { width: 18px; height: 18px; }
+
+/* SF Rounded on Apple systems; visibly rounded Nunito elsewhere. */
+.scene-ateru .project-copy h1 { font-weight: 850; letter-spacing: -.025em; }
+.showcase-shell[data-project=ateru] { font-synthesis: none; }
+@supports (font: -apple-system-body) {
+  .showcase-shell[data-project=ateru] { --stage-font: ui-rounded, 'Nunito Variable', sans-serif; --stage-display: ui-rounded, 'Nunito Variable', sans-serif; --stage-ui: ui-rounded, 'Nunito Variable', sans-serif; }
+}
+
+/* Halcyra gets the geometry of an instrument: stacked waves, dial and signal routes. */
+.synth-artwork, .log-artwork { position: absolute; inset: 0; overflow: hidden; }
+.wavetable-field, .index-field { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--stage-accent); }
+.schematic-grid { opacity: .055; }
+.wavetable-stack { opacity: .25; }
+.synth-dial { opacity: .12; }
+.signal-route { opacity: .15; }
+.synth-artwork .wavetable-stack { transform-origin: 65% 75%; animation: wavetable-breathe 14s ease-in-out infinite alternate; }
+@keyframes wavetable-breathe { to { transform: translateY(-18px) skewX(-3deg); } }
+.scene-overline, .scene-bottomline { position: absolute; left: 5vw; right: 5vw; display: flex; justify-content: space-between; align-items: center; gap: 24px; color: var(--stage-accent-ink); font: 500 10px/1.5 var(--stage-ui); letter-spacing: .12em; }
+.scene-overline { top: 28px; padding-bottom: 14px; border-bottom: 1px solid var(--chrome-border); }
+.scene-bottomline { bottom: 28px; letter-spacing: .02em; color: var(--chrome-muted); }
+.scene-halcyra { padding-block: 80px; }
+.scene-halcyra .project-copy { padding: 28px 0; }
+.scene-halcyra .project-copy h1 { font-size: clamp(48px, 5.8vw, 88px); font-weight: 650; letter-spacing: -.045em; }
+.scene-halcyra .project-tags li { border-radius: 4px; background: #15161abf; }
+.scene-halcyra .project-media { border-radius: 12px; padding: 0; background: #1e2026; box-shadow: 0 24px 80px #0005; overflow: hidden; }
+.scene-halcyra .project-media, .scene-logscope .project-media { height: 100%; min-height: 0; container-type: size; display: flex; flex-direction: column; justify-content: center; }
+.scene-halcyra .project-media > .capture-scene, .scene-logscope .project-media > .media-scene { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.scene-halcyra .project-media .capture-landscape .capture-image, .scene-logscope .project-media .media-scene video { max-height: max(40px, calc(100cqh - 106px)); }
+.scene-halcyra figcaption, .scene-logscope figcaption, .media-instrument-header { flex: none; }
+.scene-halcyra .capture-scene { padding: 10px; }
+.scene-halcyra .capture-image { border: 0; box-shadow: none; background: #15161a; }
+.scene-halcyra figcaption, .scene-logscope figcaption { padding: 12px 16px; border-top: 1px solid var(--chrome-border); }
+.media-instrument-header { display: flex; align-items: center; gap: 10px; padding: 13px 16px; border-bottom: 1px solid var(--chrome-border); font: 600 12px/1.4 var(--stage-ui); color: var(--stage-fg); }
+.media-instrument-header > span:nth-of-type(2) { font-weight: 400; color: var(--chrome-muted); margin-left: auto; font-size: 11px; }
+.media-instrument-header svg { width: 72px; height: 20px; color: var(--stage-accent); margin-left: 12px; }
+.instrument-led { width: 6px; height: 6px; border-radius: 50%; background: var(--stage-accent); box-shadow: 0 0 8px color-mix(in srgb, var(--stage-accent) 25%, transparent); }
+
+/* Logscope: visible input routes, index geometry and an engraved waterfall baseline. */
+.scene-logscope { padding-block: 80px; }
+.scene-logscope .project-copy { padding-left: 24px; border-left: 2px solid var(--stage-accent); }
+.scene-logscope .project-copy h1 { font-weight: 500; }
+.scene-logscope .project-tags li { background: #10151ecc; border: 1px solid var(--chrome-border); }
+.log-routes { opacity: .18; }
+.log-waterfall { opacity: .12; }
+.index-brackets { opacity: .3; }
+.scene-logscope .project-media { padding: 0; border-radius: 8px; background: #0d1118; box-shadow: 0 24px 80px #0007; overflow: hidden; }
+.scene-logscope .media-scene { padding: 10px; background: #0a0d12; }
+.log-window-header > span:last-child { margin-left: 12px; color: var(--chrome-muted); }
+
+@media (max-width: 1100px) {
+  .showcase-rail button { gap: 7px; padding-inline: 9px; }
+  .showcase-rail .rail-number { display: none; }
+  .constellation-object small:last-of-type { display: none; }
+  .constellation-object-inner > span { grid-template-columns: auto 1fr auto; }
+}
+@media (max-width: 959px) {
+  .showcase-intro { padding: 24px 32px; gap: 24px; }
+  .intro-copy { grid-template-columns: 1fr; gap: 14px; }
+  .intro-copy h1 { font-size: 50px; }
+  .intro-note { justify-self: start; max-width: 100%; display: flex; gap: 32px; align-items: center; }
+  .intro-note p { max-width: 40ch; font-size: 14px; }
+  .intro-enter { margin-top: 0; flex: none; }
+  .constellation { min-height: 0; width: 100%; margin: 0; }
+  .constellation-object strong { font-size: 16px; }
+  .constellation-object small { font-size: 11px; }
+  .showcase-rail button, .showcase-shell[data-project=ateru] .showcase-rail button { font-size: 12px; gap: 6px; padding: 9px 7px; }
+  .rail-emblem { width: 20px; height: 20px; }
+  .rail-state { display: none; }
+  .scene-halcyra, .scene-logscope { padding-block: 62px; }
+  .scene-halcyra .project-copy { padding-block: 0; }
+  .scene-overline, .scene-bottomline { left: 32px; right: 32px; font-size: 9px; }
+  .scene-overline { top: 18px; }
+  .scene-bottomline { bottom: 16px; }
+}
+@media (max-width: 540px) {
+  .showcase-intro { padding: 18px 22px; gap: 18px; }
+  .intro-copy { gap: 10px; }
+  .intro-copy .showcase-eyebrow { margin-bottom: 10px; font-size: 10px; }
+  .intro-copy h1 { font-size: 39px; }
+  .intro-note { display: block; }
+  .intro-note p { font-size: 12px; line-height: 1.5; }
+  .intro-enter { display: none; }
+  .constellation { display: grid; grid-template-columns: 1fr; grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 6px; }
+  .constellation-object, .constellation-object:nth-child(-n+2) { grid-column: auto; min-height: 0; }
+  .constellation-object-inner { grid-template-columns: 76px 1fr; grid-template-rows: 1fr; border-radius: 6px; }
+  .constellation-object-inner > span { padding: 6px 10px; gap: 8px; grid-template-columns: auto 1fr auto; }
+  .constellation-object strong { font-size: 15px; }
+  .constellation-object small { font-size: 10px; }
+  .constellation-object b { font-size: 16px; }
+  .object-1 .project-tile-image { padding: 0; display: block; }
+  .constellation-object.object-1 .project-tile-image img { height: 100%; width: 100%; max-width: none; border: 0; border-radius: 0; object-fit: cover; object-position: center 20%; }
+  .object-1 .project-tile-image img:not(:first-child) { display: none; }
+  .showcase-footer { padding: 9px 10px max(10px, env(safe-area-inset-bottom)); }
+  .showcase-footer-meta { font-size: 10px; margin-bottom: 7px; }
+  .showcase-rail { gap: 6px; }
+  .showcase-rail > a { width: 32px; border-radius: 8px; }
+  .showcase-rail [role=tablist] { padding: 3px; gap: 2px; border-radius: 9px; }
+  .showcase-rail button, .showcase-shell[data-project=ateru] .showcase-rail button { flex-direction: column; justify-content: center; padding: 5px 2px; gap: 3px; min-height: 48px; font-size: 10px; }
+  .rail-emblem { width: 19px; height: 19px; }
+  .about-summary, .about-contact { padding: 24px; }
+  .about-summary h2 { font-size: 36px; }
+  .about-summary > p:not(.about-kicker) { font-size: 14px; }
+  .school-progress { flex-wrap: wrap; font-size: 11px; }
+  .school-progress > span:last-child { margin-left: 0; }
+  .scene-overline { top: 12px; left: 22px; right: 22px; padding-bottom: 8px; font-size: 8px; letter-spacing: .06em; }
+  .scene-overline > span:last-child, .scene-bottomline { display: none; }
+  .scene-halcyra, .scene-logscope { padding-top: 44px; padding-bottom: 18px; }
+  .scene-halcyra .project-copy h1 { font-size: 40px; }
+  .scene-logscope .project-copy { padding-left: 14px; }
+  .media-instrument-header { padding: 7px 10px; font-size: 10px; flex: none; }
+  .media-instrument-header > span:nth-of-type(2) { font-size: 8px; }
+  .media-instrument-header svg { width: 42px; margin-left: 0; }
+  .scene-halcyra .capture-scene, .scene-logscope .media-scene { padding: 5px; }
+  .scene-halcyra figcaption, .scene-logscope figcaption { padding: 6px 8px; font-size: 8px; }
+  .scene-halcyra .project-media .capture-landscape .capture-image, .scene-logscope .project-media .media-scene video { max-height: max(40px, calc(100cqh - 64px)); }
+}
+@media (max-height: 700px) and (min-width: 960px) {
+  .intro-copy h1 { font-size: 50px; }
+  .showcase-intro { gap: 18px; padding-block: 20px; }
+}
+@media (max-height: 540px) and (orientation: landscape) {
+  .showcase-footer { padding: 8px 6px; }
+  .showcase-rail { gap: 6px; }
+  .showcase-rail > a { width: 100%; height: 32px; }
+  .showcase-rail [role=tablist] { display: flex; padding: 3px; gap: 2px; }
+  .showcase-rail button, .showcase-shell[data-project=ateru] .showcase-rail button { flex-direction: row; padding: 5px; font-size: 10px; min-height: 34px; }
+  .showcase-intro { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; padding: 16px; gap: 20px; }
+  .intro-copy { display: block; }
+  .intro-copy h1 { font-size: 30px; }
+  .intro-copy .showcase-eyebrow { font-size: 9px; margin-bottom: 12px; }
+  .intro-note { margin-top: 16px; display: block; }
+  .intro-note p { font-size: 11px; }
+  .intro-enter { display: none; }
+  .constellation { grid-template-columns: 1fr; grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 5px; }
+  .constellation-object, .constellation-object:nth-child(-n+2) { grid-column: auto; }
+  .constellation-object-inner { grid-template-columns: 56px 1fr; grid-template-rows: 1fr; }
+  .constellation-object .project-tile-image img { display: block; }
+  .object-1 .project-tile-image { padding: 0; display: block; }
+  .constellation-object.object-1 .project-tile-image img { height: 100%; width: 100%; max-width: none; border: 0; border-radius: 0; object-fit: cover; object-position: center 20%; }
+  .object-1 .project-tile-image img:not(:first-child) { display: none; }
+  .constellation-object-inner > span { padding: 4px 8px; gap: 6px; }
+  .constellation-object strong { font-size: 12px; }
+  .constellation-object small { font-size: 9px; }
+  .constellation-object b { font-size: 14px; }
+  .scene-halcyra, .scene-logscope { padding: 46px 16px 16px; }
+  .scene-overline { top: 10px; left: 16px; right: 16px; font-size: 8px; }
+  .scene-bottomline { display: none; }
+  .scene-halcyra .project-copy h1 { font-size: 34px; }
+  .scene-halcyra .project-media, .scene-logscope .project-media { max-height: 100%; }
+  .scene-halcyra .project-media .capture-landscape .capture-image, .scene-logscope .project-media .media-scene video { max-height: max(40px, calc(100cqh - 90px)); }
+  .media-instrument-header { padding: 7px 10px; font-size: 10px; }
+  .media-instrument-header > span:nth-of-type(2) { font-size: 8px; }
+  .media-instrument-header svg { width: 36px; margin: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .synth-artwork .wavetable-stack { animation: none; }
+}

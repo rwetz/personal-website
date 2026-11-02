@@ -30,7 +30,7 @@ export const projects = [
     id: 'ateru', name: 'Ateru', kind: 'iPhone app',
     tagline: 'A private anime journal for your library, daily progress and the stories you finish.',
     tags: ['React Native', 'Local-first', 'iPhone'],
-    palette: { bg: '#0b0b0c', fg: '#f2f2f3', accent: '#ef4a44', surface: '#161618', font: "'SF Pro Rounded', 'Nunito Sans Variable', ui-rounded, sans-serif", display: "'SF Pro Rounded', 'Nunito Sans Variable', ui-rounded, sans-serif", ui: "'SF Pro Rounded', 'Nunito Sans Variable', ui-rounded, sans-serif", radius: '28px' },
+    palette: { bg: '#0b0b0c', fg: '#f2f2f3', accent: '#ef4a44', surface: '#161618', font: "ui-rounded, 'SF Pro Rounded', 'Nunito Variable', sans-serif", display: "ui-rounded, 'SF Pro Rounded', 'Nunito Variable', sans-serif", ui: "ui-rounded, 'SF Pro Rounded', 'Nunito Variable', sans-serif", radius: '28px' },
     media: { src: ateru, thumb: ateruThumb, alt: 'Ateru Chronicle showing a Wrapped recap and sample viewing history', caption: 'Ateru / Sample library' },
     links: [{ label: 'Ask about Ateru', href: 'mailto:rwetz00@gmail.com?subject=Ateru' }],
   },

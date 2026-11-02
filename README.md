@@ -12,7 +12,7 @@
   <a href="https://github.com/rwetz/personal-website/actions/workflows/deploy.yml"><img src="https://github.com/rwetz/personal-website/actions/workflows/deploy.yml/badge.svg" alt="GitHub Pages deployment"></a>
 </p>
 
-![The live Constellation intro with five project objects around the heptagram](docs/main.png)
+![The home gallery with five actual projects and the project navigation dock](docs/main.png)
 
 Explore [ryanwetzstein.com](https://ryanwetzstein.com). The five projects are
 Nexis, Ateru, BibleLM, Halcyra, and Logscope. Each page adopts its app's actual
@@ -21,8 +21,8 @@ Geist Sans.
 
 ## Features
 
-- A Constellation intro with CSS depth, desktop pointer tilt, drift and real UI
-  previews on intentional hover. Mobile gets a static tap-to-enter arrangement.
+- A structured screenshot gallery with real UI previews on intentional desktop
+  hover. Mobile gets a compact five-project index.
 - Hash navigation and browser history that work on GitHub Pages without rewrites.
 - A heptagram that morphs into project emblems, including a rainbow terminal for
   Nexis and a dithered book for BibleLM. Reduced motion disables animated effects.
@@ -33,8 +33,8 @@ Geist Sans.
 - Distinct app identities: Space Grotesk and workspace panels for Nexis;
   rounded coral-on-black Ateru; blackletter, Garamond and dithered crosses for
   BibleLM; instrument panels for Halcyra; terminal rules for Logscope.
-- About, experience, skills, resume and validated mailto contact in a focus-trapped
-  modal. Experience data remains aligned with the existing resume.
+- A short, focus-trapped About with current school progress and direct email,
+  GitHub and LinkedIn links. The resume remains a separate download.
 - Lazy project scenes, a command palette, accessible tabs and screen-reader
   announcements. No Three.js or WebGL dependency.
 
@@ -61,8 +61,7 @@ npm run dev
 Use Node.js 24 or newer. The site is React 19, Vite, Tailwind 4, Framer Motion,
 GSAP and Radix UI. Fonts are bundled locally and project fonts load with their
 scene. Ateru uses the native rounded system face on Apple browsers and Nunito
-Sans as its bundled cross-platform fallback. The skill-logo stylesheet is
-requested only when About opens, with its version and integrity pinned.
+as its bundled cross-platform fallback. No proprietary Apple fonts are hosted.
 
 ## Configuration
 
@@ -71,6 +70,7 @@ requested only when About opens, with its version and integrity pinned.
 | `src/stage/projects.js` | Project order, copy, tags, palettes, links and posters |
 | `src/stage/scenes/` | Lazy app recordings and real UI galleries |
 | `src/stage/identities.css` | App-specific type, surfaces, marks and framing |
+| `src/stage/refinements.css` | Gallery, project dock, short About and SVG scene treatments |
 | `src/stage/stage.css` | One-viewport layout, RAW Titanium chrome and responsive rules |
 | `src/brand/` | Detailed heptagram and simple morph silhouettes |
 | `src/components/Experience.jsx` | Resume-aligned experience data |

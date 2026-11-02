@@ -2,6 +2,20 @@
 
 ## Current direction
 
+### Refinement: 2 November 2026
+
+The home is now a structured screenshot gallery, replacing the orbit composition.
+The project rail uses app emblems, a contained active state and visible keyboard
+focus. About contains one school-progress paragraph, email, GitHub and LinkedIn;
+resume sections no longer appear there. The original Experience data is retained.
+Ateru uses native rounded type or bundled Nunito (rather than Nunito Sans) and
+the real default AppIcon SVG geometry. Halcyra has a wavetable/dial/signal-path
+background; Logscope has input/index routes and a waterfall baseline. These SVGs
+are decorative, not live telemetry. The home morph starts at the actual detailed
+heptagram instead of flashing a filled surrogate star.
+
+### Project identities
+
 The selected five projects are **Nexis, Ateru, BibleLM, Halcyra and Logscope**.
 Ateru and Halcyra replace the two design-family specimens. The user explicitly
 kept five projects when asked about adding an actual Ferrite app.

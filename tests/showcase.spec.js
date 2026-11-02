@@ -8,7 +8,7 @@ import AxeBuilder from '@axe-core/playwright'
 import { emblems, outline } from '../src/brand/emblems.js'
 const ids = ['nexis', 'ateru', 'biblelm', 'halcyra', 'logscope']
 
-for (const [width, height] of [[360, 640], [768, 1024], [1440, 900], [844, 390]]) {
+for (const [width, height] of [[360, 640], [768, 1024], [1440, 900], [2048, 1152], [844, 390]]) {
   test(`all stages fit ${width}×${height}`, async ({ page }) => {
     const errors = []
     page.on('pageerror', error => errors.push(error.message))
@@ -28,6 +28,12 @@ for (const [width, height] of [[360, 640], [768, 1024], [1440, 900], [844, 390]]
         }).map(element => element.className)
       })
       expect(clipped, id || 'home').toEqual([])
+      if (id) expect(await page.locator('.project-media').evaluate(figure => {
+        const outer = figure.getBoundingClientRect()
+        const caption = figure.querySelector('figcaption').getBoundingClientRect()
+        const media = figure.querySelector('.capture-image, video, :scope > img')?.getBoundingClientRect()
+        return caption.bottom <= outer.bottom + 1 && caption.top >= outer.top && (!media || media.bottom <= caption.top + 1)
+      }), `${id} caption must fit inside its figure`).toBeTruthy()
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth && document.documentElement.scrollHeight <= innerHeight)).toBeTruthy()
     }
     expect(errors).toEqual([])
@@ -72,7 +78,9 @@ test('app identities replace the generic gradient and keep home in Geist Sans', 
   await expect(page.locator('h1')).toHaveText('Ateru')
   await expect(page.locator('.capture-scene')).toBeVisible()
   expect(await page.locator('header').evaluate(element => getComputedStyle(element).backgroundColor)).toBe('rgb(11, 11, 12)')
-  expect(await page.locator('h1').evaluate(element => getComputedStyle(element).fontFamily)).toContain('Nunito Sans')
+  expect(await page.locator('h1').evaluate(element => getComputedStyle(element).fontFamily)).toContain('Nunito Variable')
+  await page.evaluate(() => document.fonts.ready)
+  expect(await page.evaluate(() => document.fonts.check('850 48px "Nunito Variable"'))).toBeTruthy()
   await page.keyboard.press('3')
   await expect(page.locator('h1')).toHaveText('BibleLM')
   await expect(page.locator('video')).toBeVisible()
@@ -82,18 +90,22 @@ test('app identities replace the generic gradient and keep home in Geist Sans', 
   await expect.poll(() => page.locator('.mark-biblelm mask rect:last-child').first().evaluate(element => getComputedStyle(element).opacity)).toBe('0')
 })
 
-test('modal traps focus, protects typing, validates contact and restores focus', async ({ page }) => {
+test('short About shows school progress and direct contact links, traps and restores focus', async ({ page }) => {
   await page.goto('/#/nexis')
   await page.getByRole('button', { name: 'About & contact' }).click()
   const dialog = page.getByRole('dialog')
   await expect(dialog).toBeVisible()
-  await expect(dialog.getByText('North Dakota State University', { exact: true })).toBeVisible()
-  await dialog.locator('#contact-name').fill('12345')
+  await expect(dialog.getByText(/senior year at North Dakota State University/)).toBeVisible()
+  await expect(dialog.getByText(/graduation in May 2027/)).toBeVisible()
+  await expect(dialog.locator('#experience, #skills, form')).toHaveCount(0)
+  await expect(dialog.getByRole('link', { name: 'GitHub', exact: true })).toHaveAttribute('href', 'https://github.com/rwetz')
+  await expect(dialog.getByRole('link', { name: 'LinkedIn', exact: true })).toHaveAttribute('href', 'https://linkedin.com/in/ryan-wetzstein')
+  await expect(dialog.getByRole('link', { name: 'Email', exact: true })).toHaveAttribute('href', 'mailto:rwetz00@gmail.com')
+  await dialog.getByRole('link', { name: 'LinkedIn', exact: true }).focus()
+  await page.keyboard.press('Tab')
+  await expect(dialog.getByRole('button', { name: 'Close about' })).toBeFocused()
   await page.keyboard.press('ArrowRight')
   await expect(page).toHaveURL(/#\/nexis$/)
-  await dialog.getByRole('button', { name: 'Send via email' }).click()
-  await expect(dialog.locator('#contact-email')).toHaveAttribute('aria-invalid', 'true')
-  await expect(dialog.locator('#contact-message')).toHaveAttribute('aria-invalid', 'true')
   await page.keyboard.press('Escape')
   await expect(dialog).not.toBeVisible()
   await expect(page.getByRole('button', { name: 'About & contact' })).toBeFocused()
@@ -105,9 +117,10 @@ test('command palette navigates projects and opens About', async ({ page }) => {
   await page.getByPlaceholder('Type a command or search…').fill('Logscope')
   await page.keyboard.press('Enter')
   await expect(page).toHaveURL(/#\/logscope$/)
+  await expect(page.locator('h1')).toHaveText('Logscope')
   await page.keyboard.press('Control+k')
   await page.getByPlaceholder('Type a command or search…').fill('About')
-  await page.keyboard.press('Enter')
+  await page.getByRole('option', { name: 'About & contact', exact: true }).click()
   await expect(page.getByRole('dialog', { name: 'About Ryan' })).toBeVisible()
 })
 
@@ -119,6 +132,7 @@ test('swipe and wheel move once per gesture', async ({ page }) => {
   await page.mouse.move(350, 300)
   await page.mouse.up()
   await expect(page).toHaveURL(/#\/ateru$/)
+  await expect(page.locator('h1')).toHaveText('Ateru')
   await page.locator('main').dispatchEvent('wheel', { deltaY: 100 })
   await expect(page).toHaveURL(/#\/biblelm$/)
   await page.locator('main').dispatchEvent('wheel', { deltaY: 100 })
@@ -180,6 +194,7 @@ test('desktop hover previews and logo morph work with motion enabled', async ({ 
   await page.keyboard.press('2')
   await expect(page.locator('h1')).toHaveText('Ateru')
   await expect.poll(() => page.locator('.showcase-wordmark svg path:last-child').getAttribute('d')).not.toBe(emblem)
+  await expect(page.locator('.showcase-wordmark svg path:last-child')).toHaveAttribute('d', emblems.ateru)
   await page.keyboard.press('3')
   await expect(page.locator('h1')).toHaveText('BibleLM')
   await expect.poll(() => page.locator('.mark-biblelm mask rect:last-child').first().evaluate(element => getComputedStyle(element).opacity)).toBe('0')
@@ -199,7 +214,7 @@ test('WCAG AA scans on every stage, modal and command palette', async ({ page })
   }
   await page.getByRole('button', { name: 'About & contact' }).click()
   await expect(page.getByRole('dialog')).toBeVisible()
-  for (const section of ['about', 'experience', 'skills', 'contact']) {
+  for (const section of ['about', 'contact']) {
     await page.locator(`#${section}`).scrollIntoViewIfNeeded()
     const about = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
     expect(about.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })), section).toEqual([])

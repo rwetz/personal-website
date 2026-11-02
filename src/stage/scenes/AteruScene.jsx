@@ -3,7 +3,7 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import '@fontsource-variable/nunito-sans'
+import '@fontsource-variable/nunito'
 import CaptureScene from '../CaptureScene'
 import chronicle from '../../assets/showcase/ateru.webp'
 import studio from '../../assets/showcase/ateru-studio.webp'

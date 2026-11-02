@@ -14,6 +14,7 @@ import Rail from './stage/Rail'
 import Heptagram from './brand/Heptagram'
 import './stage/stage.css'
 import './stage/identities.css'
+import './stage/refinements.css'
 
 const AboutModal = lazy(() => import('./stage/AboutModal'))
 const loadMotionFeatures = () => import('./lib/motion-features').then(mod => mod.default)
@@ -40,7 +41,7 @@ export default function App() {
             {stage.project ? <Stage project={stage.project} /> : <Intro />}
           </main>
           <footer className="showcase-footer">
-            <div className="showcase-footer-meta"><span>Selected projects</span><span>Use ← → to explore · Esc for home</span></div>
+            <div className="showcase-footer-meta"><span>Selected work <span className="footer-count">Five projects</span></span><span>← → to explore <span className="footer-divider">/</span> Esc for home</span></div>
             <Rail activeId={stage.project?.id} navigate={stage.navigate} />
           </footer>
           <span className="sr-only" role="status" aria-live="polite">{stage.project?.name ?? 'Home, selected work'}</span>

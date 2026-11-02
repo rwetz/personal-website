@@ -20,7 +20,7 @@ import { toast } from '@/components/ui/sonner'
 const EMAIL = 'rwetz00@gmail.com'
 
 const navigate = [
-  { id: 'home', label: 'Home / Constellation', icon: FolderSimple, hash: '#/' },
+  { id: 'home', label: 'Home / Selected work', icon: FolderSimple, hash: '#/' },
   ...projects.map(project => ({ id: project.id, label: project.name, icon: FolderSimple, hash: `#/${project.id}` })),
 ]
 
@@ -58,7 +58,7 @@ export default function CommandPalette({ open, onClose, onAbout }) {
         <CommandEmpty>No results found.</CommandEmpty>
 
         <CommandGroup heading="Navigate">
-          <CommandItem onSelect={() => { onClose(); onAbout() }}><User /><span>About, experience, skills & contact</span></CommandItem>
+          <CommandItem onSelect={() => { onClose(); onAbout() }}><User /><span>About & contact</span></CommandItem>
           {navigate.map(({ id, label, icon: Icon, hash }) => (
             <CommandItem key={id} onSelect={go(hash)}>
               <Icon /> <span>{label}</span>
