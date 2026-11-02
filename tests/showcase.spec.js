@@ -15,6 +15,8 @@ for (const [width, height] of [[360, 640], [768, 1024], [1440, 900], [2048, 1152
     await page.setViewportSize({ width, height })
     for (const id of ['', ...ids]) {
       await page.goto(`/#/${id}`)
+      // Hash navigation can resolve while React still shows the previous stage.
+      await expect(page.locator('.showcase-shell')).toHaveAttribute('data-project', id || 'home')
       await expect(page.locator('h1')).toBeVisible()
       if (['ateru', 'halcyra'].includes(id)) await expect(page.locator('.capture-scene')).toBeVisible()
       if (id && !['ateru', 'halcyra'].includes(id)) await expect(page.locator('video')).toHaveAttribute('preload', 'none')
