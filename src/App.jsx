@@ -17,6 +17,7 @@ import Heptagram from './brand/Heptagram'
 import './stage/stage.css'
 import './stage/identities.css'
 import './stage/refinements.css'
+import './stage/product-buttons.css'
 
 const AboutPage = lazy(() => import('./stage/AboutPage'))
 const loadMotionFeatures = () => import('./lib/motion-features').then(mod => mod.default)
@@ -31,7 +32,16 @@ export default function App() {
   return (
     <LazyMotion features={loadMotionFeatures} strict>
       <MotionConfig reducedMotion="user">
-        <div className="showcase-shell" data-project={stage.pageId}>
+        <div className="showcase-shell" data-project={stage.pageId} onClickCapture={event => {
+          if (stage.pageId !== 'logscope') return
+          const control = event.target.closest('.showcase-header-actions button, .media-toggle, .showcase-rail button, .showcase-rail > a')
+          if (!control) return
+          control.classList.remove('ferrite-ack')
+          void control.offsetWidth
+          control.classList.add('ferrite-ack')
+        }} onAnimationEnd={event => {
+          if (event.animationName === 'ferrite-ack') event.target.classList.remove('ferrite-ack')
+        }}>
           {stage.pageId !== 'about' && <ProjectBackground key={stage.pageId} project={stage.project} />}
           <a className="showcase-skip" href="#main-content" onClick={event => {
             event.preventDefault()
