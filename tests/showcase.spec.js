@@ -449,7 +449,7 @@ test('immersive view hands the stage to the project and Escape returns to the fu
   await page.getByRole('button', { name: 'Immerse' }).click()
   await expect(page.locator('.showcase-shell')).toHaveAttribute('data-immersed', '')
   await expect(page.locator('.project-copy')).toBeHidden()
-  await expect(page.locator('.immerse-hint')).toContainText('Motion is reduced')
+  await expect(page.locator('.field-nudge')).toHaveCount(0)
   const fits = await page.locator('.project-media').evaluate(figure => {
     const main = document.querySelector('main').getBoundingClientRect()
     const media = figure.querySelector('.capture-image').getBoundingClientRect()
@@ -518,17 +518,13 @@ test('the 404 page is its own entry, stays useful and plays the constellation ga
   await page.getByRole('button', { name: 'Play: find your way home' }).click()
   await expect(page.locator('.lost')).toHaveAttribute('data-state', 'playing')
   await expect(page.locator('#lost-stage')).toBeFocused()
-  // Autopilot: let go only when the tangent points into the next ring.
+  // Autopilot: let go only when the game's own flight preview ends in a ring.
   const reached = await page.evaluate(() => new Promise(resolve => {
     const game = window.lostGame
     const tick = () => {
       const s = game.snapshot()
       if (s.state !== 'playing' || (s.score >= 9 && s.mode === 'orbit')) return resolve(s)
-      if (s.mode === 'orbit') {
-        const dx = -Math.sin(s.angle) * s.dir, dy = Math.cos(s.angle) * s.dir
-        const rx = s.next.x - s.x, ry = s.next.y - s.y
-        if (rx * dx + ry * dy > 0 && Math.abs(rx * dy - ry * dx) < s.next.ring * .35) game.release()
-      }
+      if (s.mode === 'orbit' && s.aim.hit === 'star') game.release()
       requestAnimationFrame(tick)
     }
     tick()

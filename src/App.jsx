@@ -61,7 +61,7 @@ function usePointerDepth(shell) {
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-// The outgoing world stays for a moment and dissolves beneath the next one's iris.
+// The outgoing world stays for a moment and dissolves as the next one fades in.
 // Both keep their keys, so neither field is torn down and rebuilt on the way.
 function useWorlds(pageId) {
   const [current, setCurrent] = useState(pageId)
@@ -135,8 +135,7 @@ export default function App() {
           </header>
           <main id="main-content" tabIndex={-1} {...(stage.pageId === 'about' ? {} : stage.gestures)}>
             {stage.pageId === 'about' ? <Suspense fallback={<p role="status">Loading about…</p>}><AboutPage returnProject={returnProject} /></Suspense> : stage.project ? <Stage project={stage.project} /> : <Intro onTint={setTint} />}
-            {nudge && !immersive && <p className="immerse-hint field-nudge" key={`nudge-${stage.project.id}`}>{stage.project.field} <span>Immerse to play with it.</span></p>}
-            {immersive && <p className="immerse-hint" key={stage.project.id}><span className="immerse-hint-live">{stage.project.field}</span><span className="immerse-hint-reduced">Motion is reduced, so the field holds still.</span></p>}
+            {nudge && !immersive && <p className="field-nudge" key={`nudge-${stage.project.id}`}>{stage.project.field} <span>Immerse to play with it.</span></p>}
           </main>
           <footer className="showcase-footer">
             <div className="showcase-footer-meta">

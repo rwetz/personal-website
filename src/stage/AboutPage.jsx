@@ -9,7 +9,6 @@ import { toast } from 'sonner'
 import FlexCarousel from '../components/gallery/FlexCarousel'
 import { projects } from './projects'
 import { emblems } from '../brand/emblems'
-import { setIrisOrigin } from './iris'
 import profile480 from '../assets/profile-480.webp'
 import profile960 from '../assets/profile-960.webp'
 import photo01 from '../assets/about/photo-01.svg'
@@ -104,7 +103,7 @@ export default function AboutPage({ returnProject }) {
     <section className="about-building" aria-labelledby="building-title">
       <h2 id="building-title">What I’m building</h2>
       <ul>{projects.map(project => <li key={project.id}>
-        <a href={`#/${project.id}`} style={{ '--object-accent': project.palette.accent }} onPointerDown={event => setIrisOrigin(event.currentTarget)}>
+        <a href={`#/${project.id}`} style={{ '--object-accent': project.palette.accent }}>
           <svg viewBox="0 0 1024 1024" aria-hidden="true"><path d={emblems[project.id]} fill="currentColor" fillRule="evenodd" /></svg>
           <span><strong>{project.name}</strong><small>{project.kind}</small></span>
         </a>

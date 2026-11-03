@@ -7,7 +7,6 @@ import { projects } from './projects'
 import Heptagram from '../brand/Heptagram'
 import { emblems } from '../brand/emblems'
 import RubberSegment from '../components/micro/RubberSegment'
-import { setIrisOrigin } from './iris'
 export default function Rail({ activeId, navigate, pageId }) {
   const onKeyDown = event => {
     const index = projects.findIndex(project => project.id === activeId)
@@ -23,10 +22,7 @@ export default function Rail({ activeId, navigate, pageId }) {
     document.getElementById(`tab-${projects[next].id}`)?.focus()
   }
   return (
-    <nav className="showcase-rail" aria-label="Selected work" onPointerDownCapture={event => {
-      const target = event.target.closest('a, button')
-      if (target) setIrisOrigin(target)
-    }}>
+    <nav className="showcase-rail" aria-label="Selected work">
       <a id="rail-home" href="#/" aria-label="Home" aria-current={pageId === 'home' ? 'page' : undefined}><Heptagram /></a>
       <RubberSegment value={activeId ?? null} onChange={navigate} onKeyDown={onKeyDown} aria-label="Projects"
         size="lg" inset={5} radius={12} stretch={80} squash={3} draggable={false}

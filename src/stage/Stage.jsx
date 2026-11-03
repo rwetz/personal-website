@@ -8,7 +8,7 @@ import { m } from 'framer-motion'
 import { projects } from './projects'
 import HalcyraScene from './scenes/HalcyraScene'
 import { emblems } from '../brand/emblems'
-import { setIrisOrigin } from './iris'
+import { outline } from '../brand/emblems'
 const loaders = {
   nexis: () => import('./scenes/NexisScene'),
   biblelm: () => import('./scenes/BibleLmScene'),
@@ -21,9 +21,8 @@ const scenes = Object.fromEntries(Object.entries(loaders).map(([id, load]) => [i
 function Peek({ project, direction }) {
   const label = direction === 'previous' ? 'Previous' : 'Next'
   return <a className={`stage-peek peek-${direction}`} href={project ? `#/${project.id}` : '#/'}
-    style={project ? { '--peek-accent': project.palette.accent } : undefined}
-    onPointerDown={event => setIrisOrigin(event.currentTarget)}>
-    {project ? <svg viewBox="0 0 1024 1024" aria-hidden="true"><path d={emblems[project.id]} fill="currentColor" fillRule="evenodd" /></svg> : <span className="peek-home" aria-hidden="true" />}
+    style={project ? { '--peek-accent': project.palette.accent } : undefined}>
+    <svg className={project ? undefined : 'peek-home'} viewBox="0 0 1024 1024" aria-hidden="true"><path d={project ? emblems[project.id] : outline} fill="currentColor" fillRule="evenodd" /></svg>
     <span><small>{label}</small> {project?.name ?? 'Home'}</span>
   </a>
 }

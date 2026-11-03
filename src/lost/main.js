@@ -70,6 +70,9 @@ function onEvent(event) {
   $('lost-sector').textContent = event.sector.name
   document.documentElement.style.setProperty('--lost-accent', event.sector.accent)
   if (event.type === 'capture' && event.score > readBest()) $('lost-best').textContent = event.score
+  if (event.type === 'capture' && event.perfect) banner(event.combo > 1 ? `Perfect ×${event.combo}` : 'Perfect')
+  if (event.type === 'shield') { banner('Shield up'); announce('Three perfect catches. Shield up: the next hit from static is absorbed.') }
+  if (event.type === 'shield-lost') { banner('Shield down'); announce('Your shield absorbed the static.') }
   if (event.type === 'start') { setState('playing'); announce('Game started. You are orbiting the first star in Nexis.') }
   if (event.type === 'sector') { banner(`Entering ${event.sector.name}`); announce(`Entering ${event.sector.name}.`) }
   if (event.type === 'home') { banner('Home. Keep drifting, or head back to work.'); announce('You found your way home. The game continues if you keep going.') }
@@ -81,9 +84,9 @@ function onEvent(event) {
     writeBest(best)
     $('lost-best').textContent = best
     $('lost-over-sector').textContent = `Lost in ${event.sector.name}`
-    $('lost-over-text').textContent = event.score === 0
-      ? 'You drifted off before the first star. Let go when the dotted line points into the next ring.'
-      : `You reached star ${event.score} of 35${record ? ', a new best' : `. Your best is ${best}`}.`
+    const cause = { decay: 'Your orbit decayed into the star. Let go before the arc runs out.', static: 'You flew into static. Thread the gap, or earn a shield with three perfect catches.' }[event.reason]
+      ?? (event.score === 0 ? 'You drifted off before the first star. Let go when the dotted line points into the next ring.' : 'You drifted out of reach.')
+    $('lost-over-text').textContent = `${cause} ${event.score > 0 ? `You reached star ${event.score} of 35${record ? ', a new best' : `. Your best is ${best}`}.` : ''}`.trim()
     setState('over')
     $('lost-over-title').focus()
     announce(`Signal lost at star ${event.score}. Best ${best}.`)

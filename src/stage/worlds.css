@@ -4,26 +4,12 @@
  * ║  2026                                ║
  * ╚══════════════════════════════════════╝ */
 
-/* Travel between worlds: the next field opens as a circle from where it was chosen. */
-.showcase-shell { --tilt-x: 0; --tilt-y: 0; --iris-ease: cubic-bezier(.65, 0, .2, 1); }
-.showcase-shell > .stage-effect { animation: world-iris 1100ms var(--iris-ease) both; transition: opacity 700ms ease; }
-@keyframes world-iris {
-  from { clip-path: circle(0 at var(--iris-x) var(--iris-y)); }
-  to { clip-path: circle(150vmax at var(--iris-x) var(--iris-y)); }
-}
-.world-ring {
-  position: absolute; z-index: -1; left: var(--iris-x); top: var(--iris-y); width: 0; height: 0;
-  translate: -50% -50%; border-radius: 50%; border: 1px solid var(--stage-accent); pointer-events: none; opacity: 0;
-  animation: world-ring 1100ms var(--iris-ease) both;
-}
-/* The world being left dissolves under the iris instead of cutting out. */
-.showcase-shell > .stage-effect.is-leaving { animation: world-leave 1100ms var(--iris-ease) forwards; }
+/* Travel between worlds: the next field fades in while the one being left dissolves. */
+.showcase-shell { --tilt-x: 0; --tilt-y: 0; --travel-ease: cubic-bezier(.65, 0, .2, 1); }
+.showcase-shell > .stage-effect { animation: world-in 900ms var(--travel-ease) both; transition: opacity 700ms ease; }
+@keyframes world-in { from { opacity: 0; } }
+.showcase-shell > .stage-effect.is-leaving { animation: world-leave 1100ms var(--travel-ease) forwards; }
 @keyframes world-leave { to { opacity: 0; scale: 1.08; filter: blur(10px) saturate(.4); } }
-@keyframes world-ring {
-  0% { width: 0; height: 0; opacity: .9; }
-  70% { opacity: .5; }
-  100% { width: 300vmax; height: 300vmax; opacity: 0; }
-}
 
 /* Depth: the media leans towards the pointer, the field drifts the other way. */
 @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
@@ -116,29 +102,50 @@
 .immerse-toggle:hover { background: var(--stage-surface); }
 .immerse-toggle[aria-pressed=true] { border-color: var(--stage-accent); }
 .immerse-toggle svg { width: 15px; height: 15px; }
-.immerse-hint {
+/* Shown once per session outside Immerse; Immerse itself carries no tips. */
+.field-nudge {
   position: absolute; left: 50%; bottom: 14px; translate: -50% 0; margin: 0; padding: 8px 14px; border-radius: 999px;
   background: color-mix(in srgb, var(--t-void) 72%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   color: var(--stage-fg); font: 500 12px/1.4 var(--stage-ui); white-space: nowrap; pointer-events: none; z-index: 4;
-  animation: hint-in 700ms 300ms cubic-bezier(.22, 1, .36, 1) both;
+  animation: hint-in 700ms cubic-bezier(.22, 1, .36, 1) both, hint-out 600ms 5400ms ease forwards;
 }
-.immerse-hint-reduced { display: none; }
 @keyframes hint-in { from { opacity: 0; translate: -50% 10px; } }
 .field-nudge span { color: var(--chrome-muted); margin-left: 4px; }
-.field-nudge { animation: hint-in 700ms cubic-bezier(.22, 1, .36, 1) both, hint-out 600ms 5400ms ease forwards; }
 @keyframes hint-out { to { opacity: 0; } }
 @media (max-width: 959px) {
   .showcase-shell[data-immersed] .project-copy { display: none; }
 }
-/* Phones hide the keyboard hints, so Immerse floats as a round control above the dock. */
+/* Phones hide the keyboard hints, so Immerse floats as a round control above the dock,
+ * on the left where it clears the media's own play and enlarge buttons. */
 @media (max-width: 540px), (max-height: 540px) and (orientation: landscape) {
-  .showcase-footer-meta { display: flex; position: absolute; right: max(12px, env(safe-area-inset-right)); bottom: calc(100% + 8px); margin: 0; }
+  .showcase-footer-meta { display: flex; position: absolute; left: max(12px, env(safe-area-inset-left)); bottom: calc(100% + 8px); margin: 0; }
   .showcase-footer-meta > span { display: none; }
   .immerse-toggle { width: 44px; height: 44px; padding: 0; justify-content: center; }
   .immerse-toggle svg { width: 18px; height: 18px; }
   .immerse-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .immerse-hint { top: 10px; bottom: auto; max-width: calc(100vw - 32px); white-space: normal; text-align: center; }
+  .field-nudge { top: 10px; bottom: auto; max-width: calc(100vw - 32px); white-space: normal; text-align: center; }
   .field-nudge span { display: block; margin: 0; }
+}
+/* The resume must stay reachable on phones; it shares the header with a shorter gap. */
+@media (max-width: 540px) {
+  .showcase-header-actions { gap: 6px; }
+  .showcase-header-actions > a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 10px; }
+}
+@media (max-width: 400px) {
+  .showcase-wordmark span { display: none; }
+}
+/* Short landscape phones move the dock to a side column; Immerse sits at its foot. */
+@media (max-height: 540px) and (orientation: landscape) {
+  .showcase-footer { display: flex; flex-direction: column; }
+  /* Fit the copy and media to the short screen instead of a tall scrolling stage. */
+  .showcase-intro, .project-stage { min-height: 0; }
+  .project-stage { height: 100%; }
+  .project-media { height: 100%; max-height: 100%; min-height: 0; display: flex; flex-direction: column; justify-content: center; container-type: size; }
+  .project-media > * { min-height: 0; }
+  .project-stage .project-media .media-scene video, .project-media .capture-landscape .capture-image { max-height: calc(100cqh - 8px); }
+  .capture-portrait .capture-image { max-height: calc(100cqh - 56px); }
+  .capture-portrait .capture-companion { height: auto; max-height: calc(100cqh - 76px); }
+  .showcase-footer-meta { position: static; justify-content: center; margin: 8px 0 0; order: 2; }
 }
 
 /* Neighbouring worlds, named at the edges on screens with room for them. */
@@ -155,7 +162,10 @@
   .stage-peek small { font-size: 11px; opacity: .8; margin-block-end: 6px; }
   .stage-peek svg { width: 18px; height: 18px; color: var(--peek-accent, var(--t-silver)); rotate: 90deg; }
   .peek-previous svg { rotate: -90deg; }
-  .peek-home { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--t-silver); }
+  .stage-peek .peek-home { rotate: 0deg; color: var(--t-silver); }
+  .peek-previous .peek-home { rotate: 180deg; }
+  /* Ateru's stage is centred at a max width; keep its edge links at the viewport edges like the others. */
+  .scene-ateru .stage-peeks { inset: 0 calc((100% - 100vw) / 2); }
   .stage-peek:hover { color: var(--stage-fg); background: color-mix(in srgb, var(--t-void) 60%, transparent); }
   .stage-peek:hover svg { scale: 1.15; }
 }
@@ -167,9 +177,6 @@
 @media (max-width: 760px) { .about-world-mark { width: 150vmin; translate: 30vw -18vh; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .showcase-shell > .stage-effect, .world-ring { animation: none !important; }
+  .showcase-shell > .stage-effect { animation: none !important; }
   .project-media { view-transition-name: none; }
-  .world-ring { display: none; }
-  .immerse-hint-live { display: none; }
-  .immerse-hint-reduced { display: inline; }
 }

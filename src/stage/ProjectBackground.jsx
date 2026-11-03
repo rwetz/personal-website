@@ -3,9 +3,8 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense } from 'react'
 import { backgroundLoaders } from './backgrounds'
-import { irisOrigin } from './iris'
 
 const backgrounds = Object.fromEntries(Object.entries(backgroundLoaders).map(([id, load]) => [id, lazy(load)]))
 const homeColors = ['#61dca3', '#61b3dc']
@@ -22,11 +21,6 @@ export default function ProjectBackground({ project, leaving = false, tint = nul
   const id = project?.id ?? 'home'
   const Background = backgrounds[id]
   const accent = project?.palette.accent
-  // Each world opens as a circle from wherever the visitor chose it.
-  const [origin] = useState(() => {
-    const point = irisOrigin()
-    return { '--iris-x': point ? `${point.x}px` : '50%', '--iris-y': point ? `${point.y}px` : '55%' }
-  })
   const settings = {
     home: { glitchColors: homeColors, baseColor: '#2b4539', spacing: .1, density: 1, baseOpacity: 1, glitchAmount: .85, flow: 0, characters: '0123456789ABCDEF', interactive: true, clickEffect: 'tear', intro: false, dpr: 1, tintColors: glyphTints[tint] },
     nexis: { colors: [project?.palette.bg, '#526580', accent], speed: .35, grainAmount: .1, interactive: true, clickSwirl: true, intro: false, dpr: 1 },
@@ -36,9 +30,8 @@ export default function ProjectBackground({ project, leaving = false, tint = nul
     logscope: { tint: '#ffb347', glyphs: 'dots', scale: 1.6, digitSize: 1.25, timeScale: .85, brightness: .8, glow: .6, persistence: .5, mouseStrength: .5, mouseGlow: .55, scramble: .5, scanlineIntensity: .5, glitchAmount: 1, flickerAmount: 1, noiseAmp: 1, chromaticAberration: 0, curvature: .07, vignette: .25, mouseReact: true, clickEffect: 'glitch', pageLoadAnimation: true, pause: false, lightMode: false, dpr: 1 },
   }
   return <>
-    <div className={`stage-effect effect-${id}${leaving ? ' is-leaving' : ''}`} aria-hidden="true" data-effect={id} style={origin}>
+    <div className={`stage-effect effect-${id}${leaving ? ' is-leaving' : ''}`} aria-hidden="true" data-effect={id}>
       <Suspense fallback={null}><Background {...settings[id]} /></Suspense>
     </div>
-    {!leaving && <span className="world-ring" aria-hidden="true" style={origin} />}
   </>
 }
