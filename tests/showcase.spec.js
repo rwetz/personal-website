@@ -441,3 +441,100 @@ test('About retains its photo strip when WebGL is unavailable', async ({ page })
   await expect(page.locator('.photo-fallback img')).toHaveCount(4)
   expect(errors).toEqual([])
 })
+
+test('immersive view hands the stage to the project and Escape returns to the full page', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/#/halcyra')
+  await expect(page.locator('.capture-scene')).toBeVisible()
+  await page.getByRole('button', { name: 'Immerse' }).click()
+  await expect(page.locator('.showcase-shell')).toHaveAttribute('data-immersed', '')
+  await expect(page.locator('.project-copy')).toBeHidden()
+  await expect(page.locator('.immerse-hint')).toContainText('Motion is reduced')
+  const fits = await page.locator('.project-media').evaluate(figure => {
+    const main = document.querySelector('main').getBoundingClientRect()
+    const media = figure.querySelector('.capture-image').getBoundingClientRect()
+    return media.top >= main.top - 1 && media.bottom <= main.bottom + 1
+  })
+  expect(fits).toBeTruthy()
+  await page.keyboard.press('ArrowRight')
+  await expect(page.locator('h1')).toHaveText('Logscope')
+  await expect(page.locator('.showcase-shell')).toHaveAttribute('data-immersed', '')
+  const audit = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
+  expect(audit.violations.map(v => v.id)).toEqual([])
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.showcase-shell')).not.toHaveAttribute('data-immersed', '')
+  await expect(page).toHaveURL(/#\/logscope$/)
+  await page.keyboard.press('Escape')
+  await expect(page).toHaveURL(/#\/$/)
+})
+
+test('About shows the portrait, a live degree meter and the project strip', async ({ page }) => {
+  await page.goto('/#/about')
+  await expect(page.getByRole('img', { name: 'Portrait of Ryan Wetzstein' })).toBeVisible()
+  const meter = page.getByRole('meter', { name: 'Progress through my degree' })
+  await expect(meter).toBeVisible()
+  const value = Number(await meter.getAttribute('aria-valuenow'))
+  expect(value).toBeGreaterThanOrEqual(0)
+  expect(value).toBeLessThanOrEqual(100)
+  await expect(page.locator('.about-building a')).toHaveCount(5)
+  await page.locator('.about-building a').first().click()
+  await expect(page.locator('h1')).toHaveText('Nexis')
+})
+
+test('the 404 page is its own entry, stays useful and plays the constellation game', async ({ page }) => {
+  const errors = []
+  page.on('pageerror', error => errors.push(error.message))
+  const scripts = []
+  page.on('request', request => { if (request.resourceType() === 'script') scripts.push(request.url()) })
+  await page.goto('/404.html?seed=7')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lost in the constellation.')
+  await expect(page.getByRole('link', { name: 'Back to work' }).first()).toHaveAttribute('href', '/#/')
+  expect(scripts.some(url => /game-/.test(url))).toBeFalsy()
+  const idle = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
+  expect(idle.violations.map(v => v.id)).toEqual([])
+  await page.getByRole('button', { name: 'Play: find your way home' }).click()
+  await expect(page.locator('.lost')).toHaveAttribute('data-state', 'playing')
+  await expect(page.locator('#lost-stage')).toBeFocused()
+  // Autopilot: let go only when the tangent points into the next ring.
+  const reached = await page.evaluate(() => new Promise(resolve => {
+    const game = window.lostGame
+    const tick = () => {
+      const s = game.snapshot()
+      if (s.state !== 'playing' || (s.score >= 9 && s.mode === 'orbit')) return resolve(s)
+      if (s.mode === 'orbit') {
+        const dx = -Math.sin(s.angle) * s.dir, dy = Math.cos(s.angle) * s.dir
+        const rx = s.next.x - s.x, ry = s.next.y - s.y
+        if (rx * dx + ry * dy > 0 && Math.abs(rx * dy - ry * dx) < s.next.ring * .35) game.release()
+      }
+      requestAnimationFrame(tick)
+    }
+    tick()
+  }))
+  expect(reached.state).toBe('playing')
+  expect(reached.sector).toBe('ateru')
+  await expect(page.locator('#lost-sector')).toHaveText('Ateru')
+  await page.keyboard.press('p')
+  await expect(page.locator('.lost')).toHaveAttribute('data-state', 'paused')
+  const paused = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
+  expect(paused.violations.map(v => v.id)).toEqual([])
+  await page.getByRole('button', { name: 'Resume' }).first().click()
+  await expect(page.locator('.lost')).toHaveAttribute('data-state', 'playing')
+  await page.evaluate(() => new Promise(resolve => {
+    const game = window.lostGame
+    const tick = () => {
+      const s = game.snapshot()
+      if (s.state !== 'playing') return resolve()
+      if (s.mode === 'orbit' && Math.cos(s.angle) * s.dir < -.9) game.release()
+      requestAnimationFrame(tick)
+    }
+    tick()
+  }))
+  await expect(page.locator('.lost')).toHaveAttribute('data-state', 'over')
+  await expect(page.getByRole('heading', { name: 'Signal lost.' })).toBeFocused()
+  await expect(page.locator('#lost-best')).toHaveText(/^(9|1\d)$/)
+  const over = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
+  expect(over.violations.map(v => v.id)).toEqual([])
+  await page.getByRole('button', { name: 'Try again' }).click()
+  await expect(page.locator('.lost')).toHaveAttribute('data-state', 'playing')
+  expect(errors).toEqual([])
+})

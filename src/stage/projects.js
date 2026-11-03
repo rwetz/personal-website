@@ -24,6 +24,7 @@ export const projects = [
     tags: ['Rust + Tauri', 'Terminal', 'Workspace'],
     palette: { bg: '#101319', fg: '#f0f3f7', accent: '#8dbce8', surface: '#222b36', font: sans, display: "'Space Grotesk Variable', sans-serif", radius: '18px' },
     media: { src: nexis, thumb: nexisThumb, animated: true, alt: 'The Nexis welcome screen in the real desktop app', caption: 'Nexis / Desktop workspace' },
+    field: 'Move to stir the grain. Click to swirl it.',
     links: [{ label: 'Launch', href: 'https://nexisdev.org' }, { label: 'Source', href: 'https://github.com/rwetz/Nexis' }],
   },
   {
@@ -32,6 +33,7 @@ export const projects = [
     tags: ['React Native', 'Local-first', 'iPhone'],
     palette: { bg: '#0b0b0c', fg: '#f2f2f3', accent: '#ef4a44', surface: '#161618', font: "ui-rounded, 'SF Pro Rounded', 'Nunito Variable', sans-serif", display: "ui-rounded, 'SF Pro Rounded', 'Nunito Variable', sans-serif", ui: "ui-rounded, 'SF Pro Rounded', 'Nunito Variable', sans-serif", radius: '28px' },
     media: { src: ateru, thumb: ateruThumb, alt: 'Ateru Chronicle showing a Wrapped recap and sample viewing history', caption: 'Ateru / Sample library' },
+    field: 'Move through the threads to part them.',
     links: [{ label: 'Ask about Ateru', href: 'mailto:rwetz00@gmail.com?subject=Ateru' }],
   },
   {
@@ -40,6 +42,7 @@ export const projects = [
     tags: ['Bible study', 'Public-domain art', 'ML lab'],
     palette: { bg: '#14110d', fg: '#e9e1d0', accent: '#d4a94f', surface: '#1b1712', font: "'EB Garamond Variable', Georgia, serif", display: "'UnifrakturMaguntia', Georgia, serif", radius: '3px' },
     media: { src: biblelm, thumb: biblelmThumb, animated: true, alt: 'BibleLM running with its illustrated study interface', caption: 'BibleLM / Illustrated study' },
+    field: 'Move to disturb the dither. Click to send a ripple.',
     links: [{ label: 'Source & download', href: 'https://github.com/rwetz/biblelm' }],
   },
   {
@@ -48,6 +51,7 @@ export const projects = [
     tags: ['C++ + JUCE', 'Audio DSP', 'VST3'],
     palette: { bg: '#15161a', fg: '#e6e8ee', accent: '#7fb8ff', surface: '#1e2026', font: sans, display: sans, radius: '6px' },
     media: { src: halcyra, thumb: halcyraThumb, alt: 'Halcyra’s real synth interface with oscillator, filter, sub and noise controls', caption: 'Halcyra / Wavetable synthesizer' },
+    field: 'Move to bend the fibers. Click to pulse them.',
     links: [{ label: 'Ask about Halcyra', href: 'mailto:rwetz00@gmail.com?subject=Halcyra' }],
   },
   {
@@ -56,6 +60,7 @@ export const projects = [
     tags: ['Rust', 'Live search', 'Trigram index'],
     palette: { bg: '#090b10', fg: '#f3f5f7', accent: '#c7d0dd', surface: '#1b222c', font: sans, display: mono, radius: '2px' },
     media: { src: logscope, thumb: logscopeThumb, animated: true, alt: 'Logscope filtering a live stream of synthetic logs', caption: 'Logscope / Synthetic log stream' },
+    field: 'Move to light the terminal. Click to glitch it.',
     links: [],
   },
 ]

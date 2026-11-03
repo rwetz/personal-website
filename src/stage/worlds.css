@@ -1,0 +1,116 @@
+/* ╔══════════════════════════════════════╗
+ * ║  Ryan Wetzstein                      ║
+ * ║  Personal Website                    ║
+ * ║  2026                                ║
+ * ╚══════════════════════════════════════╝ */
+
+/* Travel between worlds: the next field opens as a circle from where it was chosen. */
+.showcase-shell { --tilt-x: 0; --tilt-y: 0; --iris-ease: cubic-bezier(.65, 0, .2, 1); }
+.showcase-shell > .stage-effect { animation: world-iris 1100ms var(--iris-ease) both; transition: opacity 700ms ease; }
+@keyframes world-iris {
+  from { clip-path: circle(0 at var(--iris-x) var(--iris-y)); }
+  to { clip-path: circle(150vmax at var(--iris-x) var(--iris-y)); }
+}
+.world-ring {
+  position: absolute; z-index: -1; left: var(--iris-x); top: var(--iris-y); width: 0; height: 0;
+  translate: -50% -50%; border-radius: 50%; border: 1px solid var(--stage-accent); pointer-events: none; opacity: 0;
+  animation: world-ring 1100ms var(--iris-ease) both;
+}
+@keyframes world-ring {
+  0% { width: 0; height: 0; opacity: .9; }
+  70% { opacity: .5; }
+  100% { width: 300vmax; height: 300vmax; opacity: 0; }
+}
+
+/* Depth: the media leans towards the pointer, the field drifts the other way. */
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .project-stage .project-media > .media-scene, .project-stage .project-media > .capture-scene {
+    transform: perspective(1600px) rotateY(calc(var(--tilt-x) * 2.6deg)) rotateX(calc(var(--tilt-y) * -2deg));
+    transition: transform 700ms cubic-bezier(.22, 1, .36, 1);
+  }
+  .showcase-shell > .stage-effect > * {
+    translate: calc(var(--tilt-x) * -16px) calc(var(--tilt-y) * -12px); scale: 1.04;
+    transition: translate 1200ms cubic-bezier(.22, 1, .36, 1);
+  }
+}
+
+/* Fields that read as muddy at their old strength. */
+.effect-nexis { opacity: .5; }
+.effect-biblelm { opacity: .5; }
+
+/* Home: hovering a tile washes the glitch field in that project's colour. */
+.effect-home::after {
+  content: ''; position: absolute; inset: 0; background: var(--home-tint, transparent);
+  mix-blend-mode: color; opacity: 0; transition: opacity 500ms ease;
+}
+.showcase-shell[data-tint] > .effect-home { opacity: .34; }
+.showcase-shell[data-tint] > .effect-home::after { opacity: 1; }
+.constellation-object:hover .constellation-object-inner, .constellation-object:focus-visible .constellation-object-inner {
+  border-color: color-mix(in srgb, var(--object-accent) 70%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--object-accent) 25%, transparent), 0 18px 50px -20px var(--object-accent);
+}
+
+/* Immerse: the copy steps aside and the project takes the whole page. */
+.project-stage { transition: grid-template-columns 800ms cubic-bezier(.22, 1, .36, 1), gap 800ms cubic-bezier(.22, 1, .36, 1); }
+.project-copy { transition: opacity 400ms ease, translate 600ms cubic-bezier(.22, 1, .36, 1), visibility 0s; }
+.showcase-shell[data-immersed] .project-stage { grid-template-columns: 0fr 1fr; grid-template-rows: minmax(0, 1fr); gap: 0; }
+.showcase-shell[data-immersed] .project-media { height: 100%; max-height: 100%; min-height: 0; display: flex; flex-direction: column; justify-content: center; container-type: size; }
+.showcase-shell[data-immersed] .project-media > * { min-height: 0; }
+.showcase-shell[data-immersed] .project-copy { opacity: 0; translate: -32px 0; visibility: hidden; pointer-events: none; transition: opacity 300ms ease, translate 600ms cubic-bezier(.22, 1, .36, 1), visibility 0s 300ms; }
+.showcase-shell[data-immersed] > .stage-effect { opacity: .85; }
+.showcase-shell[data-immersed] .capture-portrait .capture-image { max-height: 64dvh; }
+.showcase-shell[data-immersed] .capture-portrait .capture-companion { height: 54dvh; }
+.showcase-shell[data-immersed] .scene-ateru .project-media { max-width: 900px; }
+.showcase-footer-meta { align-items: center; gap: 16px; }
+.immerse-toggle {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 4px 12px; border-radius: 999px;
+  border: 1px solid var(--chrome-border); background: color-mix(in srgb, var(--t-void) 68%, transparent); color: var(--stage-fg);
+  font: 500 12px/1 var(--stage-ui); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.immerse-toggle:hover { background: var(--stage-surface); }
+.immerse-toggle[aria-pressed=true] { border-color: var(--stage-accent); }
+.immerse-toggle svg { width: 15px; height: 15px; }
+.immerse-hint {
+  position: absolute; left: 50%; bottom: 14px; translate: -50% 0; margin: 0; padding: 8px 14px; border-radius: 999px;
+  background: color-mix(in srgb, var(--t-void) 72%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  color: var(--stage-fg); font: 500 12px/1.4 var(--stage-ui); white-space: nowrap; pointer-events: none; z-index: 4;
+  animation: hint-in 700ms 300ms cubic-bezier(.22, 1, .36, 1) both;
+}
+.immerse-hint-reduced { display: none; }
+@keyframes hint-in { from { opacity: 0; translate: -50% 10px; } }
+@media (max-width: 959px) {
+  .showcase-shell[data-immersed] .project-copy { display: none; }
+  .showcase-shell[data-immersed] .project-stage { grid-template-rows: minmax(0, 1fr); }
+}
+
+/* Neighbouring worlds, named at the edges on screens with room for them. */
+.stage-peeks { display: none; }
+@media (min-width: 1280px) and (min-height: 700px) {
+  .stage-peeks { display: block; position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+  .stage-peek {
+    position: absolute; top: 50%; pointer-events: auto; display: flex; align-items: center; gap: 10px; padding: 14px 8px;
+    writing-mode: vertical-rl; color: var(--chrome-muted); font: 500 12px/1 var(--stage-ui); border-radius: 999px;
+    transition: color 250ms, background-color 250ms;
+  }
+  .peek-previous { left: 10px; translate: 0 -50%; rotate: 180deg; }
+  .peek-next { right: 10px; translate: 0 -50%; }
+  .stage-peek small { font-size: 11px; opacity: .8; margin-block-end: 6px; }
+  .stage-peek svg { width: 18px; height: 18px; color: var(--peek-accent, var(--t-silver)); rotate: 90deg; }
+  .peek-previous svg { rotate: -90deg; }
+  .peek-home { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--t-silver); }
+  .stage-peek:hover { color: var(--stage-fg); background: color-mix(in srgb, var(--t-void) 60%, transparent); }
+  .stage-peek:hover svg { scale: 1.15; }
+}
+
+/* About's world: line-engraved heptagram, turning and drifting with the pointer. */
+.effect-about { opacity: 1; display: grid; place-items: center; color: var(--t-steel); }
+.about-world-mark { width: min(130vmin, 1300px); height: auto; opacity: .16; translate: 22vw -8vh; animation: about-turn 140s linear infinite; }
+@keyframes about-turn { to { rotate: 360deg; } }
+@media (max-width: 760px) { .about-world-mark { width: 150vmin; translate: 30vw -18vh; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase-shell > .stage-effect, .world-ring { animation: none !important; }
+  .world-ring { display: none; }
+  .immerse-hint-live { display: none; }
+  .immerse-hint-reduced { display: inline; }
+}

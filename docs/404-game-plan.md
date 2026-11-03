@@ -1,6 +1,6 @@
 # 404 game: Lost Signal
 
-Status: planned, not implemented. Keep this out of the current visual cleanup.
+Status: superseded. The shipped 404 is "Lost in the Constellation" (`404.html`, `src/lost/`), an orbit-and-release game across the five project worlds. See `docs/redesign-critique.md`. The accessibility, entry and testing requirements below still apply.
 
 ## The idea
 

@@ -14,12 +14,15 @@ const subscribe = listener => {
 const snapshot = () => window.location.hash
 const isBlocked = target => Boolean(document.querySelector('[role="dialog"], dialog[open]') || target?.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"])'))
 
-export function useStage() {
+// onEscape lets an open mode (such as Immerse) claim Escape before it means home.
+export function useStage({ onEscape } = {}) {
   const hash = useSyncExternalStore(subscribe, snapshot)
   const project = projectFromHash(hash)
   const pageId = /^#\/?about\/?$/.test(hash) ? 'about' : project?.id ?? 'home'
   const pointer = useRef(null)
   const wheel = useRef({ amount: 0, last: 0, lockedUntil: 0 })
+  const escape = useRef(onEscape)
+  useEffect(() => { escape.current = onEscape })
   const navigate = useCallback(id => { window.location.hash = id ? `#/${id}` : '#/' }, [])
   const step = useCallback(direction => {
     const index = projects.findIndex(item => item.id === project?.id)
@@ -41,7 +44,7 @@ export function useStage() {
   useEffect(() => {
     const onKey = event => {
       if (event.defaultPrevented || event.repeat || event.metaKey || event.ctrlKey || event.altKey || isBlocked(event.target) || event.target.closest('[role="tablist"]')) return
-      if (event.key === 'Escape') { event.preventDefault(); navigate(null) }
+      if (event.key === 'Escape') { event.preventDefault(); if (!escape.current?.()) navigate(null) }
       if (pageId === 'about') return
       if (/^[0-4]$/.test(event.key)) { event.preventDefault(); navigate(projects[Number(event.key)].id) }
       if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp'].includes(event.key)) {

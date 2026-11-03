@@ -1,0 +1,65 @@
+<!-- ╔══════════════════════════════════════╗
+     ║  Ryan Wetzstein                      ║
+     ║  Personal Website                    ║
+     ║  2026                                ║
+     ╚══════════════════════════════════════╝ -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#090b10" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'" />
+    <link rel="icon" href="/favicon.svg?v=heptagram" type="image/svg+xml" />
+    <title>404 | Ryan Wetzstein</title>
+  </head>
+  <body>
+    <canvas class="lost-canvas" aria-hidden="true"></canvas>
+    <header class="lost-header">
+      <a class="lost-wordmark" href="/#/"><img src="/favicon.svg" alt="" width="28" height="28" /><span>Ryan Wetzstein</span></a>
+      <a class="lost-back" href="/#/">Back to work</a>
+    </header>
+    <main class="lost" data-state="ready">
+      <section class="lost-card" id="lost-intro" aria-labelledby="lost-title">
+        <p class="lost-eyebrow">Error 404</p>
+        <h1 id="lost-title">Lost in the constellation.</h1>
+        <p class="lost-lead">This page doesn’t exist. The address may have changed, or the link was mistyped.</p>
+        <p class="lost-path" id="path" hidden></p>
+        <div class="lost-actions">
+          <a class="lost-primary" href="/#/">Back to work</a>
+          <button type="button" class="lost-secondary" id="lost-play">Play: find your way home</button>
+        </div>
+        <p class="lost-how" id="lost-how">Your mark orbits a star. Tap, click or press Space to let go, then drift into the next ring to be caught. Seven stars per world, five worlds, then home.</p>
+        <nav class="lost-links" aria-label="Projects">
+          <a href="/#/nexis">Nexis</a><a href="/#/ateru">Ateru</a><a href="/#/biblelm">BibleLM</a><a href="/#/halcyra">Halcyra</a><a href="/#/logscope">Logscope</a><a href="/#/about">About</a>
+        </nav>
+      </section>
+      <div class="lost-stage" id="lost-stage" tabindex="-1" role="group" aria-label="Lost in the constellation, game" aria-describedby="lost-tap" hidden>
+        <div class="lost-hud">
+          <p><span>Star</span> <strong id="lost-score">0</strong> <span>of 35</span></p>
+          <p><span>Best</span> <strong id="lost-best">0</strong></p>
+          <p class="lost-sector" id="lost-sector">Nexis</p>
+          <button type="button" id="lost-pause">Pause</button>
+        </div>
+        <p class="lost-banner" id="lost-banner" aria-hidden="true"></p>
+        <p class="lost-tap" id="lost-tap">Tap, click or press Space to let go. P pauses.</p>
+        <div class="lost-paused" id="lost-paused" hidden>
+          <p>Paused</p>
+          <button type="button" class="lost-secondary" id="lost-resume">Resume</button>
+        </div>
+      </div>
+      <section class="lost-card lost-over" id="lost-over" aria-labelledby="lost-over-title" hidden>
+        <p class="lost-eyebrow" id="lost-over-sector"></p>
+        <h2 id="lost-over-title" tabindex="-1">Signal lost.</h2>
+        <p class="lost-lead" id="lost-over-text"></p>
+        <div class="lost-actions">
+          <a class="lost-primary" href="/#/">Back to work</a>
+          <button type="button" class="lost-secondary" id="lost-retry">Try again</button>
+        </div>
+      </section>
+      <p class="sr-only" role="status" aria-live="polite" id="lost-live"></p>
+    </main>
+    <script type="module" src="/src/lost/main.js"></script>
+  </body>
+</html>

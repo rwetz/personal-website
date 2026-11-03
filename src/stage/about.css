@@ -4,40 +4,105 @@
  * ║  2026                                ║
  * ╚══════════════════════════════════════╝ */
 .showcase-shell[data-project=about] #main-content { overflow-y: auto; overscroll-behavior: contain; }
-.about-page { max-width: 1440px; margin: auto; padding: 24px clamp(24px, 5vw, 88px) 64px; font-family: 'Geist Variable', sans-serif; }
-.about-back { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: var(--t-silver); font-size: 13px; }
-.about-hero { display: grid; grid-template-columns: 1.2fr 1fr; align-items: end; gap: clamp(32px, 7vw, 100px); margin: 44px 0 56px; }
-.about-hero h1 { color: var(--t-white); font-size: clamp(56px, 7.6vw, 110px); line-height: 1; font-weight: 450; letter-spacing: -.065em; margin: 0 0 28px; }
-.about-hero h1 span { color: var(--t-steel); }
+.about-page { max-width: 1320px; margin: auto; padding: 24px clamp(24px, 5vw, 88px) 64px; font-family: 'Geist Variable', sans-serif; }
+.about-back { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px 0 10px; margin-left: -10px; border-radius: 999px; color: var(--t-silver); font-size: 13px; }
+.about-back:hover { color: var(--t-white); background: #ffffff0d; }
 .about-page .about-kicker { color: var(--t-silver); font-size: 12px; margin: 0 0 20px; }
-.about-lead { max-width: 32ch; color: var(--t-silver); font-size: clamp(18px, 1.65vw, 23px); line-height: 1.65; margin: 0; }
-.about-page-bio { color: var(--t-silver); font-size: 16px; line-height: 1.85; padding-bottom: 4px; }
+
+/* Hero: words on the left, a real portrait on the right. */
+.about-hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: center; gap: clamp(32px, 7vw, 110px); margin: 36px 0 56px; }
+.about-hero h1 { color: var(--t-white); font-size: clamp(56px, 7.6vw, 112px); line-height: 1; font-weight: 450; letter-spacing: -.065em; margin: 0 0 28px; }
+.about-hero h1 span { color: var(--t-steel); }
+.about-lead { max-width: 30ch; color: var(--t-white); font-size: clamp(19px, 1.75vw, 25px); line-height: 1.5; letter-spacing: -.015em; margin: 0 0 24px; }
+.about-page-bio { max-width: 52ch; color: var(--t-silver); font-size: 16px; line-height: 1.8; }
 .about-page-bio p { margin: 0; }
-.about-page-bio .about-school { display: flex; gap: 12px; margin-top: 24px; font-size: 12px; }
+.about-portrait { position: relative; margin: 0; justify-self: end; width: min(100%, 380px); }
+.about-portrait::before {
+  content: ''; position: absolute; inset: 14px -14px -14px 14px; border: 1px solid var(--t-gunmetal); border-radius: 22px; z-index: -1;
+}
+.about-portrait img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 22px; background: #10151e; filter: saturate(.9); }
+.about-portrait figcaption {
+  position: absolute; left: 14px; right: 14px; bottom: 14px; display: flex; justify-content: space-between; gap: 12px;
+  padding: 9px 14px; border-radius: 999px; background: #090b10cc; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  color: var(--t-white); font-size: 12px;
+}
+.about-portrait figcaption span:last-child { color: var(--t-silver); }
+
+/* Where things stand: live degree progress and campus time. */
+.about-now { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 24px 48px; padding: 28px 32px; border-radius: 20px; background: #10151ecc; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid #343d4b80; }
+.degree-heading { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; color: var(--t-white); font-size: 14px; margin-bottom: 16px; }
+.degree-heading span:last-child { color: var(--t-silver); }
+.degree-track { position: relative; height: 6px; border-radius: 999px; background: #343d4b; }
+.degree-fill { position: absolute; inset: 0 auto 0 0; width: calc(var(--progress) * 100%); border-radius: inherit; background: var(--t-silver); transform-origin: left; animation: degree-grow 1400ms 200ms cubic-bezier(.22, 1, .36, 1) both; }
+.degree-marker { position: absolute; top: 50%; left: calc(var(--progress) * 100%); width: 16px; height: 16px; translate: -50% -50%; border-radius: 50%; background: var(--t-white); box-shadow: 0 0 0 5px #f3f5f726; animation: degree-pulse 2.8s 1.6s ease-in-out infinite; }
+@keyframes degree-grow { from { transform: scaleX(0); } }
+@keyframes degree-pulse { 50% { box-shadow: 0 0 0 10px #f3f5f700; } }
+.degree-years { display: grid; grid-template-columns: repeat(4, 1fr) 0; list-style: none; padding: 0; margin: 12px 0 0; color: #a3b0c2; font-size: 12px; }
+.degree-years li { white-space: nowrap; }
+.degree-years li:last-child { justify-self: end; direction: rtl; }
+.degree-years li[data-current] { color: var(--t-white); }
+.campus-clock { display: flex; align-items: center; gap: 10px; margin: 0; color: var(--t-silver); font-size: 13px; white-space: nowrap; }
+.campus-clock time { color: var(--t-white); font-variant-numeric: tabular-nums; }
+.campus-dot { width: 7px; height: 7px; border-radius: 50%; background: #61dca3; box-shadow: 0 0 0 4px #61dca322; }
+
+/* The work, one tap away, each in its own colour. */
+.about-building { margin: 56px 0 0; }
+.about-building h2, .about-gallery-heading h2 { color: var(--t-white); font-size: 24px; font-weight: 450; letter-spacing: -.035em; margin: 0 0 18px; }
+.about-building ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.about-building a {
+  display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 12px 14px; border-radius: 14px; color: var(--t-white);
+  background: #10151ecc; border: 1px solid #343d4b80; transition: border-color 250ms, background-color 250ms, translate 250ms;
+}
+.about-building a:hover, .about-building a:focus-visible { border-color: var(--object-accent); background: #171e29; translate: 0 -2px; }
+.about-building svg { width: 26px; height: 26px; flex: none; color: var(--object-accent); }
+.about-building span { display: grid; gap: 2px; min-width: 0; }
+.about-building strong { font-size: 15px; font-weight: 550; letter-spacing: -.02em; }
+.about-building small { color: var(--t-silver); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Contact. */
+.about-page-contact { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: start; padding: 72px 0 24px; }
+.about-page-contact h2 { font-size: clamp(32px, 3.6vw, 52px); color: var(--t-white); font-weight: 450; letter-spacing: -.05em; margin: 0; }
+.about-contact-note { color: var(--t-silver); font-size: 15px; line-height: 1.7; max-width: 36ch; margin: 16px 0 0; }
+.about-email-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid var(--t-gunmetal); }
+.about-page .about-email { font-size: clamp(20px, 2.5vw, 34px); flex: 1; }
+.about-copy { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--t-gunmetal); background: transparent; color: var(--t-white); font: 500 13px/1 'Geist Variable', sans-serif; }
+.about-copy:hover { background: #ffffff0d; }
+.about-copy svg { width: 16px; height: 16px; }
+.about-page .about-socials { gap: 20px; }
+.about-page .about-socials a { padding: 8px 0; border: 0; border-radius: 0; }
+.about-page .about-socials a:hover { background: transparent; color: var(--t-white); }
+
+/* Photos, last: personal, and still on their way. */
+.about-gallery { margin-top: 56px; }
 .about-gallery-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; }
-.about-gallery-heading h2 { color: var(--t-white); font-size: 24px; font-weight: 450; letter-spacing: -.035em; margin: 0; }
 .about-gallery-heading p, .about-gallery-hint { color: var(--t-silver); font-size: 12px; }
-.about-photos { position: relative; height: clamp(260px, 34vw, 420px); margin: 8px -24px 0; isolation: isolate; }
+.about-photos { position: relative; height: clamp(260px, 30vw, 380px); margin: 8px -24px 0; isolation: isolate; }
 .about-photos .flex-carousel { position: absolute; inset: 0; z-index: 1; }
 .photo-fallback { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; height: 100%; align-items: center; margin: 0; padding: 20px 24px; list-style: none; }
 .photo-fallback img { display: block; width: 100%; height: auto; max-height: 340px; object-fit: cover; border-radius: 16px; }
 .about-photos:has(canvas) .photo-fallback { visibility: hidden; }
 .about-gallery-hint { text-align: center; margin: 0; }
-.about-page-contact { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: start; padding-top: 64px; }
-.about-page-contact h2 { font-size: clamp(28px, 3vw, 42px); color: var(--t-white); font-weight: 450; letter-spacing: -.045em; margin: 0; }
-.about-page .about-email { font-size: clamp(20px, 2.5vw, 34px); }
-.about-page .about-socials { gap: 20px; }
-.about-page .about-socials a { padding: 8px 0; border: 0; border-radius: 0; }
-.about-page .about-socials a:hover { background: transparent; color: var(--t-white); }
+
+@media (max-width: 1100px) {
+  .about-building ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 @media (max-width: 760px) {
   .about-page { padding-top: 12px; }
-  .about-hero { grid-template-columns: 1fr; gap: 28px; margin: 28px 0 40px; }
-  .about-hero h1 { font-size: clamp(52px, 12vw, 80px); margin-bottom: 20px; }
-  .about-page-bio { font-size: 14px; }
+  .about-hero { grid-template-columns: 1fr; gap: 32px; margin: 24px 0 40px; }
+  .about-hero h1 { font-size: clamp(52px, 13vw, 80px); margin-bottom: 20px; }
+  .about-portrait { justify-self: start; width: min(78%, 320px); }
+  .about-page-bio { font-size: 15px; }
+  .about-now { grid-template-columns: 1fr; padding: 22px; }
+  .degree-years { font-size: 11px; }
+  .degree-years li:not([data-current]):not(:last-child) { visibility: hidden; }
+  .about-building ul { grid-template-columns: 1fr 1fr; }
   .about-gallery-heading { display: block; }
   .about-gallery-heading p { margin-bottom: 0; }
   .about-photos { height: 300px; }
   .photo-fallback { grid-template-columns: repeat(2, minmax(0, 1fr)); overflow-y: auto; align-items: start; }
   .photo-fallback img { max-height: 240px; }
-  .about-page-contact { grid-template-columns: 1fr; gap: 24px; padding-top: 44px; }
+  .about-page-contact { grid-template-columns: 1fr; gap: 24px; padding-top: 52px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .degree-fill, .degree-marker { animation: none; }
 }
