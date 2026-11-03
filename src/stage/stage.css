@@ -67,7 +67,6 @@ body { background: var(--t-void); }
 .project-links a { color: var(--stage-fg); display: inline-flex; align-items: center; gap: 24px; min-height: 44px; border-bottom: 1px solid var(--stage-accent); font-size: 13px; }
 .project-media { min-width: 0; margin: 0; width: 100%; max-height: 100%; animation: stage-enter 700ms both; }
 .project-media img, .media-scene video { display: block; width: 100%; max-height: min(57dvh, 620px); object-fit: contain; border-radius: var(--stage-radius); border: 0; background: var(--stage-surface); box-shadow: 0 30px 80px #0006; }
-.project-media figcaption { display: flex; justify-content: space-between; gap: 12px; color: var(--stage-accent-ink); font: 10px/1.5 var(--m-font-sans); padding-top: 14px; }
 .media-scene { position: relative; }
 .media-toggle { position: absolute; right: 10px; bottom: 10px; border: 1px solid var(--t-gunmetal); border-radius: 5px; padding: 8px 12px; min-height: 44px; background: var(--t-void); color: var(--t-white); font-size: 11px !important; display: flex; gap: 14px; align-items: center; }
 .showcase-footer { position: relative; z-index: 3; background: var(--t-void); color: var(--t-silver); padding: 15px max(32px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(32px, env(safe-area-inset-left)); border-top: 1px solid var(--t-gunmetal); }
@@ -189,7 +188,6 @@ body { background: var(--t-void); }
   .project-tags { font-size: 9px; gap: 8px; margin: 10px 0 4px; }
   .project-links a { font-size: 12px; min-height: 36px; }
   .project-media img, .media-scene video { max-height: 30dvh; }
-  .project-media figcaption { font-size: 8px; padding-top: 9px; }
   .showcase-intro { padding: 22px; gap: 8px; }
   .intro-copy h1 { font-size: 43px; }
   .showcase-eyebrow { font-size: 9px; }

@@ -26,7 +26,6 @@
 .project-tags { font: 500 12px/1.5 var(--stage-ui); gap: 8px; margin: 24px 0 20px; color: var(--chrome-muted); }
 .project-tags li { padding: 5px 10px; border: 1px solid var(--chrome-border); border-radius: var(--stage-radius); }
 .project-links a { font-size: 14px; font-weight: 500; }
-.project-media figcaption { font: 400 12px/1.5 var(--stage-ui); color: var(--chrome-muted); }
 .showcase-footer-meta { font: 400 12px/1.5 var(--stage-ui); color: var(--chrome-muted); }
 .showcase-rail { max-width: 1100px; }
 .showcase-rail > a, .showcase-rail button { color: var(--chrome-muted); }
@@ -75,19 +74,11 @@
 /* Halcyra: flat instrument panels and an oscillator trace, using Theme.h colors. */
 .scene-halcyra .project-copy h1 { text-transform: uppercase; font-size: clamp(42px, 5vw, 76px); font-weight: 750; letter-spacing: -.02em; }
 .scene-halcyra .project-media { padding: 10px; }
-.oscillator-lines { position: absolute; inset: auto 4% 0 35%; height: 80px; display: flex; gap: 18px; align-items: center; opacity: .08; }
-.oscillator-lines i { width: 2px; height: var(--bar); background: var(--stage-accent); animation: oscillator-pulse 4s ease-in-out infinite alternate; }
-.oscillator-lines i:nth-child(3n) { animation-delay: -1.5s; }
-@keyframes oscillator-pulse { to { scale: 1 .55; } }
 
 /* Logscope: a terminal instrument with plain rules and an honest monospace title. */
 .scene-logscope .project-copy h1 { font-size: clamp(36px, 4.5vw, 66px); letter-spacing: -.05em; }
 .scene-logscope .project-media { padding: 10px; }
 .scene-logscope video { border: 0; box-shadow: none; border-radius: 0; }
-.terminal-rules { position: absolute; inset: 28px; border: 1px solid var(--chrome-border); opacity: .5; }
-.terminal-rules::before, .terminal-rules::after { content: ''; position: absolute; height: 8px; width: 8px; background: var(--stage-fg); opacity: .6; }
-.terminal-rules::before { left: -4px; top: -4px; }
-.terminal-rules::after { right: -4px; bottom: -4px; }
 
 /* Real app captures, with a full-size inspection dialog rather than invented UI. */
 .capture-body { position: relative; display: flex; justify-content: center; align-items: center; gap: 20px; }
@@ -111,7 +102,6 @@
   .project-copy h1 { font-size: 54px; }
   .project-tagline { font-size: 17px; }
   .project-tags { margin: 14px 0 8px; }
-  .project-media figcaption { font-size: 11px; }
   .showcase-rail button { font-size: 13px; }
   .scene-biblelm .project-copy h1 { font-size: 66px; }
   .scene-biblelm .project-tagline { font-size: 21px; }
@@ -135,9 +125,7 @@
   .project-tags { font-size: 11px; margin: 12px 0 6px; }
   .project-tags li { padding: 3px 7px; }
   .project-links a { font-size: 13px; }
-  .project-media figcaption { font-size: 10px; }
   .project-media { height: 100%; min-height: 0; max-height: none; container-type: size; display: flex; flex-direction: column; justify-content: center; }
-  .project-media figcaption { flex: none; padding-top: 8px; }
   .project-media > .media-scene, .project-media > .capture-scene { min-height: 0; }
   .project-media .media-scene video, .project-media .capture-landscape .capture-image { max-height: max(60px, calc(100cqh - 30px)); }
   .scene-nexis .project-backdrop { inset: 12px; border-radius: 14px; }
@@ -148,7 +136,6 @@
   .scene-biblelm .project-media { padding: 5px; outline-offset: 3px; }
   .scene-halcyra .project-copy h1 { font-size: 40px; }
   .scene-logscope .project-copy h1 { font-size: 36px; }
-  .terminal-rules { inset: 12px; }
   .capture-portrait .capture-image { max-height: max(70px, calc(100cqh - 80px)); border-width: 3px; border-radius: 16px; }
   .capture-portrait .capture-companion { height: auto; max-height: max(60px, calc(100cqh - 100px)); border-width: 3px; border-radius: 14px; }
   .capture-controls { gap: 4px; margin-top: 8px; }
@@ -178,4 +165,4 @@
   .capture-controls > span { display: none; }
   .constellation-object small:last-child { display: none; }
 }
-@media (prefers-reduced-motion: reduce) { .oscillator-lines i, .mark-nexis .emblem-ink { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .mark-nexis .emblem-ink { animation: none; } }

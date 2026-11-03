@@ -4,12 +4,14 @@
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { LazyMotion, MotionConfig } from 'framer-motion'
 import { ArrowsOut, ArrowsIn } from '@phosphor-icons/react'
 import CommandPaletteHost from './components/CommandPaletteHost'
 import { Toaster } from '@/components/ui/sonner'
 import { useStage } from './stage/useStage'
 import Stage from './stage/Stage'
+import { projects } from './stage/projects'
 import ProjectBackground from './stage/ProjectBackground'
 import AboutWorld from './stage/AboutWorld'
 import Intro from './stage/Intro'
@@ -57,11 +59,57 @@ function usePointerDepth(shell) {
   }, [shell])
 }
 
+const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+// The outgoing world stays for a moment and dissolves beneath the next one's iris.
+// Both keep their keys, so neither field is torn down and rebuilt on the way.
+function useWorlds(pageId) {
+  const [current, setCurrent] = useState(pageId)
+  const [leaving, setLeaving] = useState(null)
+  if (current !== pageId) {
+    setCurrent(pageId)
+    setLeaving(reducedMotion() ? null : current)
+  }
+  useEffect(() => {
+    if (!leaving) return
+    const timer = setTimeout(() => setLeaving(null), 1100)
+    return () => clearTimeout(timer)
+  }, [leaving])
+  return leaving && leaving !== pageId ? [leaving, pageId] : [pageId]
+}
+
+function World({ id, leaving }) {
+  if (id === 'about') return <AboutWorld leaving={leaving} />
+  return <ProjectBackground project={projects.find(project => project.id === id)} leaving={leaving} />
+}
+
+// Once per browser session, say that the field answers the pointer, then step aside.
+const nudgeKey = 'field-nudge-seen'
+function useFieldNudge(project) {
+  const [shown, setShown] = useState(false)
+  useEffect(() => {
+    if (!project || reducedMotion()) return
+    try { if (sessionStorage.getItem(nudgeKey)) return; sessionStorage.setItem(nudgeKey, '1') } catch { /* Show it once for this page instead. */ }
+    const show = setTimeout(() => setShown(true), 1400)
+    const hide = setTimeout(() => setShown(false), 7400)
+    return () => { clearTimeout(show); clearTimeout(hide); setShown(false) }
+  }, [project])
+  return shown
+}
+
 export default function App() {
   const [immersed, setImmersed] = useState(false)
   const [tint, setTint] = useState(null)
   const shell = useRef(null)
-  const stage = useStage({ onEscape: () => { if (!immersed) return false; setImmersed(false); return true } })
+  // Immerse morphs the media into place with a view transition where the browser has one.
+  const setImmersion = next => {
+    const update = () => flushSync(() => setImmersed(next))
+    if (!document.startViewTransition || reducedMotion()) update()
+    else document.startViewTransition(update)
+  }
+  const stage = useStage({ onEscape: () => { if (!immersed) return false; setImmersion(false); return true } })
+  const worlds = useWorlds(stage.pageId)
+  const nudge = useFieldNudge(immersed ? null : stage.project)
   const [returnProject, setReturnProject] = useState(null)
   usePointerDepth(shell)
   const openAbout = () => {
@@ -74,7 +122,7 @@ export default function App() {
       <MotionConfig reducedMotion="user">
         <div ref={shell} className="showcase-shell" data-project={stage.pageId} data-immersed={immersive ? '' : undefined}
           data-tint={stage.pageId === 'home' && tint ? '' : undefined} style={tint ? { '--home-tint': tint } : undefined}>
-          {stage.pageId === 'about' ? <AboutWorld key="about" /> : <ProjectBackground key={stage.pageId} project={stage.project} />}
+          {worlds.map(id => <World key={id} id={id} leaving={id !== stage.pageId} />)}
           <a className="showcase-skip" href="#main-content" onClick={event => {
             event.preventDefault()
             document.getElementById('main-content')?.focus()
@@ -88,13 +136,14 @@ export default function App() {
           </header>
           <main id="main-content" tabIndex={-1} {...(stage.pageId === 'about' ? {} : stage.gestures)}>
             {stage.pageId === 'about' ? <Suspense fallback={<p role="status">Loading about…</p>}><AboutPage returnProject={returnProject} /></Suspense> : stage.project ? <Stage project={stage.project} /> : <Intro onTint={setTint} />}
+            {nudge && !immersive && <p className="immerse-hint field-nudge" key={`nudge-${stage.project.id}`}>{stage.project.field} <span>Immerse to play with it.</span></p>}
             {immersive && <p className="immerse-hint" key={stage.project.id}><span className="immerse-hint-live">{stage.project.field}</span><span className="immerse-hint-reduced">Motion is reduced, so the field holds still.</span></p>}
           </main>
           <footer className="showcase-footer">
             <div className="showcase-footer-meta">
               <span>← → to explore <span className="footer-divider">/</span> Esc for {immersive ? 'the full page' : 'home'}</span>
-              {stage.project && <button type="button" className="immerse-toggle" aria-pressed={immersive} onClick={() => setImmersed(value => !value)}>
-                {immersive ? <ArrowsIn aria-hidden="true" /> : <ArrowsOut aria-hidden="true" />}{immersive ? 'Leave immersive view' : 'Immerse'}
+              {stage.project && <button type="button" className="immerse-toggle" aria-pressed={immersive} onClick={() => setImmersion(!immersive)}>
+                {immersive ? <ArrowsIn aria-hidden="true" /> : <ArrowsOut aria-hidden="true" />}<span className="immerse-label">{immersive ? 'Leave immersive view' : 'Immerse'}</span>
               </button>}
             </div>
             <Rail activeId={stage.project?.id} navigate={stage.navigate} pageId={stage.pageId} />

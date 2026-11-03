@@ -10,7 +10,7 @@ import { irisOrigin } from './iris'
 const backgrounds = Object.fromEntries(Object.entries(backgroundLoaders).map(([id, load]) => [id, lazy(load)]))
 const homeColors = ['#61dca3', '#61b3dc']
 
-export default function ProjectBackground({ project }) {
+export default function ProjectBackground({ project, leaving = false }) {
   const id = project?.id ?? 'home'
   const Background = backgrounds[id]
   const accent = project?.palette.accent
@@ -28,9 +28,9 @@ export default function ProjectBackground({ project }) {
     logscope: { tint: '#ffb347', glyphs: 'dots', scale: 1.6, digitSize: 1.25, timeScale: .85, brightness: .8, glow: .6, persistence: .5, mouseStrength: .5, mouseGlow: .55, scramble: .5, scanlineIntensity: .5, glitchAmount: 1, flickerAmount: 1, noiseAmp: 1, chromaticAberration: 0, curvature: .07, vignette: .25, mouseReact: true, clickEffect: 'glitch', pageLoadAnimation: true, pause: false, lightMode: false, dpr: 1 },
   }
   return <>
-    <div className={`stage-effect effect-${id}`} aria-hidden="true" data-effect={id} style={origin}>
+    <div className={`stage-effect effect-${id}${leaving ? ' is-leaving' : ''}`} aria-hidden="true" data-effect={id} style={origin}>
       <Suspense fallback={null}><Background {...settings[id]} /></Suspense>
     </div>
-    <span className="world-ring" aria-hidden="true" style={origin} />
+    {!leaving && <span className="world-ring" aria-hidden="true" style={origin} />}
   </>
 }

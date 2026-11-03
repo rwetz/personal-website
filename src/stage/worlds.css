@@ -16,6 +16,9 @@
   translate: -50% -50%; border-radius: 50%; border: 1px solid var(--stage-accent); pointer-events: none; opacity: 0;
   animation: world-ring 1100ms var(--iris-ease) both;
 }
+/* The world being left dissolves under the iris instead of cutting out. */
+.showcase-shell > .stage-effect.is-leaving { animation: world-leave 1100ms var(--iris-ease) forwards; }
+@keyframes world-leave { to { opacity: 0; scale: 1.08; filter: blur(10px) saturate(.4); } }
 @keyframes world-ring {
   0% { width: 0; height: 0; opacity: .9; }
   70% { opacity: .5; }
@@ -50,17 +53,66 @@
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--object-accent) 25%, transparent), 0 18px 50px -20px var(--object-accent);
 }
 
+/* Each world has its own composition on screens with room for one.
+ * Nexis keeps the canonical split; the others take the shape of the app. */
+@media (min-width: 1100px) and (min-height: 700px) {
+  /* Ateru: phones lead, fanned like a hand of cards, with the copy on the right. */
+  .scene-ateru { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); }
+  .scene-ateru .project-copy { grid-area: 1 / 2; }
+  .scene-ateru .project-media { grid-area: 1 / 1; }
+  .scene-ateru .capture-companion { rotate: -9deg; translate: 18px 14px; transform-origin: bottom right; }
+  .scene-ateru .capture-open { rotate: 2.5deg; transform-origin: bottom left; }
+
+  /* BibleLM: an open book. Copy is the verso, the demo the recto, with a spine between. */
+  .scene-biblelm { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(48px, 6vw, 104px); }
+  .scene-biblelm::after {
+    content: ''; position: absolute; left: 50%; top: 14%; bottom: 14%; width: 1px; pointer-events: none;
+    background: color-mix(in srgb, var(--stage-accent) 40%, transparent);
+  }
+  .scene-biblelm .project-copy { padding: 0 4%; text-align: center; justify-items: center; display: grid; }
+  .scene-biblelm .project-tagline { margin-inline: auto; }
+  .scene-biblelm .project-tags, .scene-biblelm .project-links { justify-content: center; }
+  .scene-biblelm .project-copy::after { content: '✦'; margin-top: 28px; color: var(--stage-accent); opacity: .6; }
+
+  /* Halcyra: a rack unit. The copy is the faceplate, the synth fills the bay below. */
+  .scene-halcyra { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); align-items: stretch; gap: 24px; padding-block: 40px 28px; }
+  .scene-halcyra .project-copy {
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: 'eye eye eye' 'title line links' 'title tags links';
+    align-items: center; column-gap: clamp(28px, 3vw, 56px); padding: 0 0 20px; border-bottom: 1px solid var(--chrome-border);
+  }
+  .scene-halcyra .showcase-eyebrow { grid-area: eye; margin-bottom: 10px; }
+  .scene-halcyra .project-copy h1 { grid-area: title; margin: 0; font-size: clamp(48px, 5vw, 80px); }
+  .scene-halcyra .project-tagline { grid-area: line; max-width: 54ch; }
+  .scene-halcyra .project-tags { grid-area: tags; margin: 10px 0 0; }
+  .scene-halcyra .project-links { grid-area: links; }
+  .scene-halcyra .capture-landscape .capture-open { display: flex; justify-content: center; }
+
+  /* Logscope: the terminal takes the screen; the copy is its status line. */
+  .scene-logscope { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; align-items: stretch; gap: 20px; padding-block: 32px 24px; }
+  .scene-logscope .project-media { grid-area: 1 / 1; }
+  .scene-logscope .project-copy {
+    grid-area: 2 / 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px clamp(20px, 2.4vw, 40px);
+    padding: 16px 0 0 0; border-top: 1px solid var(--chrome-border);
+  }
+  .scene-logscope .showcase-eyebrow { margin: 0; flex-direction: column; gap: 0; }
+  .scene-logscope .project-copy h1 { margin: 0; font-size: clamp(34px, 3.4vw, 52px); }
+  .scene-logscope .project-tagline { flex: 1 1 32ch; max-width: 56ch; font-size: 15px; }
+  .scene-logscope .project-tags { margin: 0; }
+}
+
 /* Immerse: the copy steps aside and the project takes the whole page. */
-.project-stage { transition: grid-template-columns 800ms cubic-bezier(.22, 1, .36, 1), gap 800ms cubic-bezier(.22, 1, .36, 1); }
+.project-media { view-transition-name: project-media; }
+::view-transition-group(project-media) { animation-duration: 650ms; animation-timing-function: cubic-bezier(.22, 1, .36, 1); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 350ms; }
 .project-copy { transition: opacity 400ms ease, translate 600ms cubic-bezier(.22, 1, .36, 1), visibility 0s; }
-.showcase-shell[data-immersed] .project-stage { grid-template-columns: 0fr 1fr; grid-template-rows: minmax(0, 1fr); gap: 0; }
-.showcase-shell[data-immersed] .project-media { height: 100%; max-height: 100%; min-height: 0; display: flex; flex-direction: column; justify-content: center; container-type: size; }
+.showcase-shell[data-immersed] .project-stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: 0; }
+.showcase-shell[data-immersed] .project-media { grid-area: 1 / 1; height: 100%; max-height: 100%; min-height: 0; display: flex; flex-direction: column; justify-content: center; container-type: size; }
 .showcase-shell[data-immersed] .project-media > * { min-height: 0; }
-.showcase-shell[data-immersed] .project-copy { opacity: 0; translate: -32px 0; visibility: hidden; pointer-events: none; transition: opacity 300ms ease, translate 600ms cubic-bezier(.22, 1, .36, 1), visibility 0s 300ms; }
-.showcase-shell[data-immersed] > .stage-effect { opacity: .85; }
+.showcase-shell[data-immersed] .project-copy { position: absolute; opacity: 0; translate: -32px 0; visibility: hidden; pointer-events: none; transition: opacity 300ms ease, translate 600ms cubic-bezier(.22, 1, .36, 1), visibility 0s 300ms; }
+.showcase-shell[data-immersed] > .stage-effect:not(.is-leaving) { opacity: .85; }
 .showcase-shell[data-immersed] .capture-portrait .capture-image { max-height: 64dvh; }
 .showcase-shell[data-immersed] .capture-portrait .capture-companion { height: 54dvh; }
-.showcase-shell[data-immersed] .scene-ateru .project-media { max-width: 900px; }
+.showcase-shell[data-immersed] .scene-ateru .project-media { max-width: 900px; justify-self: center; }
 .showcase-footer-meta { align-items: center; gap: 16px; }
 .immerse-toggle {
   display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 4px 12px; border-radius: 999px;
@@ -78,9 +130,21 @@
 }
 .immerse-hint-reduced { display: none; }
 @keyframes hint-in { from { opacity: 0; translate: -50% 10px; } }
+.field-nudge span { color: var(--chrome-muted); margin-left: 4px; }
+.field-nudge { animation: hint-in 700ms cubic-bezier(.22, 1, .36, 1) both, hint-out 600ms 5400ms ease forwards; }
+@keyframes hint-out { to { opacity: 0; } }
 @media (max-width: 959px) {
   .showcase-shell[data-immersed] .project-copy { display: none; }
-  .showcase-shell[data-immersed] .project-stage { grid-template-rows: minmax(0, 1fr); }
+}
+/* Phones hide the keyboard hints, so Immerse floats as a round control above the dock. */
+@media (max-width: 540px), (max-height: 540px) and (orientation: landscape) {
+  .showcase-footer-meta { display: flex; position: absolute; right: max(12px, env(safe-area-inset-right)); bottom: calc(100% + 8px); margin: 0; }
+  .showcase-footer-meta > span { display: none; }
+  .immerse-toggle { width: 44px; height: 44px; padding: 0; justify-content: center; }
+  .immerse-toggle svg { width: 18px; height: 18px; }
+  .immerse-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .immerse-hint { top: 10px; bottom: auto; max-width: calc(100vw - 32px); white-space: normal; text-align: center; }
+  .field-nudge span { display: block; margin: 0; }
 }
 
 /* Neighbouring worlds, named at the edges on screens with room for them. */
@@ -110,6 +174,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .showcase-shell > .stage-effect, .world-ring { animation: none !important; }
+  .project-media { view-transition-name: none; }
   .world-ring { display: none; }
   .immerse-hint-live { display: none; }
   .immerse-hint-reduced { display: inline; }

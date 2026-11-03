@@ -82,3 +82,24 @@ Resume and experience data, `CNAME`, hash routing contract, project slots, typog
 3. Immerse on phones as a floating control, and a one-time "this field is interactive" hint outside Immerse.
 4. Fold `stage.css` → `identities.css` → `refinements.css` → `worlds.css` into one ordered sheet, and delete `SceneArtwork` and `AboutModal`.
 5. Real photos for About.
+
+## Pass two
+
+What changed:
+
+- **Compositions.** On screens at least 1100 × 700, four worlds take the shape of their app. Nexis keeps the canonical split. Ateru leads with its phones fanned like cards, with the copy on the right. BibleLM is an open book: the copy is a centred verso, the demo the recto, with an accent spine between. Halcyra is a rack unit: the copy is a faceplate across the top and the synth fills the bay below. Logscope gives the terminal the screen, and the copy becomes its status line. Smaller screens keep the stacked layout they had.
+- **Dissolve.** The world you leave stays mounted for 1.1 s and blurs, desaturates and fades under the incoming iris. It keeps its React key, so no field is torn down and rebuilt. Under reduced motion it is removed at once.
+- **Immerse.** Entering or leaving now morphs the media into place with a view transition where the browser supports one. Every composition collapses to one cell, so Immerse works for all of them.
+- **Phones.** Immerse is a round floating control above the dock, and its hint sits at the top of the stage.
+- **Discovery.** Once per browser session, the first project you open says what its field does ("Move to bend the fibers…") and suggests Immerse, then fades. It is skipped under reduced motion.
+- **Debt.** Deleted `SceneArtwork`, `AboutModal` and about 55 lines of CSS for decorations that no longer render.
+
+| # | Pass one | Pass two | Notes |
+|---|---|---|---|
+| 1 | 8.5 | 9.5 | The worlds now change shape, not just colour: a fan of phones, a book spread, a rack unit and a terminal. **Still true:** Nexis uses the shared split, on purpose, as the baseline. |
+| 2 | 8 | 9 | The old world dissolves beneath the new one's iris, and Immerse morphs instead of jumping. **Still true:** the copy uses one shared entrance for every project. |
+| 3 | 7.5 | 8.5 | A first-visit note says what the field does, and phones get Immerse. **Still true:** the note appears once per session, by design. |
+| 4 | 7.5 | 7.5 | Unchanged. |
+| 5 | 8 | 8 | Unchanged. Needs your photos. |
+| 6 | 9 | 9 | Unchanged. |
+| 7 | 8 | 8.5 | 28/28 tests pass, one of them new (compositions at 1440 × 900, phone Immerse with an axe scan). Less dead code. **Still true:** four stacked stylesheets. Merging them is a mechanical refactor best done on its own. |
