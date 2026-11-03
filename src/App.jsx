@@ -78,9 +78,9 @@ function useWorlds(pageId) {
   return leaving && leaving !== pageId ? [leaving, pageId] : [pageId]
 }
 
-function World({ id, leaving }) {
+function World({ id, leaving, tint }) {
   if (id === 'about') return <AboutWorld leaving={leaving} />
-  return <ProjectBackground project={projects.find(project => project.id === id)} leaving={leaving} />
+  return <ProjectBackground project={projects.find(project => project.id === id)} leaving={leaving} tint={id === 'home' ? tint : null} />
 }
 
 // Once per browser session, say that the field answers the pointer, then step aside.
@@ -120,9 +120,8 @@ export default function App() {
   return (
     <LazyMotion features={loadMotionFeatures} strict>
       <MotionConfig reducedMotion="user">
-        <div ref={shell} className="showcase-shell" data-project={stage.pageId} data-immersed={immersive ? '' : undefined}
-          data-tint={stage.pageId === 'home' && tint ? '' : undefined} style={tint ? { '--home-tint': tint } : undefined}>
-          {worlds.map(id => <World key={id} id={id} leaving={id !== stage.pageId} />)}
+        <div ref={shell} className="showcase-shell" data-project={stage.pageId} data-immersed={immersive ? '' : undefined}>
+          {worlds.map(id => <World key={id} id={id} leaving={id !== stage.pageId} tint={tint} />)}
           <a className="showcase-skip" href="#main-content" onClick={event => {
             event.preventDefault()
             document.getElementById('main-content')?.focus()

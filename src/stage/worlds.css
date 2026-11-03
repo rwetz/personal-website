@@ -41,13 +41,7 @@
 .effect-nexis { opacity: .5; }
 .effect-biblelm { opacity: .5; }
 
-/* Home: hovering a tile washes the glitch field in that project's colour. */
-.effect-home::after {
-  content: ''; position: absolute; inset: 0; background: var(--home-tint, transparent);
-  mix-blend-mode: color; opacity: 0; transition: opacity 500ms ease;
-}
-.showcase-shell[data-tint] > .effect-home { opacity: .34; }
-.showcase-shell[data-tint] > .effect-home::after { opacity: 1; }
+/* Home: hovering a tile recolours the glitch glyphs (in LetterGlitch) and edges the tile. */
 .constellation-object:hover .constellation-object-inner, .constellation-object:focus-visible .constellation-object-inner {
   border-color: color-mix(in srgb, var(--object-accent) 70%, transparent);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--object-accent) 25%, transparent), 0 18px 50px -20px var(--object-accent);

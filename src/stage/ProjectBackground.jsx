@@ -9,8 +9,16 @@ import { irisOrigin } from './iris'
 
 const backgrounds = Object.fromEntries(Object.entries(backgroundLoaders).map(([id, load]) => [id, lazy(load)]))
 const homeColors = ['#61dca3', '#61b3dc']
+// Hovering a home tile recolours the glyphs in that project's own colours.
+const glyphTints = {
+  nexis: ['#ef7777', '#f2ae61', '#7dcf9b', '#75c7e9', '#a8a3ec', '#d99acf'],
+  ateru: ['#ef4a44'],
+  biblelm: ['#d4a94f'],
+  halcyra: ['#7fb8ff'],
+  logscope: ['#ffb347'],
+}
 
-export default function ProjectBackground({ project, leaving = false }) {
+export default function ProjectBackground({ project, leaving = false, tint = null }) {
   const id = project?.id ?? 'home'
   const Background = backgrounds[id]
   const accent = project?.palette.accent
@@ -20,7 +28,7 @@ export default function ProjectBackground({ project, leaving = false }) {
     return { '--iris-x': point ? `${point.x}px` : '50%', '--iris-y': point ? `${point.y}px` : '55%' }
   })
   const settings = {
-    home: { glitchColors: homeColors, baseColor: '#2b4539', spacing: .1, density: 1, baseOpacity: 1, glitchAmount: .85, flow: 0, characters: '0123456789ABCDEF', interactive: true, clickEffect: 'tear', intro: false, dpr: 1 },
+    home: { glitchColors: homeColors, baseColor: '#2b4539', spacing: .1, density: 1, baseOpacity: 1, glitchAmount: .85, flow: 0, characters: '0123456789ABCDEF', interactive: true, clickEffect: 'tear', intro: false, dpr: 1, tintColors: glyphTints[tint] },
     nexis: { colors: [project?.palette.bg, '#526580', accent], speed: .35, grainAmount: .1, interactive: true, clickSwirl: true, intro: false, dpr: 1 },
     ateru: { color: accent, accentColor: '#f2b5a8', speed: .35, lineCount: 64, thickness: .7, angle: 25, opacity: .8, parting: .5, enableMouseInteraction: true },
     biblelm: { waveColor: accent, backgroundColor: 'transparent', waveSpeed: .035, waveFrequency: 2.5, waveAmplitude: .3, colorNum: 4, pixelSize: 3, mouseRadius: .22, enableMouseInteraction: true, clickRipple: true, intro: false, dpr: 1 },

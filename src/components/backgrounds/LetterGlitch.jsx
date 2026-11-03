@@ -44,6 +44,9 @@ uniform float uTime;
 uniform float uFlow;
 uniform float uFlowScale;
 uniform vec4 uBackground;
+uniform vec3 uTintColors[8];
+uniform int uTintCount;
+uniform float uTint;
 out vec4 outColor;
 
 float hash(vec2 p) {
@@ -61,6 +64,14 @@ float noise(vec2 p) {
   float c = hash(i + vec2(0.0, 1.0));
   float d = hash(i + vec2(1.0, 1.0));
   return mix(mix(a, b, w.x), mix(c, d, w.x), w.y);
+}
+
+// A tint with several colours runs as a slow diagonal spectrum across the glyphs.
+vec3 tintAt(vec2 c) {
+  if (uTintCount <= 1) return uTintColors[0];
+  float t = fract((c.x + c.y) / (uResolution.x + uResolution.y) * 1.5 - uTime * 0.04) * float(uTintCount);
+  int i = int(t);
+  return mix(uTintColors[i], uTintColors[(i + 1) % uTintCount], fract(t));
 }
 
 float smoother(float x) {
@@ -105,8 +116,14 @@ void main() {
       float heat = state.b;
       rest = min(rest, 1.0) * (1.0 - heat);
       vec3 tint = uColors[int(state.a * 255.0 + 0.5)];
+      vec3 base = uBase;
+      if (uTint > 0.0) {
+        vec3 recolor = tintAt(center);
+        base = mix(uBase, recolor * 0.8, uTint);
+        tint = mix(tint, recolor, uTint);
+      }
       float weight = coverage * mask;
-      color = vec4((uBase * rest + tint * heat) * weight, (rest + heat) * weight);
+      color = vec4((base * rest + tint * heat) * weight, (rest + heat) * weight);
     }
   }
   outColor = color + uBackground * (1.0 - color.a);
@@ -174,6 +191,7 @@ const LetterGlitch = ({
   intro = true,
   lightMode = false,
   backgroundColor,
+  tintColors,
   dpr,
   className = '',
   style,
@@ -203,6 +221,7 @@ const LetterGlitch = ({
     centerFade: clamp(centerFade, 0, 1),
     intro,
     backgroundColor,
+    tintColors: Array.isArray(tintColors) && tintColors.length ? tintColors.slice(0, MAX_COLORS) : null,
     dpr
   };
   const settingsRef = useRef(settings);
@@ -269,6 +288,10 @@ const LetterGlitch = ({
     const pointer = { x: 0, y: 0, sx: 0, sy: 0, inside: false, presence: 0, stir: 0, fresh: true };
     const walkers = [];
     const palette = new Float32Array(MAX_COLORS * 3);
+    const tintPalette = new Float32Array(MAX_COLORS * 3);
+    let tintKey = '';
+    let tintCount = 1;
+    let tintMix = 0;
     const loadedFonts = new Set();
     let pool = [0];
     let typeKey = '';
@@ -486,6 +509,22 @@ const LetterGlitch = ({
         if (data[i * 4 + 3] >= colorCount) data[i * 4 + 3] = randomColor();
       }
       dirty = true;
+    };
+
+    // Only the glyphs change colour; the field's behaviour and background stay as they are.
+    const syncTint = dt => {
+      const s = settingsRef.current;
+      if (s.tintColors) {
+        const key = s.tintColors.join(',');
+        if (key !== tintKey) {
+          tintKey = key;
+          tintCount = s.tintColors.length;
+          s.tintColors.forEach((value, i) => tintPalette.set(parse(value), i * 3));
+        }
+      }
+      const goal = s.tintColors ? 1 : 0;
+      tintMix = reduce ? goal : tintMix + (goal - tintMix) * (1 - Math.exp(-dt / 0.2));
+      if (Math.abs(goal - tintMix) < 0.002) tintMix = goal;
     };
 
     const addWalker = walker => {
@@ -748,6 +787,7 @@ const LetterGlitch = ({
       if (!reduce) time += dt * s.speed;
       syncType();
       syncPalette();
+      syncTint(dt);
       if (s.density !== density) {
         density = s.density;
         for (let i = 0; i < count; i++) if (born[i] < 0) data[i * 4 + 1] = restValue(i);
@@ -807,6 +847,9 @@ const LetterGlitch = ({
       } else {
         gl.uniform4f(u.uBackground, 0, 0, 0, 0);
       }
+      gl.uniform3fv(u.uTintColors, tintPalette);
+      gl.uniform1i(u.uTintCount, tintCount);
+      gl.uniform1f(u.uTint, tintMix);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
 
       const busy =
@@ -814,6 +857,7 @@ const LetterGlitch = ({
         activeCount > 0 ||
         walkers.length > 0 ||
         introLeft ||
+        tintMix !== (s.tintColors ? 1 : 0) ||
         (pointer.presence !== 0 && pointer.presence !== 1) ||
         pointer.stir > 0;
       if (busy && !reduce) raf = requestAnimationFrame(frame);

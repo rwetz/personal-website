@@ -12,9 +12,9 @@ import ateruStudio from '../assets/showcase/ateru-studio.webp'
 import ateruAppearance from '../assets/showcase/ateru-appearance.webp'
 export default function Intro({ onTint }) {
   const [hovered, setHovered] = useState(null)
-  // Any pointer or focus tints the home field; only desktop hover plays a video.
+  // Any pointer or focus recolours the home glyphs; only desktop hover plays a video.
   const preview = project => {
-    onTint?.(project.palette.accent)
+    onTint?.(project.id)
     const id = project.id
     if (window.matchMedia('(min-width: 960px) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) setHovered(id)
   }
