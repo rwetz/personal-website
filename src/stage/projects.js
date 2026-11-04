@@ -3,7 +3,7 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import nexis from '../assets/nexis/welcome-1600.webp'
+import nexis from '../assets/showcase/nexis.webp'
 import biblelm from '../assets/showcase/biblelm.webp'
 import logscope from '../assets/showcase/logscope.webp'
 import ateru from '../assets/showcase/ateru.webp'
@@ -23,7 +23,7 @@ export const projects = [
     tagline: 'A terminal built as a workspace, with code, commands and AI within reach.',
     tags: ['Rust + Tauri', 'Terminal', 'Workspace'],
     palette: { bg: '#101319', fg: '#f0f3f7', accent: '#8dbce8', surface: '#222b36', font: sans, display: "'Space Grotesk Variable', sans-serif", radius: '18px' },
-    media: { src: nexis, thumb: nexisThumb, animated: true, alt: 'The Nexis welcome screen in the real desktop app', caption: 'Nexis / Desktop workspace' },
+    media: { src: nexis, thumb: nexisThumb, animated: true, alt: 'Nexis editing a Python file beside its workspace explorer', caption: 'Nexis / Desktop workspace' },
     field: 'Move to stir the grain. Click to swirl it.',
     links: [{ label: 'Launch', href: 'https://nexisdev.org' }, { label: 'Source', href: 'https://github.com/rwetz/Nexis' }],
   },
@@ -32,7 +32,7 @@ export const projects = [
     tagline: 'A private anime journal for your library, daily progress and the stories you finish.',
     tags: ['React Native', 'Local-first', 'iPhone'],
     palette: { bg: '#0b0b0c', fg: '#f2f2f3', accent: '#ef4a44', surface: '#161618', font: "ui-rounded, 'SF Pro Rounded', 'Nunito Variable', sans-serif", display: "ui-rounded, 'SF Pro Rounded', 'Nunito Variable', sans-serif", ui: "ui-rounded, 'SF Pro Rounded', 'Nunito Variable', sans-serif", radius: '28px' },
-    media: { src: ateru, thumb: ateruThumb, alt: 'Ateru Chronicle showing a Wrapped recap and sample viewing history', caption: 'Ateru / Sample library' },
+    media: { src: ateru, thumb: ateruThumb, alt: 'Ateru’s library with Bleach up next at 5 of 366 episodes watched', caption: 'Ateru / iPhone' },
     field: 'Move through the threads to part them.',
     links: [{ label: 'Ask about Ateru', href: 'mailto:rwetz00@gmail.com?subject=Ateru' }],
   },
@@ -41,7 +41,7 @@ export const projects = [
     tagline: 'An illustrated Bible study tool with notebooks, connected passages and a from-scratch language model lab.',
     tags: ['Bible study', 'Public-domain art', 'ML lab'],
     palette: { bg: '#14110d', fg: '#e9e1d0', accent: '#d4a94f', surface: '#1b1712', font: "'EB Garamond Variable', Georgia, serif", display: "'UnifrakturMaguntia', Georgia, serif", radius: '3px' },
-    media: { src: biblelm, thumb: biblelmThumb, animated: true, alt: 'BibleLM running with its illustrated study interface', caption: 'BibleLM / Illustrated study' },
+    media: { src: biblelm, thumb: biblelmThumb, animated: true, alt: 'BibleLM’s home in the Nocturne theme with the verse of the day', caption: 'BibleLM / Illustrated study' },
     field: 'Move to disturb the dither. Click to send a ripple.',
     links: [{ label: 'Source & download', href: 'https://github.com/rwetz/biblelm' }],
   },
@@ -50,7 +50,7 @@ export const projects = [
     tagline: 'A wavetable synthesizer with a custom sound engine, modulation system and effects built in C++.',
     tags: ['C++ + JUCE', 'Audio DSP', 'VST3'],
     palette: { bg: '#15161a', fg: '#e6e8ee', accent: '#7fb8ff', surface: '#1e2026', font: sans, display: sans, radius: '6px' },
-    media: { src: halcyra, thumb: halcyraThumb, alt: 'Halcyra’s real synth interface with oscillator, filter, sub and noise controls', caption: 'Halcyra / Wavetable synthesizer' },
+    media: { src: halcyra, thumb: halcyraThumb, animated: true, alt: 'Halcyra’s real synth interface with oscillator, filter, sub and noise controls', caption: 'Halcyra / Wavetable synthesizer' },
     field: 'Move to bend the fibers. Click to pulse them.',
     links: [{ label: 'Ask about Halcyra', href: 'mailto:rwetz00@gmail.com?subject=Halcyra' }],
   },
@@ -59,7 +59,7 @@ export const projects = [
     tagline: 'Tail many logs, index every line and search the live stream with a purpose-built trigram engine.',
     tags: ['Rust', 'Live search', 'Trigram index'],
     palette: { bg: '#090b10', fg: '#f3f5f7', accent: '#c7d0dd', surface: '#1b222c', font: sans, display: mono, radius: '2px' },
-    media: { src: logscope, thumb: logscopeThumb, animated: true, alt: 'Logscope filtering a live stream of synthetic logs', caption: 'Logscope / Synthetic log stream' },
+    media: { src: logscope, thumb: logscopeThumb, animated: true, alt: 'Logscope matching timeout OR refused in a live synthetic log stream', caption: 'Logscope / Synthetic log stream' },
     field: 'Move to light the terminal. Click to glitch it.',
     links: [],
   },

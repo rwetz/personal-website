@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react'
 import { m } from 'framer-motion'
 import { projects } from './projects'
 import ProjectPreview from './ProjectPreview'
-import ateruStudio from '../assets/showcase/ateru-studio.webp'
-import ateruAppearance from '../assets/showcase/ateru-appearance.webp'
+import ateruSearch from '../assets/showcase/ateru-search.webp'
+import ateruChronicle from '../assets/showcase/ateru-chronicle.webp'
 export default function Intro({ onTint }) {
   const [hovered, setHovered] = useState(null)
   // Any pointer or focus recolours the home glyphs; only desktop hover plays a video.
@@ -30,7 +30,7 @@ export default function Intro({ onTint }) {
       {projects.map((project, index) => <m.a layoutId={`project-preview-${project.id}`} transition={{ duration: .6, ease: [.22, 1, .36, 1] }} key={project.id} className={`constellation-object object-${index}`} href={`#/${project.id}`} style={{ '--object-accent': project.palette.accent, '--delay': `${index * -1.7}s` }} onMouseEnter={() => preview(project)} onMouseLeave={leave} onFocus={() => preview(project)} onBlur={leave}>
         <div className="constellation-object-inner">
         <div className="project-tile-image"><img src={project.media.src} alt="" loading="eager" width="460" height="192" />
-        {project.id === 'ateru' && <><img src={ateruStudio} alt="" width="393" height="852" /><img src={ateruAppearance} alt="" width="393" height="852" /></>}
+        {project.id === 'ateru' && <><img src={ateruSearch} alt="" width="393" height="852" /><img src={ateruChronicle} alt="" width="393" height="852" /></>}
         {hovered === project.id && project.media.animated && <ProjectPreview id={project.id} />}
         </div>
         <span><small>{String(index).padStart(2, '0')}</small><strong>{project.name}</strong><small>{project.kind}</small><b aria-hidden="true">↗</b></span>

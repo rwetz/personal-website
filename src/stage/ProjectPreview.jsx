@@ -8,6 +8,7 @@ const sources = {
   nexis: () => import('../assets/showcase/nexis.mp4?url'),
   biblelm: () => import('../assets/showcase/biblelm.mp4?url'),
   logscope: () => import('../assets/showcase/logscope.mp4?url'),
+  halcyra: () => import('../assets/showcase/halcyra.mp4?url'),
 }
 // Mounted only after intentional desktop hover/focus; no idle video downloads.
 export default function ProjectPreview({ id }) {

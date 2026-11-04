@@ -148,6 +148,11 @@
   .showcase-footer-meta { position: static; justify-content: center; margin: 8px 0 0; order: 2; }
 }
 
+/* Halcyra's Synth / Mod / FX tabs sit under the capture, which leaves room for them. */
+.scene-halcyra .project-media > .capture-scene { flex-direction: column; gap: 10px; }
+.scene-halcyra .capture-controls, .scene-halcyra .capture-controls > div { justify-content: center; margin-top: 0; }
+.scene-halcyra .project-media .capture-landscape .capture-image { max-height: max(40px, calc(100cqh - 70px)); }
+
 /* Neighbouring worlds, named at the edges on screens with room for them. */
 .stage-peeks { display: none; }
 @media (min-width: 1280px) and (min-height: 700px) {

@@ -20,7 +20,7 @@ for (const [w, h] of [[390, 844], [360, 640], [844, 390]]) {
       await expect(page.locator('h1')).toHaveText(name)
     }
     await page.getByRole('tab', { name: /Ateru/ }).tap()
-    const studio = page.getByRole('button', { name: 'Studio', exact: true })
+    const studio = page.getByRole('button', { name: 'Details', exact: true })
     await studio.scrollIntoViewIfNeeded()
     await studio.tap()
     await expect(studio).toHaveAttribute('aria-pressed', 'true')
