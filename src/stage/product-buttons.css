@@ -1,0 +1,31 @@
+/* Button behavior adapted from Nexis's button.tsx and BibleLM's installed
+   @nexis/design button.tsx; Ferrite's button.rs and motion.rs inform Logscope. */
+:is(.showcase-shell[data-project=nexis], .showcase-shell[data-project=biblelm]) :is(.showcase-header-actions button, .project-links a, .media-toggle, .showcase-rail button, .showcase-rail > a) {
+  transition: color 90ms cubic-bezier(.2,0,0,1), background-color 90ms cubic-bezier(.2,0,0,1), border-color 90ms cubic-bezier(.2,0,0,1), transform 90ms cubic-bezier(.2,0,0,1), box-shadow 90ms cubic-bezier(.2,0,0,1);
+}
+:is(.showcase-shell[data-project=nexis], .showcase-shell[data-project=biblelm]) :is(.showcase-header-actions button, .project-links a, .media-toggle) {
+  border: 1px solid var(--chrome-border); border-radius: 999px; padding-inline: 16px;
+  background: var(--stage-surface); color: var(--stage-fg);
+}
+:is(.showcase-shell[data-project=nexis], .showcase-shell[data-project=biblelm]) :is(.showcase-header-actions button, .project-links a, .media-toggle):hover { background: color-mix(in srgb, var(--stage-fg) 12%, var(--stage-surface)); }
+:is(.showcase-shell[data-project=nexis], .showcase-shell[data-project=biblelm]) :is(.showcase-header-actions button, .project-links a, .media-toggle, .showcase-rail button, .showcase-rail > a):active { transform: translateY(1px); }
+:is(.showcase-shell[data-project=nexis], .showcase-shell[data-project=biblelm]) :is(button, a):focus-visible { outline: 1px solid var(--stage-accent); outline-offset: 2px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--stage-accent) 30%, transparent); }
+
+/* Ferrite's secondary and ghost states: instant hover, inverse on press,
+   bracketed ghost controls, and an explicitly stepped 120ms acknowledgment. */
+.showcase-shell[data-project=logscope] :is(.showcase-header-actions button, .media-toggle, .showcase-rail button, .showcase-rail > a) {
+  transition: none; border-radius: 0; font-family: 'Geist Mono Variable', ui-monospace, monospace;
+}
+.showcase-shell[data-project=logscope] :is(.showcase-header-actions button, .media-toggle, .showcase-rail > a) { border: 1px solid var(--chrome-border); background: var(--stage-surface); color: var(--stage-fg); }
+.showcase-shell[data-project=logscope] :is(.showcase-header-actions button, .media-toggle, .showcase-rail button, .showcase-rail > a):hover { background: color-mix(in srgb, var(--stage-fg) 18%, var(--stage-bg)); color: var(--stage-fg); }
+.showcase-shell[data-project=logscope] :is(.showcase-header-actions button, .media-toggle, .showcase-rail button, .showcase-rail > a):active { background: var(--stage-fg); color: var(--stage-bg); }
+.showcase-shell[data-project=logscope] :is(.showcase-header-actions button, .media-toggle, .showcase-rail button, .showcase-rail > a):focus-visible { outline: 1px solid var(--stage-accent); outline-offset: 2px; }
+.showcase-shell[data-project=logscope] .media-toggle::before { content: '['; color: var(--stage-accent); }
+.showcase-shell[data-project=logscope] .media-toggle::after { content: ']'; color: var(--stage-accent); }
+.showcase-shell[data-project=logscope] .media-toggle { gap: 7px; text-transform: uppercase; }
+.showcase-shell[data-project=logscope] .ferrite-ack { animation: ferrite-ack 120ms steps(3, end); }
+@keyframes ferrite-ack { from { box-shadow: inset 0 0 0 50px color-mix(in srgb, var(--stage-fg) 50%, transparent); } to { box-shadow: inset 0 0 0 50px transparent; } }
+@media (prefers-reduced-motion: reduce) {
+  :is(.showcase-shell[data-project=nexis], .showcase-shell[data-project=biblelm]) :is(button, a) { transition: none; }
+  .showcase-shell[data-project=logscope] .ferrite-ack { animation: none; }
+}

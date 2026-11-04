@@ -40,7 +40,7 @@
 .showcase-rail [role=tablist] { gap: 6px; padding: 5px; background: color-mix(in srgb, var(--stage-surface) 35%, var(--stage-bg)); border: 1px solid var(--chrome-border); border-radius: 12px; min-width: 0; }
 .showcase-rail button, .showcase-shell[data-project=ateru] .showcase-rail button { position: relative; border: 0; border-radius: 7px; padding: 10px 12px; gap: 10px; flex-direction: row; align-items: center; justify-content: flex-start; min-height: 46px; font-size: 13px; background: transparent; }
 .showcase-rail button[aria-selected=true], .showcase-shell[data-project=ateru] .showcase-rail button[aria-selected=true] { border-color: color-mix(in srgb, var(--stage-accent) 36%, var(--stage-bg)); background: var(--stage-surface); color: var(--stage-fg); box-shadow: none; }
-.showcase-rail button:hover { background: var(--stage-surface); }
+.showcase-rail button[aria-selected=false]:hover { background: color-mix(in srgb, var(--stage-fg) 9%, transparent); color: var(--stage-fg); }
 .showcase-rail .rail-number { font-size: 10px; color: var(--chrome-muted); }
 .rail-emblem { width: 24px; height: 24px; flex: none; color: var(--chrome-muted); }
 .showcase-rail button[aria-selected=true] .rail-emblem { color: var(--stage-accent); }
@@ -251,7 +251,16 @@
 .showcase-wordmark { padding: 6px 10px; }
 .showcase-header-actions a { padding: 10px 14px; }
 .showcase-footer-meta span { text-shadow: 0 1px 6px #000; }
-.showcase-rail .rubber-segment__thumb { backdrop-filter: blur(8px); }
+/* Keep the moving thumb inexpensive to paint; the stationary track supplies the blur. */
+.showcase-rail .rubber-segment__thumb { backdrop-filter: none; -webkit-backdrop-filter: none; }
+.showcase-rail .rubber-segment button[aria-selected=true] { color: var(--stage-fg); font-weight: 650; }
+.showcase-rail .rubber-segment button[aria-selected=true]::after {
+  content: ''; position: absolute; bottom: 4px; left: 12px; right: 12px;
+  height: 2px; border-radius: 2px; background: var(--stage-accent); pointer-events: none;
+}
+@media (max-width: 540px) {
+  .showcase-rail .rubber-segment button[aria-selected=true]::after { left: 8px; right: 8px; bottom: 2px; }
+}
 
 /* Allow the layout to breathe and remain reachable in unusually short windows. */
 @media (max-height: 760px) {

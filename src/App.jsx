@@ -21,6 +21,7 @@ import Heptagram from './brand/Heptagram'
 import './stage/stage.css'
 import './stage/identities.css'
 import './stage/refinements.css'
+import './stage/product-buttons.css'
 import './stage/worlds.css'
 
 const AboutPage = lazy(() => import('./stage/AboutPage'))
@@ -120,7 +121,16 @@ export default function App() {
   return (
     <LazyMotion features={loadMotionFeatures} strict>
       <MotionConfig reducedMotion="user">
-        <div ref={shell} className="showcase-shell" data-project={stage.pageId} data-immersed={immersive ? '' : undefined}>
+        <div ref={shell} className="showcase-shell" data-project={stage.pageId} data-immersed={immersive ? '' : undefined} onClickCapture={event => {
+          if (stage.pageId !== 'logscope') return
+          const control = event.target.closest('.showcase-header-actions button, .media-toggle, .showcase-rail button, .showcase-rail > a')
+          if (!control) return
+          control.classList.remove('ferrite-ack')
+          void control.offsetWidth
+          control.classList.add('ferrite-ack')
+        }} onAnimationEnd={event => {
+          if (event.animationName === 'ferrite-ack') event.target.classList.remove('ferrite-ack')
+        }}>
           {worlds.map(id => <World key={id} id={id} leaving={id !== stage.pageId} tint={tint} />)}
           <a className="showcase-skip" href="#main-content" onClick={event => {
             event.preventDefault()
