@@ -127,15 +127,6 @@ export default function RubberSegment({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listKey, size, inset, equalSlots]);
 
-  useEffect(() => {
-    if (!drag.current && committed.current !== index) {
-      const from = committed.current;
-      committed.current = index;
-      if (from < 0 || index < 0 || reduce) jumpTo(index);
-      else travel(from, index);
-    }
-  });
-
   useEffect(
     () => () => {
       clearTimeout(handoff.current);
@@ -191,6 +182,16 @@ export default function RubberSegment({
     animate(edgeR, b.r + (Math.max(a.r, b.r) - b.r) * u, tween);
     handoff.current = setTimeout(() => land(to, null, false, true), t(HANDOFF) * 1000);
   };
+
+  // Declared after travel and jumpTo so it never reads them before they exist.
+  useEffect(() => {
+    if (!drag.current && committed.current !== index) {
+      const from = committed.current;
+      committed.current = index;
+      if (from < 0 || index < 0 || reduce) jumpTo(index);
+      else travel(from, index);
+    }
+  });
 
   const localX = e => e.clientX - (box.current ? box.current.left : 0) - inset;
 
