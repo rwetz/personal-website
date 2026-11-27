@@ -83,6 +83,9 @@ export default function CommandPalette({ open, onClose, onAbout }) {
           <CommandItem onSelect={openExternal('https://nexisdev.org')}>
             <ArrowSquareOut /> <span>Nexis</span>
           </CommandItem>
+          <CommandItem onSelect={openExternal('https://github.com/rwetz/papers')}>
+            <ArrowSquareOut /> <span>Papers</span>
+          </CommandItem>
           <CommandItem onSelect={openExternal('https://github.com/rwetz')}>
             <ArrowSquareOut /> <span>GitHub</span>
           </CommandItem>

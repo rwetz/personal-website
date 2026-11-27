@@ -139,6 +139,7 @@ export default function App() {
           <header className="showcase-header">
             <a href="#/" className="showcase-wordmark" aria-label="Ryan Wetzstein, home"><Heptagram activeId={stage.project?.id} /><span>Ryan Wetzstein</span></a>
             <div className="showcase-header-actions">
+              <a href="https://github.com/rwetz/papers" target="_blank" rel="noopener noreferrer">Papers ↗</a>
               <a href="/resume.pdf" download>Resume ↗</a>
               <button id="about-trigger" onClick={openAbout} aria-current={stage.pageId === 'about' ? 'page' : undefined}>About & contact</button>
             </div>
