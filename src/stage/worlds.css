@@ -27,12 +27,6 @@
 .effect-nexis { opacity: .5; }
 .effect-biblelm { opacity: .5; }
 
-/* Home: hovering a tile recolours the glitch glyphs (in LetterGlitch) and edges the tile. */
-.constellation-object:hover .constellation-object-inner, .constellation-object:focus-visible .constellation-object-inner {
-  border-color: color-mix(in srgb, var(--object-accent) 70%, transparent);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--object-accent) 25%, transparent), 0 18px 50px -20px var(--object-accent);
-}
-
 /* Each world has its own composition on screens with room for one.
  * Nexis keeps the canonical split; the others take the shape of the app. */
 @media (min-width: 1100px) and (min-height: 700px) {
@@ -103,14 +97,7 @@
 .immerse-toggle[aria-pressed=true] { border-color: var(--stage-accent); }
 .immerse-toggle svg { width: 15px; height: 15px; }
 /* Shown once per session outside Immerse; Immerse itself carries no tips. */
-.field-nudge {
-  position: absolute; left: 50%; bottom: 14px; translate: -50% 0; margin: 0; padding: 8px 14px; border-radius: 999px;
-  background: color-mix(in srgb, var(--t-void) 72%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  color: var(--stage-fg); font: 500 12px/1.4 var(--stage-ui); white-space: nowrap; pointer-events: none; z-index: 4;
-  animation: hint-in 700ms cubic-bezier(.22, 1, .36, 1) both, hint-out 600ms 5400ms ease forwards;
-}
 @keyframes hint-in { from { opacity: 0; translate: -50% 10px; } }
-.field-nudge span { color: var(--chrome-muted); margin-left: 4px; }
 @keyframes hint-out { to { opacity: 0; } }
 @media (max-width: 959px) {
   .showcase-shell[data-immersed] .project-copy { display: none; }
@@ -123,8 +110,6 @@
   .immerse-toggle { width: 44px; height: 44px; padding: 0; justify-content: center; }
   .immerse-toggle svg { width: 18px; height: 18px; }
   .immerse-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .field-nudge { top: 10px; bottom: auto; max-width: calc(100vw - 32px); white-space: normal; text-align: center; }
-  .field-nudge span { display: block; margin: 0; }
 }
 /* The resume must stay reachable on phones; it shares the header with a shorter gap. */
 @media (max-width: 540px) {
@@ -138,7 +123,7 @@
 @media (max-height: 540px) and (orientation: landscape) {
   .showcase-footer { display: flex; flex-direction: column; }
   /* Fit the copy and media to the short screen instead of a tall scrolling stage. */
-  .showcase-intro, .project-stage { min-height: 0; }
+  .project-stage { min-height: 0; }
   .project-stage { height: 100%; }
   .project-media { height: 100%; max-height: 100%; min-height: 0; display: flex; flex-direction: column; justify-content: center; container-type: size; }
   .project-media > * { min-height: 0; }

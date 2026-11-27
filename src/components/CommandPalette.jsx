@@ -58,7 +58,7 @@ export default function CommandPalette({ open, onClose, onAbout }) {
         <CommandEmpty>No results found.</CommandEmpty>
 
         <CommandGroup heading="Navigate">
-          <CommandItem onSelect={() => { onClose(); onAbout() }}><User /><span>About & contact</span></CommandItem>
+          <CommandItem onSelect={() => { onClose(); onAbout() }}><User /><span>About</span></CommandItem>
           {navigate.map(({ id, label, icon: Icon, hash }) => (
             <CommandItem key={id} onSelect={go(hash)}>
               <Icon /> <span>{label}</span>

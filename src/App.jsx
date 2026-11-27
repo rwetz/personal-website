@@ -23,6 +23,7 @@ import './stage/identities.css'
 import './stage/refinements.css'
 import './stage/product-buttons.css'
 import './stage/worlds.css'
+import './stage/home.css'
 
 const AboutPage = lazy(() => import('./stage/AboutPage'))
 const loadMotionFeatures = () => import('./lib/motion-features').then(mod => mod.default)
@@ -84,20 +85,6 @@ function World({ id, leaving, tint }) {
   return <ProjectBackground project={projects.find(project => project.id === id)} leaving={leaving} tint={id === 'home' ? tint : null} />
 }
 
-// Once per browser session, say that the field answers the pointer, then step aside.
-const nudgeKey = 'field-nudge-seen'
-function useFieldNudge(project) {
-  const [shown, setShown] = useState(false)
-  useEffect(() => {
-    if (!project || reducedMotion()) return
-    try { if (sessionStorage.getItem(nudgeKey)) return; sessionStorage.setItem(nudgeKey, '1') } catch { /* Show it once for this page instead. */ }
-    const show = setTimeout(() => setShown(true), 1400)
-    const hide = setTimeout(() => setShown(false), 7400)
-    return () => { clearTimeout(show); clearTimeout(hide); setShown(false) }
-  }, [project])
-  return shown
-}
-
 export default function App() {
   const [immersed, setImmersed] = useState(false)
   const [tint, setTint] = useState(null)
@@ -110,7 +97,6 @@ export default function App() {
   }
   const stage = useStage({ onEscape: () => { if (!immersed) return false; setImmersion(false); return true } })
   const worlds = useWorlds(stage.pageId)
-  const nudge = useFieldNudge(immersed ? null : stage.project)
   const [returnProject, setReturnProject] = useState(null)
   usePointerDepth(shell)
   const openAbout = () => {
@@ -139,18 +125,16 @@ export default function App() {
           <header className="showcase-header">
             <a href="#/" className="showcase-wordmark" aria-label="Ryan Wetzstein, home"><Heptagram activeId={stage.project?.id} /><span>Ryan Wetzstein</span></a>
             <div className="showcase-header-actions">
-              <a href="https://github.com/rwetz/papers" target="_blank" rel="noopener noreferrer">Papers ↗</a>
-              <a href="/resume.pdf" download>Resume ↗</a>
-              <button id="about-trigger" onClick={openAbout} aria-current={stage.pageId === 'about' ? 'page' : undefined}>About & contact</button>
+              <a href="https://github.com/rwetz/papers" target="_blank" rel="noopener noreferrer">Papers</a>
+              <a href="/resume.pdf" download>Resume</a>
+              <button id="about-trigger" onClick={openAbout} aria-current={stage.pageId === 'about' ? 'page' : undefined}>About</button>
             </div>
           </header>
           <main id="main-content" tabIndex={-1} {...(stage.pageId === 'about' ? {} : stage.gestures)}>
             {stage.pageId === 'about' ? <Suspense fallback={<p role="status">Loading about…</p>}><AboutPage returnProject={returnProject} /></Suspense> : stage.project ? <Stage project={stage.project} /> : <Intro onTint={setTint} />}
-            {nudge && !immersive && <p className="field-nudge" key={`nudge-${stage.project.id}`}>{stage.project.field} <span>Immerse to play with it.</span></p>}
           </main>
           <footer className="showcase-footer">
             <div className="showcase-footer-meta">
-              <span>← → to explore <span className="footer-divider">/</span> Esc for {immersive ? 'the full page' : 'home'}</span>
               {stage.project && <button type="button" className="immerse-toggle" aria-pressed={immersive} onClick={() => setImmersion(!immersive)}>
                 {immersive ? <ArrowsIn aria-hidden="true" /> : <ArrowsOut aria-hidden="true" />}<span className="immerse-label">{immersive ? 'Leave immersive view' : 'Immerse'}</span>
               </button>}

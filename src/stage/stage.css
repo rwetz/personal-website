@@ -62,7 +62,6 @@ body { background: var(--t-void); }
 .project-copy h1 { font-family: var(--stage-font); font-size: clamp(40px, 5.7vw, 90px); font-weight: 450; line-height: .98; letter-spacing: -.055em; margin: 0 0 26px; text-wrap: balance; }
 .project-tagline { font-family: var(--stage-font); font-size: clamp(15px, 1.35vw, 20px); line-height: 1.65; margin: 0; max-width: 38ch; }
 .project-tags { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 14px; padding: 0; margin: 24px 0; font: 10px/1.5 var(--m-font-sans); color: var(--stage-accent-ink); }
-.project-tags li { border-bottom: 1px solid color-mix(in srgb, var(--stage-accent) 35%, transparent); padding-bottom: 5px; }
 .project-links { display: flex; flex-wrap: wrap; gap: 24px; }
 .project-links a { color: var(--stage-fg); display: inline-flex; align-items: center; gap: 24px; min-height: 44px; border-bottom: 1px solid var(--stage-accent); font-size: 13px; }
 .project-media { min-width: 0; margin: 0; width: 100%; max-height: 100%; animation: stage-enter 700ms both; }
@@ -79,33 +78,6 @@ body { background: var(--t-void); }
 .showcase-rail button { border: 0; border-top: 1px solid var(--t-gunmetal); border-radius: 0; padding: 12px 10px; color: var(--t-silver); background: transparent; display: flex; gap: 14px; align-items: center; font-size: 12px; text-align: left; min-height: 46px; transition: border-color 300ms, background-color 300ms; }
 .showcase-rail button[aria-selected=true] { border-color: var(--t-white); color: var(--t-white); background: #ffffff07; }
 .showcase-rail button:hover, .showcase-header-actions button:hover { background: #ffffff0d; }
-.rail-number { font: 10px var(--m-font-sans); color: var(--t-steel); }
-.showcase-intro { height: 100%; display: grid; grid-template-columns: 1fr 1.15fr; align-items: center; padding: 24px clamp(24px, 5vw, 88px); gap: 20px; background: var(--t-void); }
-.intro-copy { position: relative; z-index: 1; }
-.intro-copy h1 { font-size: clamp(44px, 5.4vw, 86px); font-weight: 450; letter-spacing: -.055em; line-height: 1.04; margin: 0 0 24px; }
-.intro-copy h1 span { color: var(--t-steel); }
-.showcase-intro-description { max-width: 32ch; color: var(--t-silver); font-size: clamp(14px, 1.3vw, 18px); line-height: 1.7; margin: 0; }
-.intro-enter { display: inline-flex; gap: 48px; align-items: center; margin-top: 28px; min-height: 44px; color: var(--t-white); border-bottom: 1px solid var(--t-steel); font-size: 13px; }
-.constellation { position: relative; height: min(490px, 58dvh); perspective: 1200px; transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
-.constellation-orbit { position: absolute; width: 75%; aspect-ratio: 1; border: 1px solid #8494a91c; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-.constellation-orbit::after { content: ''; position: absolute; inset: 20%; border: inherit; border-radius: inherit; }
-.constellation-mark { position: absolute; width: 46%; height: auto; left: 27%; top: 27%; color: #8494a928; animation: mark-breathe 9s ease-in-out infinite; }
-.constellation-object { position: absolute; width: 39%; max-width: 230px; display: block; color: var(--t-white); padding-block: 8px; }
-.constellation-object-inner { position: relative; border: 1px solid #8494a942; background: #10151eee; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 30px #0005; animation: object-drift 8s ease-in-out var(--delay) infinite; transition: border-color 250ms, box-shadow 250ms; }
-.constellation-object img { width: 100%; aspect-ratio: 2.4; object-fit: cover; display: block; opacity: .7; transition: opacity 300ms; }
-.constellation-preview { position: absolute; top: 0; left: 0; width: 100%; aspect-ratio: 2.4; object-fit: cover; pointer-events: none; }
-.constellation-object-inner > span { padding: 10px 12px; display: grid; grid-template-columns: auto 1fr; gap: 3px 9px; align-items: center; }
-.constellation-object strong { font-size: 12px; font-weight: 500; }
-.constellation-object small { font: 9px var(--m-font-sans); color: var(--t-steel); }
-.constellation-object small:last-child { grid-column: 2; }
-.constellation-object:hover, .constellation-object:focus-visible { z-index: 2; }
-.constellation-object:hover .constellation-object-inner, .constellation-object:focus-visible .constellation-object-inner { border-color: var(--object-accent); box-shadow: 0 12px 40px #0009; animation-play-state: paused; }
-.constellation-object:hover img { opacity: 1; }
-.object-0 { left: 8%; top: 2%; }
-.object-1 { right: 0; top: 17%; }
-.object-2 { left: 0; top: 40%; }
-.object-3 { right: 0; bottom: 4%; }
-.object-4 { left: 12%; bottom: 0; }
 .about-overlay { position: fixed; inset: 0; background: #000a; backdrop-filter: blur(12px); z-index: 50; }
 .showcase-about {
   position: fixed; inset: 5dvh max(20px, calc((100vw - 1120px) / 2)); z-index: 51;
@@ -140,7 +112,6 @@ body { background: var(--t-void); }
 @keyframes object-drift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 @keyframes mark-breathe { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
 @media (min-width: 960px) and (hover: hover) {
-  .constellation-object:hover .constellation-object-inner { scale: 1.08; }
 }
 @media (max-width: 959px) {
   .project-stage { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); align-content: center; gap: 24px; padding: 28px 32px; }
@@ -150,21 +121,6 @@ body { background: var(--t-void); }
   .project-tags { margin: 14px 0 8px; }
   .project-media { align-self: center; max-width: 740px; margin: auto; min-height: 0; }
   .project-media img, .media-scene video { max-height: 37dvh; }
-  .showcase-intro { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); gap: 20px; padding: 24px 32px; }
-  .intro-copy h1 { font-size: 52px; margin-bottom: 12px; }
-  .intro-copy .showcase-eyebrow { margin-bottom: 14px; }
-  .showcase-intro-description { max-width: 50ch; }
-  .intro-enter { margin-top: 12px; }
-  .constellation { height: 100%; max-height: 400px; min-height: 170px; width: min(100%, 600px); margin: auto; }
-  .constellation-object { width: 31%; }
-  .constellation-object-inner { animation: none; }
-  .object-0 { left: 0; top: 5%; }
-  .object-1 { right: 0; top: 5%; }
-  .object-2 { left: 35%; top: 30%; }
-  .object-3 { right: 0; bottom: 0; }
-  .object-4 { left: 0; bottom: 0; }
-  .constellation-mark { width: 35%; left: 33%; top: 25%; }
-  .constellation-orbit { width: 60%; }
   .showcase-rail button { flex-direction: column; align-items: flex-start; gap: 5px; font-size: 11px; }
 }
 @media (max-width: 540px) {
@@ -179,7 +135,6 @@ body { background: var(--t-void); }
   .showcase-footer-meta { display: none; }
   .showcase-rail > a { width: 34px; }
   .showcase-rail button { padding: 9px 4px; font-size: 9px; gap: 4px; }
-  .rail-number { font-size: 9px; }
   .showcase-rail .heptagram { width: 23px; height: 23px; }
   .project-stage { padding: 18px 22px; gap: 12px; }
   .project-copy h1 { font-size: 40px; margin-bottom: 10px; }
@@ -188,16 +143,7 @@ body { background: var(--t-void); }
   .project-tags { font-size: 9px; gap: 8px; margin: 10px 0 4px; }
   .project-links a { font-size: 12px; min-height: 36px; }
   .project-media img, .media-scene video { max-height: 30dvh; }
-  .showcase-intro { padding: 22px; gap: 8px; }
-  .intro-copy h1 { font-size: 43px; }
   .showcase-eyebrow { font-size: 9px; }
-  .showcase-intro-description { font-size: 13px; }
-  .intro-enter { margin-top: 8px; font-size: 12px; }
-  .constellation-object img { aspect-ratio: 3; }
-  .constellation-object-inner > span { padding: 8px; gap: 2px 5px; }
-  .constellation-object strong { font-size: 9px; }
-  .constellation-object small { font-size: 8px; }
-  .constellation-object small:last-child { display: none; }
   .showcase-about { inset: 12px; }
   .showcase-about-header { padding: 10px 14px; gap: 12px; }
   .showcase-about-header a { display: none; }
@@ -217,14 +163,7 @@ body { background: var(--t-void); }
   .project-tags { font-size: 8px; margin: 8px 0; }
   .project-links a { min-height: 30px; font-size: 11px; }
   .project-media img, .media-scene video { max-height: 60dvh; }
-  .showcase-intro { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; padding: 16px; }
-  .intro-copy h1 { font-size: 34px; }
-  .showcase-intro-description { font-size: 12px; }
-  .constellation { height: 100%; }
-  .constellation-object img { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .showcase-shell *, .showcase-shell *::before, .showcase-shell *::after { animation: none !important; transition: none !important; }
-  .constellation { transform: none; }
-  .constellation-object:hover .constellation-object-inner { scale: 1; }
 }

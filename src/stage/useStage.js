@@ -47,7 +47,9 @@ export function useStage({ onEscape } = {}) {
       if (event.key === 'Escape') { event.preventDefault(); if (!escape.current?.()) navigate(null) }
       if (pageId === 'about') return
       if (/^[0-4]$/.test(event.key)) { event.preventDefault(); navigate(projects[Number(event.key)].id) }
-      if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp'].includes(event.key)) {
+      // Home scrolls, so up and down belong to the page there.
+      const keys = pageId === 'home' ? ['ArrowRight', 'ArrowLeft'] : ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp']
+      if (keys.includes(event.key)) {
         event.preventDefault(); step(['ArrowRight', 'ArrowDown'].includes(event.key) ? 1 : -1)
       }
     }

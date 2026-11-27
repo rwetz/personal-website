@@ -24,7 +24,10 @@
 .project-copy h1 { font-family: var(--stage-display); font-size: clamp(48px, 6.2vw, 96px); font-weight: 500; letter-spacing: -.05em; }
 .project-tagline { font-family: var(--stage-font); font-size: clamp(16px, 1.4vw, 21px); }
 .project-tags { font: 500 12px/1.5 var(--stage-ui); gap: 8px; margin: 24px 0 20px; color: var(--chrome-muted); }
-.project-tags li { padding: 5px 10px; border: 1px solid var(--chrome-border); border-radius: var(--stage-radius); }
+/* Stack as a plain line of text, not chips. */
+.project-tags { gap: 4px 10px; }
+.project-tags li { padding: 0; border: 0; border-radius: 0; background: none; }
+.project-tags li + li::before { content: '·'; margin-right: 10px; opacity: .6; }
 .project-links a { font-size: 14px; font-weight: 500; }
 .showcase-footer-meta { font: 400 12px/1.5 var(--stage-ui); color: var(--chrome-muted); }
 .showcase-rail { max-width: 1100px; }
@@ -32,16 +35,6 @@
 .showcase-rail button { border-color: var(--chrome-border); font-size: 14px; gap: 12px; }
 .showcase-rail button[aria-selected=true] { border-color: var(--stage-accent); color: var(--stage-fg); background: var(--stage-surface); }
 .showcase-rail > a[aria-current] { color: var(--stage-fg); }
-.rail-number { font: 400 12px var(--stage-ui); color: var(--chrome-muted); }
-.intro-copy h1 { font-size: clamp(48px, 5.8vw, 92px); font-weight: 450; }
-.showcase-intro { background: var(--t-void); }
-.constellation-object strong { font-size: 14px; font-weight: 550; }
-.constellation-object small { font: 400 11px/1.4 var(--stage-ui); }
-.constellation-object-inner > span { gap: 3px 10px; padding: 12px; }
-.constellation-object img { opacity: .9; }
-.constellation-object[href="#/ateru"] img { object-position: center 20%; }
-.constellation-mark { color: #8494a920; }
-.constellation-orbit { opacity: .55; }
 .project-backdrop { border: 0; }
 
 /* Nexis: the display face, panel edges and soft movement of its actual shell. */
@@ -65,7 +58,6 @@
 .scene-biblelm .project-copy { padding-left: 28px; }
 .scene-biblelm .project-copy h1 { font-weight: 400; letter-spacing: -.015em; font-size: clamp(60px, 7.5vw, 116px); }
 .scene-biblelm .project-tagline { font-size: clamp(20px, 1.8vw, 26px); line-height: 1.5; }
-.scene-biblelm .project-tags li { border-width: 0 0 1px; border-radius: 0; padding-inline: 0; margin-right: 12px; }
 .scene-biblelm .project-media { padding: 12px; }
 .scene-biblelm video { border: 0; box-shadow: none; border-radius: 0; }
 .scriptorium-cross { position: absolute; height: 90%; width: 42%; left: -12%; top: 5%; color: var(--stage-fg); opacity: .055; }
@@ -108,22 +100,16 @@
   .capture-portrait .capture-image { max-height: 32dvh; }
   .capture-portrait .capture-companion { height: 26dvh; }
   .capture-controls { margin-top: 10px; }
-  .constellation-object strong { font-size: 12px; }
-  .constellation-object small { font-size: 10px; }
 }
 @media (max-width: 540px) {
   .showcase-wordmark { font-size: 12px; }
   .showcase-header-actions { font-size: 12px; }
-  .intro-copy h1 { font-size: 44px; }
-  .intro-copy .showcase-eyebrow { font-size: 12px; }
   .showcase-footer-meta { font-size: 11px; }
   .showcase-rail button { font-size: 11px; padding: 9px 4px; }
-  .rail-number { font-size: 10px; }
   .project-copy h1 { font-size: 42px; margin-bottom: 12px; }
   .project-tagline { font-size: 14px; }
   .project-copy .showcase-eyebrow { font-size: 12px; margin-bottom: 10px; }
   .project-tags { font-size: 11px; margin: 12px 0 6px; }
-  .project-tags li { padding: 3px 7px; }
   .project-links a { font-size: 13px; }
   .project-media { height: 100%; min-height: 0; max-height: none; container-type: size; display: flex; flex-direction: column; justify-content: center; }
   .project-media > .media-scene, .project-media > .capture-scene { min-height: 0; }
@@ -141,9 +127,6 @@
   .capture-controls { gap: 4px; margin-top: 8px; }
   .capture-controls button { min-height: 36px; padding: 5px 8px; font-size: 11px; }
   .capture-controls > span { display: none; }
-  .constellation-object-inner > span { padding: 8px; gap: 2px 5px; }
-  .constellation-object strong { font-size: 11px; }
-  .constellation-object small { font-size: 9px; }
   .showcase-shell[data-project=ateru] .showcase-rail button { padding-inline: 4px; }
 }
 @media (max-height: 540px) and (orientation: landscape) {
@@ -151,10 +134,8 @@
   .project-copy h1 { font-size: 36px; }
   .project-tagline { font-size: 13px; }
   .project-tags { font-size: 10px; margin: 8px 0; }
-  .project-tags li { padding: 2px 6px; }
   .project-links a { min-height: 32px; }
   .showcase-eyebrow { font-size: 11px; margin-bottom: 10px; }
-  .intro-copy h1 { font-size: 34px; }
   .scene-biblelm .project-copy h1 { font-size: 48px; }
   .scene-biblelm .project-tagline { font-size: 17px; }
   .scene-halcyra .project-copy h1 { font-size: 34px; }
@@ -163,6 +144,5 @@
   .capture-portrait .capture-companion { height: 46dvh; }
   .capture-controls button { min-height: 30px; padding: 4px 7px; font-size: 10px; }
   .capture-controls > span { display: none; }
-  .constellation-object small:last-child { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .mark-nexis .emblem-ink { animation: none; } }

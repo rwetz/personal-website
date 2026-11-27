@@ -3,8 +3,7 @@
 // ║  Personal Website                    ║
 // ║  2026                                ║
 // ╚══════════════════════════════════════╝
-import { useEffect, useState } from 'react'
-import CallChip from '../components/micro/CallChip'
+import { useEffect } from 'react'
 import { projects, projectFromHash } from './projects'
 import { backgroundLoaders } from './backgrounds'
 
@@ -32,28 +31,16 @@ function prepareAssets() {
   return prepared
 }
 
+// Warm the posters, fonts and current field once per browser session. Nothing is shown;
+// the page works the same whether or not this finishes.
 export default function AssetWarmup() {
-  const [status, setStatus] = useState(() => alreadyReady() ? null : 'running')
   useEffect(() => {
     if (alreadyReady()) return
-    let active = true
-    let dismiss
     prepareAssets().then(results => {
-      if (!active) return
-      const complete = results.every(result => result.status === 'fulfilled')
-      setStatus(complete ? 'done' : 'error')
-      if (complete) {
-        warmed = true
-        try { sessionStorage.setItem(storageKey, 'true') } catch { /* In-memory state covers restricted storage. */ }
-      }
-      dismiss = setTimeout(() => setStatus(null), 1800)
+      if (!results.every(result => result.status === 'fulfilled')) return
+      warmed = true
+      try { sessionStorage.setItem(storageKey, 'true') } catch { /* In-memory state covers restricted storage. */ }
     })
-    return () => { active = false; clearTimeout(dismiss) }
   }, [])
-  if (!status) return null
-  return <div className="asset-warmup" data-warmup={status}>
-    <CallChip icon="file" name={status === 'running' ? 'Preparing' : status === 'done' ? 'Ready' : 'Continue exploring'}
-      argument={status === 'running' ? 'the work' : status === 'done' ? 'Explore the work' : 'Previews load on demand'}
-      status={status} showTimer={false} color="var(--t-white)" surfaceColor="#10151ef2" doneColor="#61dca3" size={34} />
-  </div>
+  return null
 }

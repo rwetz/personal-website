@@ -45,11 +45,10 @@ export default function Stage({ project }) {
         {project.id === 'biblelm' && <><svg className="scriptorium-cross" viewBox="0 0 1024 1024"><defs><pattern id="cross-dither" patternUnits="userSpaceOnUse" width="12" height="12"><rect width="6" height="6" fill="currentColor" /></pattern></defs><path d="M440 80H584V336H814V480H584V910H440V480H210V336H440Z" fill="url(#cross-dither)" /></svg><span className="scriptorium-ornament">✦ · ✦</span></>}
       </div>
       <div className="project-copy" key={`copy-${project.id}`}>
-        <p className="showcase-eyebrow"><span>{String(index).padStart(2, '0')} / 04</span><span>{project.kind}</span></p>
         <h1 tabIndex={-1}>{project.name}</h1>
         <p className="project-tagline">{project.tagline}</p>
-        <ul className="project-tags" aria-label="Project tags">{project.tags.map(tag => <li key={tag}>{tag}</li>)}</ul>
-        <div className="project-links">{project.links.map(link => <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer">{link.label} <span aria-hidden="true">↗</span></a>)}</div>
+        <ul className="project-tags" aria-label="Built with">{project.tags.map(tag => <li key={tag}>{tag}</li>)}</ul>
+        <div className="project-links">{project.links.map(link => <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>)}</div>
       </div>
       <nav className="stage-peeks" aria-label="Neighbouring projects">
         <Peek project={projects[index - 1]} direction="previous" />

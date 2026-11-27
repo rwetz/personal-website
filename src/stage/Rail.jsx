@@ -27,7 +27,7 @@ export default function Rail({ activeId, navigate, pageId }) {
       <RubberSegment value={activeId ?? null} onChange={navigate} onKeyDown={onKeyDown} aria-label="Projects"
         size="lg" inset={5} radius={12} stretch={45} squash={2} speed={1.7} draggable={false}
         trackColor="transparent" thumbColor="color-mix(in srgb, var(--stage-accent) 16%, var(--stage-surface))" textColor="var(--chrome-muted)" activeTextColor="var(--stage-fg)"
-        items={projects.map((project, index) => ({ value: project.id, label: <><span className="rail-number">{String(index).padStart(2, '0')}</span><svg className="rail-emblem" viewBox="0 0 1024 1024" aria-hidden="true"><path d={emblems[project.id]} fill="currentColor" fillRule="evenodd" /></svg><span className="rail-name">{project.name}</span></> }))} />
+        items={projects.map(project => ({ value: project.id, label: <><svg className="rail-emblem" viewBox="0 0 1024 1024" aria-hidden="true"><path d={emblems[project.id]} fill="currentColor" fillRule="evenodd" /></svg><span className="rail-name">{project.name}</span></> }))} />
     </nav>
   )
 }

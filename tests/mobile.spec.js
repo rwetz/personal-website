@@ -33,7 +33,7 @@ for (const [w, h] of [[390, 844], [360, 640], [844, 390]]) {
     await play.scrollIntoViewIfNeeded()
     await play.tap()
     await expect(page.getByRole('button', { name: /Pause Nexis demo/ })).toBeVisible()
-    await page.getByRole('button', { name: 'About & contact' }).tap()
+    await page.getByRole('button', { name: 'About', exact: true }).tap()
     await expect(page.locator('h1')).toHaveText(/Hi, I.m Ryan/)
     for (const name of ['Email', 'GitHub', 'LinkedIn']) {
       const link = page.locator('.about-socials').getByRole('link', { name: new RegExp(name) })

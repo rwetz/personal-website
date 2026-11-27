@@ -22,7 +22,7 @@ for (const [width, height] of [[360, 640], [768, 1024], [1440, 900], [2048, 1152
       if (id && !['ateru', 'halcyra'].includes(id)) await expect(page.locator('video')).toHaveAttribute('preload', 'none')
       const clipped = await page.evaluate(() => {
         const main = document.querySelector('main').getBoundingClientRect()
-        const elements = [...document.querySelectorAll('main h1, .project-tagline, .project-tags, .project-links, .project-media, .capture-controls, .constellation-object, .intro-enter')]
+        const elements = [...document.querySelectorAll('main h1, .project-tagline, .project-tags, .project-links, .project-media, .capture-controls')]
         return elements.filter(element => {
           if (!element.getClientRects().length) return false
           const r = element.getBoundingClientRect()
@@ -62,20 +62,20 @@ test('deep links, legacy Nexis, invalid hashes, keyboard and history', async ({ 
 
 test('rail roves focus and selects its labelled panel', async ({ page }) => {
   await page.goto('/#/nexis')
-  await page.getByRole('tab', { name: '00 Nexis', exact: true }).focus()
+  await page.getByRole('tab', { name: 'Nexis', exact: true }).focus()
   await page.keyboard.press('ArrowRight')
-  await expect(page.getByRole('tab', { name: '01 Ateru', exact: true })).toBeFocused()
-  await expect(page.getByRole('tabpanel')).toHaveAccessibleName('01 Ateru')
+  await expect(page.getByRole('tab', { name: 'Ateru', exact: true })).toBeFocused()
+  await expect(page.getByRole('tabpanel')).toHaveAccessibleName('Ateru')
   await page.keyboard.press('End')
-  await expect(page.getByRole('tab', { name: '04 Logscope', exact: true })).toBeFocused()
+  await expect(page.getByRole('tab', { name: 'Logscope', exact: true })).toBeFocused()
   await page.keyboard.press('Escape')
   await expect(page.locator('#rail-home')).toBeFocused()
 })
 
 test('app identities replace the generic gradient and keep home in Geist Sans', async ({ page }) => {
   await page.goto('/#/')
-  expect(await page.locator('footer').evaluate(element => getComputedStyle(element).fontFamily)).toContain('Geist Variable')
-  expect(await page.locator('.showcase-intro').evaluate(element => getComputedStyle(element).backgroundImage)).toBe('none')
+  expect(await page.locator('.showcase-footer').evaluate(element => getComputedStyle(element).fontFamily)).toContain('Geist Variable')
+  expect(await page.locator('.home-hero h1').evaluate(element => getComputedStyle(element).fontFamily)).toContain('Geist Variable')
   await page.keyboard.press('1')
   await expect(page.locator('h1')).toHaveText('Ateru')
   await expect(page.locator('.capture-scene')).toBeVisible()
@@ -92,20 +92,20 @@ test('app identities replace the generic gradient and keep home in Geist Sans', 
   await expect.poll(() => page.locator('.mark-biblelm mask rect:last-child').first().evaluate(element => getComputedStyle(element).opacity)).toBe('0')
 })
 
-test('About has a full route, school progress, photo placeholders and direct contact links', async ({ page }) => {
+test('About has a full route, school facts and direct contact links', async ({ page }) => {
   await page.goto('/#/nexis')
-  await page.getByRole('button', { name: 'About & contact' }).click()
+  await page.getByRole('button', { name: 'About', exact: true }).click()
   await expect(page).toHaveURL(/#\/about$/)
   const about = page.locator('.about-page')
   await expect(page.locator('h1')).toHaveText('Hi, I’m Ryan.')
   await expect(page.locator('h1')).toBeFocused()
   await expect(page).toHaveTitle('About | Ryan Wetzstein')
-  await expect(about.getByText(/senior year at North Dakota State University/)).toBeVisible()
-  await expect(about.getByText(/graduation in May 2027/)).toBeVisible()
+  await expect(about.getByText(/senior at North Dakota State University/)).toBeVisible()
+  await expect(about.getByText(/graduate in May 2027/)).toBeVisible()
   await expect(about.locator('#experience, #skills, form')).toHaveCount(0)
   await expect(page.getByRole('dialog')).toHaveCount(0)
-  await expect(about.locator('.photo-fallback img')).toHaveCount(4)
-  await expect(about.locator('canvas')).toHaveCount(0)
+  await expect(about.locator('.about-gallery')).toBeAttached()
+  await expect(about.getByRole('link', { name: /404 page/ })).toHaveCount(0)
   await expect(about.getByRole('link', { name: 'GitHub', exact: true })).toHaveAttribute('href', 'https://github.com/rwetz')
   await expect(about.getByRole('link', { name: 'LinkedIn', exact: true })).toHaveAttribute('href', 'https://linkedin.com/in/ryan-wetzstein')
   await expect(about.getByRole('link', { name: 'Email', exact: true })).toHaveAttribute('href', 'mailto:rwetz00@gmail.com')
@@ -128,7 +128,7 @@ test('command palette navigates projects and opens About', async ({ page }) => {
   await expect(page.locator('h1')).toHaveText('Logscope')
   await page.keyboard.press('Control+k')
   await page.getByPlaceholder('Type a command or search…').fill('About')
-  await page.getByRole('option', { name: 'About & contact', exact: true }).click()
+  await page.getByRole('option', { name: 'About', exact: true }).click()
   await expect(page).toHaveURL(/#\/about$/)
   await expect(page.locator('h1')).toHaveText('Hi, I’m Ryan.')
 })
@@ -177,14 +177,26 @@ test('every real demo decodes, advances, pauses when hidden and preserves manual
   }
 })
 
-test('desktop hover previews and logo morph work with motion enabled', async ({ page }) => {
+test('home scrolls from the hero to the work list, and the logo morph works with motion enabled', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/#/')
-  const object = page.locator('.object-0')
-  await object.hover()
-  await expect(page.locator('.constellation-preview')).toBeVisible()
-  await object.click()
+  await expect(page.locator('.home-hero h1')).toHaveText('Ryan Wetzstein')
+  await expect(page.locator('.home-statement .statement p')).toHaveCount(5)
+  // The 404 game is an Easter egg: nothing on the site links to it.
+  await expect(page.locator('a[href*="404"]')).toHaveCount(0)
+  await expect(page.locator('.home-statement').getByRole('link', { name: 'Nexis' })).toHaveAttribute('href', 'https://github.com/rwetz/Nexis')
+  // Down arrow scrolls the page on home instead of changing project.
+  await page.locator('main').focus()
+  await page.keyboard.press('ArrowDown')
+  await expect(page).toHaveURL(/#\/$/)
+  await expect(page.getByRole('button', { name: 'Work' })).toHaveCount(0)
+  await page.locator('#work').scrollIntoViewIfNeeded()
+  const row = page.locator('.work-list a').first()
+  await expect(row).toBeInViewport()
+  await expect(page.locator('.work-list a')).toHaveCount(5)
+  await row.hover()
+  await row.click()
   await expect(page.locator('h1')).toHaveText('Nexis')
   await expect.poll(() => page.locator('.showcase-wordmark svg path:last-child').evaluate(element => getComputedStyle(element).opacity)).toBe('1')
   // Sample the transition, including its endpoint: home must never flash a solid star.
@@ -221,7 +233,7 @@ test('WCAG AA scans on every stage, About page and command palette', async ({ pa
     const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
     expect(result.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })), id || 'home').toEqual([])
   }
-  await page.getByRole('button', { name: 'About & contact' }).click()
+  await page.getByRole('button', { name: 'About', exact: true }).click()
   await expect(page.locator('.about-page')).toBeVisible()
   for (const section of ['about', 'contact']) {
     await page.locator(`#${section}`).scrollIntoViewIfNeeded()
@@ -307,7 +319,7 @@ test('BibleLM dither respects motion preferences, hidden tabs and route cleanup'
     document.dispatchEvent(new Event('visibilitychange'))
   })
   await expect.poll(() => page.evaluate(() => window.ditherDraws)).toBeGreaterThan(hidden + 4)
-  await page.getByRole('tab', { name: '00 Nexis', exact: true }).click()
+  await page.getByRole('tab', { name: 'Nexis', exact: true }).click()
   await expect(page.locator('.dither-canvas')).toHaveCount(0)
   const departed = await page.evaluate(() => window.ditherDraws)
   await page.waitForTimeout(150)
@@ -342,14 +354,13 @@ test('first-visit warmup stays nonblocking and remembers successful preparation'
     await route.continue()
   })
   await page.goto('/#/', { waitUntil: 'domcontentloaded' })
-  await expect(page.locator('[data-warmup=running]')).toBeVisible()
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+  await expect(page.locator('.asset-warmup')).toHaveCount(0)
   expect(videos).toEqual([])
-  await page.getByRole('tab', { name: '00 Nexis', exact: true }).click()
+  await page.getByRole('tab', { name: 'Nexis', exact: true }).click()
   await expect(page.locator('h1')).toHaveText('Nexis')
   release()
-  await expect(page.locator('[data-warmup=done]')).toBeVisible()
-  await expect(page.locator('.asset-warmup')).toHaveCount(0)
+  await expect.poll(() => page.evaluate(() => sessionStorage.getItem('portfolio-assets-ready-v1'))).toBe('true')
   await page.reload()
   await expect(page.locator('h1')).toHaveText('Nexis')
   await expect(page.locator('.asset-warmup')).toHaveCount(0)
@@ -392,11 +403,11 @@ test('rubber dock animates the thumb while preserving keyboard and assistive sel
   await page.goto('/#/nexis')
   const thumb = page.locator('.rubber-segment__thumb')
   const start = await thumb.evaluate(element => getComputedStyle(element).clipPath)
-  await page.getByRole('tab', { name: '04 Logscope', exact: true }).click()
-  await expect(page.getByRole('tab', { name: '04 Logscope', exact: true })).toHaveAttribute('aria-selected', 'true')
+  await page.getByRole('tab', { name: 'Logscope', exact: true }).click()
+  await expect(page.getByRole('tab', { name: 'Logscope', exact: true })).toHaveAttribute('aria-selected', 'true')
   await expect.poll(() => thumb.evaluate(element => getComputedStyle(element).clipPath)).not.toBe(start)
   await page.keyboard.press('0')
-  await expect(page.getByRole('tab', { name: '00 Nexis', exact: true })).toBeFocused()
+  await expect(page.getByRole('tab', { name: 'Nexis', exact: true })).toBeFocused()
   await page.keyboard.press('Escape')
   await expect(page.getByRole('link', { name: 'Home', exact: true })).toBeFocused()
   await expect(page.locator('.rubber-segment')).toHaveAttribute('data-empty', '')
@@ -491,14 +502,11 @@ test('each world keeps its own composition on wide screens and Immerse reaches p
   expect(audit.violations.map(v => v.id)).toEqual([])
 })
 
-test('About shows the portrait, a live degree meter and the project strip', async ({ page }) => {
+test('About shows the portrait and the project strip, without the clock or degree meter', async ({ page }) => {
   await page.goto('/#/about')
   await expect(page.getByRole('img', { name: 'Portrait of Ryan Wetzstein' })).toBeVisible()
-  const meter = page.getByRole('meter', { name: 'Progress through my degree' })
-  await expect(meter).toBeVisible()
-  const value = Number(await meter.getAttribute('aria-valuenow'))
-  expect(value).toBeGreaterThanOrEqual(0)
-  expect(value).toBeLessThanOrEqual(100)
+  await expect(page.getByRole('meter')).toHaveCount(0)
+  await expect(page.locator('.campus-clock')).toHaveCount(0)
   await expect(page.locator('.about-building a')).toHaveCount(5)
   await page.locator('.about-building a').first().click()
   await expect(page.locator('h1')).toHaveText('Nexis')

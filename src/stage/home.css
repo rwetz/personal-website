@@ -1,0 +1,95 @@
+/* ╔══════════════════════════════════════╗
+ * ║  Ryan Wetzstein                      ║
+ * ║  Personal Website                    ║
+ * ║  2026                                ║
+ * ╚══════════════════════════════════════╝ */
+
+/* Home scrolls. The glyph field is the hero; everything below it sits on the void. */
+.showcase-shell[data-project=home] #main-content { overflow-y: auto; overscroll-behavior: contain; container-type: size; }
+.showcase-footer-meta:empty { display: none; }
+/* The field is the hero now, so it can be seen. The scrim under the name keeps the words readable. */
+.effect-home { opacity: .55; }
+
+.home { --home-pad: clamp(24px, 6vw, 112px); --home-max: 1240px; color: var(--t-white); }
+.home > * { padding-inline: max(var(--home-pad), calc((100% - var(--home-max)) / 2)); }
+
+.home-hero {
+  min-height: 100cqh; display: flex; flex-direction: column; justify-content: flex-end;
+  padding-block: 64px clamp(40px, 9dvh, 96px); position: relative; isolation: isolate;
+}
+/* Keeps the words readable over the glyphs without hiding the field. */
+.home-hero::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(to top, #090b10e6 0%, #090b1099 32%, transparent 62%);
+}
+.home-hero h1 {
+  margin: 0; font-size: clamp(56px, 9.5vw, 156px); font-weight: 450; line-height: .92; letter-spacing: -.06em;
+  color: var(--t-white); text-wrap: balance;
+}
+.home-hero-line { margin: 28px 0 0; max-width: 44ch; font-size: clamp(16px, 1.35vw, 20px); line-height: 1.55; color: var(--t-silver); }
+
+/* Below the hero: two columns, a short label on the left and the content on the right. */
+.home-statement, .home-work, .home-end { background: var(--t-void); }
+.home-statement {
+  display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 24px 48px;
+  padding-block: clamp(72px, 12dvh, 140px);
+  background: linear-gradient(to bottom, #090b10e6, var(--t-void) 120px);
+}
+.home h2 { margin: 0; font-size: 15px; font-weight: 500; letter-spacing: -.01em; color: var(--t-silver); padding-top: .55em; }
+.statement { max-width: 64ch; display: grid; gap: 1.1em; font-size: 18px; line-height: 1.7; color: var(--t-silver); }
+.statement p { margin: 0; }
+/* Nexis is named in its own type and colour, and links to the repository (the family's home for now). */
+.statement-nexis {
+  font-family: 'Space Grotesk Variable', sans-serif; font-weight: 500; color: #8dbce8;
+  text-decoration: underline; text-decoration-color: #8dbce866; text-decoration-thickness: 1px; text-underline-offset: .22em;
+  transition: text-decoration-color 200ms ease;
+}
+.statement-nexis:hover, .statement-nexis:focus-visible { text-decoration-color: #8dbce8; }
+/* The opening claim leads, larger and brighter; the rest reads as body text. */
+.statement p:first-child { font-size: clamp(22px, 2.1vw, 30px); line-height: 1.4; letter-spacing: -.025em; color: var(--t-white); max-width: 34ch; margin-bottom: .3em; }
+
+.home-work { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 24px 48px; padding-block: 24px 96px; }
+.work-list { list-style: none; margin: 0; padding: 0; }
+.work-list li + li { border-top: 1px solid var(--t-gunmetal); }
+.work-list a {
+  display: grid; grid-template-columns: 28px minmax(0, 1fr) 176px; align-items: start; gap: 24px;
+  padding: 32px 0; color: inherit;
+}
+.work-list li:first-child a { padding-top: 0; }
+.work-emblem { width: 28px; height: 28px; margin-top: 6px; color: var(--t-steel); transition: color 250ms ease; }
+.work-text { display: grid; gap: 10px; min-width: 0; }
+.work-title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 16px; }
+.work-title strong { font-size: clamp(26px, 2.6vw, 36px); font-weight: 500; letter-spacing: -.04em; line-height: 1.1; transition: color 250ms ease; }
+.work-title span { font-size: 14px; color: var(--t-steel); }
+.work-tagline { max-width: 62ch; font-size: 16px; line-height: 1.6; color: var(--t-silver); }
+.work-thumb {
+  width: 176px; aspect-ratio: 16 / 10; object-fit: cover; object-position: center top; border-radius: 6px;
+  opacity: .55; filter: grayscale(.6); transition: opacity 300ms ease, filter 300ms ease;
+}
+.work-list a:hover .work-emblem, .work-list a:focus-visible .work-emblem,
+.work-list a:hover strong, .work-list a:focus-visible strong { color: var(--object-accent); }
+.work-list a:hover .work-thumb, .work-list a:focus-visible .work-thumb { opacity: 1; filter: none; }
+
+.home-end {
+  display: flex; flex-wrap: wrap; gap: 12px 32px; padding-block: 40px 64px;
+  border-top: 1px solid var(--t-gunmetal); font-size: 14px;
+}
+.home-end a { color: var(--t-silver); }
+.home-end a:hover { color: var(--t-white); }
+
+@media (max-width: 860px) {
+  .home-statement, .home-work { grid-template-columns: 1fr; gap: 20px; }
+  .home h2 { padding-top: 0; }
+  .work-list a { grid-template-columns: 24px minmax(0, 1fr); gap: 16px; padding: 24px 0; }
+  .work-emblem { width: 24px; height: 24px; margin-top: 4px; }
+  .work-thumb { display: none; }
+  .statement { font-size: 16px; }
+}
+@media (max-width: 540px) {
+  .home-hero { padding-block: 40px 48px; }
+  .home-hero-line { margin-top: 20px; }
+  .work-tagline { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-emblem, .work-thumb, .work-title strong { transition: none; }
+}
